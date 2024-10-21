@@ -24,8 +24,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v0.1.9
@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest
-            docker stop nextjs-app || true
-            docker rm nextjs-app || true
-            docker run -d --name nextjs-app -p 8080:3000 ${{ secrets.DOCKER_USERNAME }}/nextjs-app:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
+            docker stop ezinn-client || true
+            docker rm ezinn-client || true
+            docker run -d --name ezinn-client -p 8080:3000 ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
