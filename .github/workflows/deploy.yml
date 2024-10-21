@@ -1,4 +1,4 @@
-name: Deploy Next.js App to VPS
+name: Deploy to Staging
 
 on:
   push:
