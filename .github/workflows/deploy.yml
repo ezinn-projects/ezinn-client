@@ -27,6 +27,13 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
 
+      - name: Run deployment action in Jira
+        uses: chrnorm/deployment-action@releases/v1
+        with:
+          environment: "staging"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          description: "Deploying ezinn-client to staging via Docker"
+
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v0.1.9
         with:
