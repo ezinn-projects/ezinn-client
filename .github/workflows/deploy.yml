@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write # Cấp quyền write cho việc quản lý file và nội dung trong repo
+  deployments: write # Cấp quyền write để thực hiện deployment
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
