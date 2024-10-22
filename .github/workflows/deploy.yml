@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 permissions:
   contents: write # Cấp quyền write cho việc quản lý file và nội dung trong repo
