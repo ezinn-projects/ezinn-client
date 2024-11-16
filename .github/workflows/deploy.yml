@@ -7,13 +7,12 @@ on:
       - develop
 
 permissions:
-  contents: write # Cấp quyền write cho việc quản lý file và nội dung trong repo
-  deployments: write # Cấp quyền write để thực hiện deployment
+  contents: write
+  deployments: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -32,6 +31,10 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Run deployment action in Jira
         uses: chrnorm/deployment-action@releases/v1
         with:
