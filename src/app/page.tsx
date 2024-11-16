@@ -1,22 +1,3 @@
-<<<<<<< Updated upstream
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        {/* <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        /> */}
-        <h1 className="text-red-300">Hello</h1>
-      </main>
-=======
-"use client";
-
-import { useEffect, useState } from "react";
 import RoomCard from "@/components/room-card";
 
 const rooms = [
@@ -56,23 +37,6 @@ const rooms = [
 ];
 
 export default function Home() {
-  const [currentImages, setCurrentImages] = useState<string[]>(
-    rooms.map((room) => room.images[0])
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImages((prevImages) =>
-        prevImages.map((currentImage, index) => {
-          const roomImages = rooms[index].images;
-          const currentIndex = roomImages.indexOf(currentImage);
-          return roomImages[(currentIndex + 1) % roomImages.length];
-        })
-      );
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-8">
@@ -84,15 +48,10 @@ export default function Home() {
         </p>
       </header>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {rooms.map((room, index) => (
-          <RoomCard
-            key={room.id}
-            room={room}
-            currentImage={currentImages[index]}
-          />
+        {rooms.map((room) => (
+          <RoomCard key={room.id} room={room} />
         ))}
       </div>
->>>>>>> Stashed changes
     </div>
   );
 }

@@ -4,11 +4,7 @@ import localFont from "next/font/local";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
-<<<<<<< Updated upstream
-import { unstable_after as after } from "next/server";
-=======
-// import { MenuIcon, XIcon } from "@heroicons/react/outline";
->>>>>>> Stashed changes
+// import { unstable_after as after } from "next/server";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,9 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   // Secondary task
-  after(() => {
-    console.log("Secondary task");
-  });
+  // after(() => {
+  //   console.log("Secondary task");
+  // });
   return (
     <html lang="en">
       <link rel="icon" href="/images/ezinn-logo.png" className="w-10 h-4" />
