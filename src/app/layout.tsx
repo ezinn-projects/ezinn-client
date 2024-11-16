@@ -4,7 +4,6 @@ import localFont from "next/font/local";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
-// import { unstable_after as after } from "next/server";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,23 +27,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Secondary task
-  // after(() => {
-  //   console.log("Secondary task");
-  // });
   return (
     <html lang="en">
-      <link rel="icon" href="/images/ezinn-logo.png" className="w-10 h-4" />
+      <link rel="icon" href="/images/ezinn-logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <header className="bg-black text-white py-4">
+        {/* Header */}
+        <header className="bg-black text-white py-4 border-b border-gray-800">
           <Nav />
         </header>
-        <main className="container mx-auto px-4 py-8 flex-grow">
+
+        {/* Main */}
+        <main className="container mx-auto px-4 py-8 flex-grow mt-40">
           {children}
         </main>
-        <footer className="bg-black text-white py-6">
+
+        {/* Footer */}
+        <footer className="bg-black text-white py-6 border-t border-gray-800">
           <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
             <Link href="/" className="mb-4 md:mb-0">
               <Image
@@ -64,21 +64,21 @@ export default function RootLayout({
                 <Link
                   href="https://www.facebook.com"
                   target="_blank"
-                  className="hover:underline"
+                  className="hover:underline text-blue-400"
                 >
                   Facebook
                 </Link>
                 <Link
                   href="https://www.tiktok.com/@ezinnhomestay"
                   target="_blank"
-                  className="hover:underline"
+                  className="hover:underline text-blue-400"
                 >
                   Tiktok
                 </Link>
                 <Link
                   href="https://www.instagram.com"
                   target="_blank"
-                  className="hover:underline"
+                  className="hover:underline text-blue-400"
                 >
                   Instagram
                 </Link>
