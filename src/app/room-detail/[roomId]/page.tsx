@@ -1,7 +1,7 @@
 import React from "react";
 // import ImageGallery from "./components/ImageGallery";
 import RoomInfo from "./components/room-info";
-import { rooms } from "@/app/page"; // Import mock data
+import { rooms } from "@/mock"; // Import mock data
 import { notFound } from "next/navigation";
 import ImageGallery from "./components/image-gallery";
 import { Metadata } from "next";
