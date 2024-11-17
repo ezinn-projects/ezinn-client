@@ -9,14 +9,17 @@ interface RoomDetailPageProps {
   params: { roomId: string };
 }
 
-export async function generateMetadata({
-  params,
-}: RoomDetailPageProps): Promise<Metadata> {
+// Hàm generateMetadata
+export function generateMetadata({ params }: RoomDetailPageProps): Metadata {
   const roomId = parseInt(params.roomId, 10);
   const room = rooms.find((room) => room.id === roomId);
 
   if (!room) {
-    return {};
+    return {
+      title: "Room not found - Ezinn Homestay",
+      description:
+        "The room you are looking for does not exist. Please try again.",
+    };
   }
 
   return {
