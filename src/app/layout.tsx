@@ -18,6 +18,16 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Ezinn Homestay - Giá tốt, Chill & Free",
+  icons: {
+    icon: "/images/ezinn-logo.png",
+  },
+  keywords: [
+    "Ezinn Homestay",
+    "Giá tốt",
+    "Homestay",
+    "Chill & Free",
+    "Self check-in",
+  ],
   description:
     "Ezinn Homestay - Không gian riêng tư với giá thành rẻ nhất, tận hưởng Netflix, chill n free, và trải nghiệm self check-in dễ dàng. Phù hợp cho các cặp đôi và người muốn tìm sự thư giãn riêng tư. Tận hưởng không gian như chính ngôi nhà của bạn với chi phí hợp lý.",
 };

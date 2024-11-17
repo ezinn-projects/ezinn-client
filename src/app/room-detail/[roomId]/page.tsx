@@ -4,8 +4,36 @@ import RoomInfo from "./components/room-info";
 import { rooms } from "@/app/page"; // Import mock data
 import { notFound } from "next/navigation";
 import ImageGallery from "./components/image-gallery";
+import { Metadata } from "next";
 interface RoomDetailPageProps {
   params: { roomId: string };
+}
+
+export async function generateMetadata({
+  params,
+}: RoomDetailPageProps): Promise<Metadata> {
+  const roomId = parseInt(params.roomId, 10);
+  const room = rooms.find((room) => room.id === roomId);
+
+  if (!room) {
+    return {};
+  }
+
+  return {
+    title: room.name,
+    description: room.description,
+    openGraph: {
+      title: room.name,
+      description: room.description,
+      images: [room.images[0]], // Hình ảnh chính làm preview
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: room.name,
+      description: room.description,
+      images: [room.images[0]],
+    },
+  };
 }
 
 const RoomDetailPage = ({ params }: RoomDetailPageProps) => {

@@ -9,7 +9,6 @@ interface RoomInfoProps {
 }
 
 const RoomInfo: React.FC<RoomInfoProps> = ({
-  name,
   description,
   originalPrice,
   discountedPrice,
