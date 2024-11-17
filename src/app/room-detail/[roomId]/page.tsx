@@ -1,57 +1,46 @@
-import React from "react";
-// import ImageGallery from "./components/ImageGallery";
-import RoomInfo from "./components/room-info";
-import { rooms } from "@/mock"; // Import mock data
+import { rooms } from "@/mock";
 import { notFound } from "next/navigation";
 import ImageGallery from "./components/image-gallery";
-import { Metadata } from "next";
-interface RoomDetailPageProps {
-  params: { roomId: string };
+import RoomInfo from "./components/room-info";
+
+export const dynamic = "force-dynamic";
+
+export async function generateStaticParams() {
+  return rooms.map((room) => ({
+    roomId: room.id.toString(),
+  }));
 }
 
-// Hàm generateMetadata
-export function generateMetadata({ params }: RoomDetailPageProps): Metadata {
-  const roomId = parseInt(params.roomId, 10);
-  const room = rooms.find((room) => room.id === roomId);
+// Hàm `generateMetadata` cho SEO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function generateMetadata({ params }: any) {
+  const { roomId } = await params;
 
-  if (!room) {
-    return {
-      title: "Room not found - Ezinn Homestay",
-      description:
-        "The room you are looking for does not exist. Please try again.",
-    };
-  }
+  const room = rooms.find((room) => room.id === parseInt(roomId, 10));
 
   return {
-    title: room.name,
-    description: room.description,
-    openGraph: {
-      title: room.name,
-      description: room.description,
-      images: [room.images[0]], // Hình ảnh chính làm preview
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: room.name,
-      description: room.description,
-      images: [room.images[0]],
-    },
+    title: room ? room.name : "Room not found",
+    description: room
+      ? room.description
+      : "The room you are looking for does not exist.",
   };
 }
 
-const RoomDetailPage = ({ params }: RoomDetailPageProps) => {
-  const roomId = parseInt(params.roomId, 10);
-  const room = rooms.find((room) => room.id === roomId);
+// Component chính của trang chi tiết phòng
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RoomDetailPage = async ({ params }: any) => {
+  const { roomId = "" } = await params;
+
+  //   const roomId = parseInt(params.roomId, 10); // Không cần await
+  const room = rooms.find((room) => room.id === parseInt(roomId, 10));
 
   if (!room) {
-    return notFound(); // Trả về 404 nếu không tìm thấy phòng
+    return notFound();
   }
 
   return (
-    <div>
-      {/* Room Header */}
-      <h1 className="text-4xl font-bold mb-2">{room.name}</h1>
-      <p className="text-gray-600">Một không gian lý tưởng cho bạn</p>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4">{room.name}</h1>
 
       {/* Image Grid */}
       <div className="relative">

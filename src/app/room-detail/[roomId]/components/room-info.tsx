@@ -17,19 +17,23 @@ const RoomInfo: React.FC<RoomInfoProps> = ({
   return (
     <div className="mt-8">
       {/* Pricing */}
-      <p className="text-gray-600 line-through">Giá cũ: {originalPrice}</p>
-      <p className="text-black font-semibold text-xl mb-4">
+      <p className="dark:text-white text-black line-through">
+        Giá cũ: {originalPrice}
+      </p>
+      <p className="dark:text-white text-black font-semibold text-xl mb-4">
         Giá khuyến mãi: {discountedPrice}
       </p>
 
       {/* Description */}
-      <p className="text-lg text-gray-700 mb-6">{description}</p>
+      <p className="dark:text-white text-black text-lg mb-6">{description}</p>
 
       {/* Amenities */}
       <ul className="list-disc pl-5">
-        <strong className="text-gray-800 text-lg">Tiện ích:</strong>
+        <strong className="dark:text-white text-black text-lg">
+          Tiện ích:
+        </strong>
         {amenities.map((amenity, index) => (
-          <li key={index} className="text-gray-700">
+          <li key={index} className="dark:text-white text-gray-800">
             {amenity}
           </li>
         ))}

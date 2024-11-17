@@ -34,7 +34,7 @@ export default function RoomCard({ room }: RoomCardProps) {
       </p>
       <Link
         href={`/room-detail/${room.id}`} // Sử dụng dynamic URL
-        className="mt-4 inline-block px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all"
+        className="mt-4 inline-block px-4 py-2 bg-black text-white rounded-lg dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-800 transition-all dark:hover:text-white"
       >
         Xem chi tiết
       </Link>
