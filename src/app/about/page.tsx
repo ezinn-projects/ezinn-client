@@ -2,21 +2,21 @@ export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-4xl font-bold dark:text-white text-black">
           Giới Thiệu Về Ezinn Homestay
         </h1>
-        <p className="text-lg text-gray-300 mt-2">
+        <p className="text-lg dark:text-gray-300 text-gray-600 mt-2">
           Không gian riêng tư, tiện nghi và giá cả hợp lý
         </p>
       </header>
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white text-black mb-4">
           Ezinn Homestay là gì?
         </h2>
         <p className="text-gray-400 leading-relaxed">
           <strong>Ezinn Homestay</strong> tự hào là lựa chọn hàng đầu cho những
           ai tìm kiếm{" "}
-          <span className="text-white font-semibold">
+          <span className="text-black font-semibold">
             không gian riêng tư, tiện nghi và giá cả hợp lý
           </span>
           . Chúng tôi cung cấp dịch vụ{" "}
@@ -32,7 +32,7 @@ export default function AboutPage() {
         </ul>
       </section>
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white text-black mb-4">
           Vì Sao Chọn Ezinn Homestay?
         </h2>
         <div className="text-gray-400 leading-relaxed space-y-4">
@@ -55,10 +55,10 @@ export default function AboutPage() {
         </div>
       </section>
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white text-black mb-4">
           Khách Hàng Nói Gì?
         </h2>
-        <blockquote className="border-l-4 border-gray-600 pl-4 text-gray-300 italic">
+        <blockquote className="border-l-4 border-gray-600 pl-4 dark:text-gray-300 italic">
           &quot;Phòng rất sạch sẽ, không gian riêng tư đúng như mong đợi. Hệ
           thống check-in hiện đại giúp tôi tiết kiệm thời gian. Tôi chắc chắn sẽ
           quay lại.&quot; <br />
@@ -66,7 +66,7 @@ export default function AboutPage() {
             — Minh Trí, Khách Hàng
           </span>
         </blockquote>
-        <blockquote className="border-l-4 border-gray-600 pl-4 text-gray-300 italic mt-4">
+        <blockquote className="border-l-4 border-gray-600 pl-4 dark:text-gray-300 italic mt-4">
           &quot;Ezinn Homestay là nơi lý tưởng cho những dịp đặc biệt. Tôi đã tổ
           chức sinh nhật tại đây và rất hài lòng với không gian cũng như dịch
           vụ.&quot; <br />
@@ -76,13 +76,13 @@ export default function AboutPage() {
         </blockquote>
       </section>
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white text-black mb-4">
           Đặt Phòng Tại Ezinn Homestay Ngay Hôm Nay!
         </h2>
         <p className="text-gray-400">
           Ezinn Homestay luôn sẵn sàng chào đón bạn. Hãy đặt phòng ngay hôm nay
           để tận hưởng không gian{" "}
-          <span className="text-white">chill & free</span>, dịch vụ cao cấp với
+          <span className="text-black">chill & free</span>, dịch vụ cao cấp với
           giá thành phải chăng.
         </p>
         <ul className="mt-4 space-y-2">

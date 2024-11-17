@@ -1,13 +1,13 @@
 export default function PoliciesPage() {
   return (
     <div className="container mx-auto px-4 py-8 text-gray-200">
-      <h1 className="text-4xl font-bold text-white mb-6">
+      <h1 className="text-4xl font-bold dark:text-white text-black mb-6">
         Chính Sách Ezinn Homestay
       </h1>
 
       {/* Chính Sách Đặt Phòng */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
           Chính Sách Đặt Phòng
         </h2>
         <p className="text-gray-400">
@@ -39,7 +39,7 @@ export default function PoliciesPage() {
 
       {/* Chính Sách Hủy Phòng */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
           Chính Sách Hủy Phòng
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
@@ -51,7 +51,7 @@ export default function PoliciesPage() {
 
       {/* Chính Sách Giá */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
           Chính Sách Giá
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
@@ -69,7 +69,7 @@ export default function PoliciesPage() {
 
       {/* Trách Nhiệm Khách Hàng */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
           Trách Nhiệm Của Khách Hàng
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
@@ -95,7 +95,7 @@ export default function PoliciesPage() {
 
       {/* Chính Sách Bảo Mật */}
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
           Chính Sách Bảo Mật
         </h2>
         <p className="text-gray-400">

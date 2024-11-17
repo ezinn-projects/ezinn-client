@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface Room {
   id: number;
@@ -31,9 +32,12 @@ export default function RoomCard({ room }: RoomCardProps) {
       <p className="text-black font-semibold dark:text-white">
         Giá khuyến mãi: {room.discountedPrice}
       </p>
-      <button className="mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all">
+      <Link
+        href={`/room-detail/${room.id}`} // Sử dụng dynamic URL
+        className="mt-4 inline-block px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all"
+      >
         Xem chi tiết
-      </button>
+      </Link>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function RootLayout({
         </header>
 
         {/* Main */}
-        <main className="container mx-auto px-4 py-8 flex-grow mt-40">
+        <main className="container mx-auto px-4 py-8 flex-grow md:mt-16">
           {children}
         </main>
 

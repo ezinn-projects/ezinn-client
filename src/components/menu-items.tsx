@@ -10,7 +10,7 @@ const menuItems = [
 
 export default function MenuItems({ onClick }: { onClick?: () => void }) {
   return (
-    <ul className="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-6">
+    <ul className="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-6 bg-black md:bg-transparent">
       {menuItems.map((item) => (
         <li
           key={item.href}

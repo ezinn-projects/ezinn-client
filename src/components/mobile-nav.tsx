@@ -45,7 +45,7 @@ export default function MobileMenu() {
         )}
       </button>
       <div
-        className={`fixed top-[74px] right-0 z-40 h-full w-64 bg-black text-white transform ${
+        className={`fixed top-[80px] right-0 z-40 h-full w-64 bg-black text-white transform ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >

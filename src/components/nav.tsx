@@ -5,9 +5,10 @@ import DesktopMenu from "./desktop-nav";
 import TabletMenu from "./tablet-nav";
 import MobileMenu from "./mobile-nav";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 
 export default function Nav() {
-  const [showHeader, setShowHeader] = useState(false); // Trạng thái hiển thị header
+  const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
   const [scrollY, setScrollY] = useState(0); // Theo dõi vị trí cuộn
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // Tham chiếu timeout để kiểm tra dừng cuộn
 
@@ -46,31 +47,33 @@ export default function Nav() {
 
   return (
     <nav
-      className={`container mx-auto flex justify-between items-center px-4 fixed top-0 left-0 right-0 bg-black text-white z-50 transition-transform duration-500 ease-in-out ${
+      className={`mx-auto px-4 fixed top-0 left-0 right-0 bg-black text-white z-50 transition-transform duration-500 ease-in-out ${
         showHeader ? "translate-y-0" : "-translate-y-full"
       } ${scrollY > 0 ? "backdrop-blur-md bg-opacity-40" : "bg-opacity-100"}`}
     >
-      <div className="text-2xl font-bold">
-        {/* Desktop Logo */}
-        <Image
-          src="/images/ezinn-logo.png"
-          alt="Ezinn Homestay"
-          width={120}
-          height={30}
-          className="hidden md:block"
-        />
-        {/* Mobile Logo */}
-        <Image
-          src="/images/ezinn-logo.png"
-          alt="Ezinn Homestay"
-          width={80}
-          height={20}
-          className="block md:hidden"
-        />
+      <div className="container mx-auto flex justify-between items-center">
+        <Link href="/" className="text-2xl font-bold">
+          {/* Desktop Logo */}
+          <Image
+            src="/images/ezinn-logo.png"
+            alt="Ezinn Homestay"
+            width={120}
+            height={30}
+            className="hidden md:block"
+          />
+          {/* Mobile Logo */}
+          <Image
+            src="/images/ezinn-logo.png"
+            alt="Ezinn Homestay"
+            width={80}
+            height={20}
+            className="block md:hidden"
+          />
+        </Link>
+        <DesktopMenu />
+        <TabletMenu />
+        <MobileMenu />
       </div>
-      <DesktopMenu />
-      <TabletMenu />
-      <MobileMenu />
     </nav>
   );
 }
