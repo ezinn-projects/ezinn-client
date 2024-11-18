@@ -12,26 +12,47 @@ export async function generateStaticParams() {
 }
 
 // Hàm `generateMetadata` cho SEO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function generateMetadata({ params }: any) {
-  const { roomId } = await params;
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ roomId: string }>;
+}) {
+  const roomId = (await params).roomId;
   const room = rooms.find((room) => room.id === parseInt(roomId, 10));
 
+  if (!room) {
+    return {
+      title: "Room not found - Ezinn Homestay",
+      description:
+        "The room you are looking for does not exist. Please try again.",
+    };
+  }
+
   return {
-    title: room ? room.name : "Room not found",
-    description: room
-      ? room.description
-      : "The room you are looking for does not exist.",
+    title: room.name,
+    description: room.description,
+    openGraph: {
+      title: room.name,
+      description: room.description,
+      images: [room.images[0]], // Hình ảnh chính làm preview
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: room.name,
+      description: room.description,
+      images: [room.images[0]],
+    },
   };
 }
 
 // Component chính của trang chi tiết phòng
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const RoomDetailPage = async ({ params }: any) => {
-  const { roomId = "" } = await params;
-
-  //   const roomId = parseInt(params.roomId, 10); // Không cần await
+const RoomDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ roomId: string }>;
+}) => {
+  const roomId = (await params).roomId;
   const room = rooms.find((room) => room.id === parseInt(roomId, 10));
 
   if (!room) {
