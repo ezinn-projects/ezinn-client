@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import DesktopMenu from "./desktop-nav";
-import TabletMenu from "./tablet-nav";
-import MobileMenu from "./mobile-nav";
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import DesktopMenu from "./desktop-nav";
+import MobileMenu from "./mobile-nav";
 
 export default function Nav() {
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
@@ -47,7 +46,7 @@ export default function Nav() {
 
   return (
     <nav
-      className={`mx-auto px-4 fixed top-0 left-0 right-0 bg-black text-white z-50 transition-transform duration-500 ease-in-out ${
+      className={`mx-auto h-20 px-4 fixed top-0 left-0 right-0 bg-black text-white z-50 transition-transform duration-500 ease-in-out ${
         showHeader ? "translate-y-0" : "-translate-y-full"
       } ${scrollY > 0 ? "backdrop-blur-md bg-opacity-40" : "bg-opacity-100"}`}
     >
@@ -70,8 +69,9 @@ export default function Nav() {
             className="block md:hidden"
           />
         </Link>
+
         <DesktopMenu />
-        <TabletMenu />
+        {/* <TabletMenu /> */}
         <MobileMenu />
       </div>
     </nav>

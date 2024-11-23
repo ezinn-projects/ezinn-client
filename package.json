@@ -9,11 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-radio-group": "^1.2.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.11.17",
+    "lucide-react": "^0.460.0",
     "next": "^15.0.3",
     "postcss-loader": "^8.1.1",
     "react": "^19.0.0-rc-cae764ce-20241025",
-    "react-dom": "^19.0.0-rc-cae764ce-20241025"
+    "react-day-picker": "^8.10.1",
+    "react-dom": "^19.0.0-rc-cae764ce-20241025",
+    "react-multi-carousel": "^2.8.5",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",

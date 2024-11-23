@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,14 +45,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         {/* Header */}
-        <header className="bg-black text-white py-4 border-b border-gray-800">
+        <header className="bg-black text-white py-4 border-b border-gray-800 hidden md:block">
           <Nav />
         </header>
 
         {/* Main */}
-        <main className="container mx-auto px-4 py-8 flex-grow md:mt-16">
-          {children}
-        </main>
+        <main className="flex-grow md:mt-16">{children}</main>
 
         {/* Footer */}
         <footer className="bg-black text-white py-6 border-t border-gray-800">
@@ -96,6 +95,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <Toaster />
       </body>
     </html>
   );

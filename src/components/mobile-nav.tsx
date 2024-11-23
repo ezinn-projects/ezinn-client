@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import MenuItems from "./menu-items";
 // import MenuItems from "./MenuItems";

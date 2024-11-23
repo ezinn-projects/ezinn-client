@@ -1,5 +1,14 @@
+export type Room = {
+  id: number;
+  name: string;
+  description: string;
+  images: string[];
+  originalPrice: string;
+  discountedPrice: string;
+  amenities: string[];
+};
 
-export const rooms = [
+export const rooms: Room[] = [
   {
     id: 1,
     name: "Phòng Deluxe",
@@ -31,9 +40,9 @@ export const rooms = [
     name: "Phòng Suite",
     description: "Phòng Suite đẳng cấp cho kỳ nghỉ của bạn.",
     images: [
-      "https://a0.muscache.com/im/pictures/miso/Hosting-2170610/original/91f80cab-a429-4a37-bb63-b73056d2a172.jpeg?im_w=1200",
-      "https://a0.muscache.com/im/pictures/miso/Hosting-2170610/original/91f80cab-a429-4a37-bb63-b73056d2a172.jpeg?im_w=1200",
-      "https://a0.muscache.com/im/pictures/miso/Hosting-2170610/original/91f80cab-a429-4a37-bb63-b73056d2a172.jpeg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/d682f7bf-caa4-4433-9038-c5f81a01845b.jpg?im_w=1200",
+      "https://a0.muscache.com/im/pictures/2002b9b6-e4d8-48b2-af01-a058e400ef02.jpg?im_w=720",
+      "https://a0.muscache.com/im/pictures/113bd9ea-b92c-4ab1-81cd-13825260e442.jpg?im_w=720",
     ],
     originalPrice: "800,000 đ/giờ",
     discountedPrice: "750,000 đ/giờ",

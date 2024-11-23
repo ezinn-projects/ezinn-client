@@ -6,8 +6,6 @@ interface ImageGalleryProps {
 }
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
-  //   const [mainImage, setMainImage] = useState(images[0]);
-
   return (
     <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[500px] rounded-lg overflow-hidden">
       {/* Hình lớn bên trái */}
