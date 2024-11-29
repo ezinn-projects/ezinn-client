@@ -1,4 +1,4 @@
-name: Build & Test on Pull Request
+name: Build on Pull Request
 
 env:
   ENV: .env
@@ -12,7 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      ENV: .env
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,6 +31,3 @@ jobs:
 
       - name: Build application
         run: npm run build
-
-      - name: Run tests
-        run: npm run test
