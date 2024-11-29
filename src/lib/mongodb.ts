@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 let client: MongoClient | null = null;
 let clientPromise: Promise<MongoClient>;
 
-const uri = process.env.MONGODB_URI || "";
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.VPS_IP}:${process.env.VPS_PORT}/${process.env.DB_NAME}?authSource=${process.env.VPS_AUTH_SOURCE}`;
 
 if (!uri) {
   throw new Error("Please add your MongoDB URI to .env.local");
