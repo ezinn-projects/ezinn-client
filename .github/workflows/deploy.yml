@@ -1,4 +1,4 @@
-name: Deploy to Staging
+name: Deploy to Staging/Production
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -30,31 +30,44 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "env=production" >> $GITHUB_ENV
+            echo "docker_tag=latest" >> $GITHUB_ENV
+            echo "secret_key=${{ secrets.PRODUCTION_SECRET_KEY }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "env=staging" >> $GITHUB_ENV
+            echo "docker_tag=staging" >> $GITHUB_ENV
+            echo "secret_key=${{ secrets.STAGING_SECRET_KEY }}" >> $GITHUB_ENV
+          else
+            echo "Unsupported branch for deployment"
+            exit 1
+          fi
+
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run deployment action in Jira
-        uses: chrnorm/deployment-action@releases/v1
-        with:
-          environment: "staging"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          description: "Deploying ezinn-client to staging via Docker"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/ezinn-client:${{ env.docker_tag }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/ezinn-client:${{ env.docker_tag }}
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v0.1.9
+        env:
+          NODE_ENV: ${{ env.env }}
+          SECRET_KEY: ${{ env.secret_key }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/ezinn-client:${{ env.docker_tag }}
             docker stop ezinn-client || true
             docker rm ezinn-client || true
-            docker run -d --name ezinn-client -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/ezinn-client:latest
+            docker run -d \
+              --name ezinn-client \
+              -p 3000:3000 \
+              -e NODE_ENV=$NODE_ENV \
+              -e SECRET_KEY=$SECRET_KEY \
+              ${{ secrets.DOCKER_USERNAME }}/ezinn-client:${{ env.docker_tag }}

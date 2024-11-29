@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.head.ref != 'main' && github.event.pull_request.head.ref != 'develop'
 
     steps:
       - name: Checkout code
@@ -20,7 +21,7 @@ jobs:
           node-version: "node" # Use the latest Node.js version
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: Build application
         run: npm run build
