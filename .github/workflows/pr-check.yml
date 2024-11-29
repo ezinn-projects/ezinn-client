@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ENV: .env
     if: github.event.pull_request.head.ref != 'main' && github.event.pull_request.head.ref != 'develop'
     steps:
       - name: Checkout code
