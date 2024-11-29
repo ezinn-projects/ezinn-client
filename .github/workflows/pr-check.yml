@@ -1,4 +1,7 @@
-name: Build & Test on Pull Request
+name: Build on Pull Request
+
+env:
+  ENV: .env
 
 on:
   pull_request:
@@ -9,8 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.head.ref != 'main' && github.event.pull_request.head.ref != 'develop'
-
+    env:
+      ENV: .env
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +21,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "node" # Use the latest Node.js version
+          node-version: "lts/*"
+
+      - name: Inject environment variables
+        run: echo "${{ secrets.ENV }}" > .env
 
       - name: Install dependencies
         run: npm install --force
