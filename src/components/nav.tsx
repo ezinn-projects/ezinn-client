@@ -46,33 +46,43 @@ export default function Nav() {
 
   return (
     <nav
-      className={`mx-auto h-20 px-4 fixed top-0 left-0 right-0 bg-black text-white z-50 transition-transform duration-500 ease-in-out ${
+      className={`mx-auto px-4 fixed top-0 left-0 right-0 text-white z-50 transition-all duration-500 ease-in-out ${
         showHeader ? "translate-y-0" : "-translate-y-full"
-      } ${scrollY > 0 ? "backdrop-blur-md bg-opacity-40" : "bg-opacity-100"}`}
+      } ${
+        scrollY > 0
+          ? "bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm"
+          : "bg-black"
+      }`}
     >
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold">
-          {/* Desktop Logo */}
-          <Image
-            src="/images/ezinn-logo.png"
-            alt="Ezinn Homestay"
-            width={120}
-            height={30}
-            className="hidden md:block"
-          />
-          {/* Mobile Logo */}
-          <Image
-            src="/images/ezinn-logo.png"
-            alt="Ezinn Homestay"
-            width={80}
-            height={20}
-            className="block md:hidden"
-          />
-        </Link>
+      <div className="container h-24 mx-auto flex justify-between items-center max-w-7xl px-4">
+        <div className="flex-1">
+          <Link href="/" className="inline-block">
+            {/* Desktop Logo */}
+            <Image
+              src="/images/Screenshot_11.png"
+              alt="Ezinn Homestay"
+              width={120}
+              height={30}
+              className="hidden md:block"
+            />
+            {/* Mobile Logo */}
+            <Image
+              src="/images/Screenshot_11.png"
+              alt="Ezinn Homestay"
+              width={80}
+              height={20}
+              className="block md:hidden"
+            />
+          </Link>
+        </div>
 
-        <DesktopMenu />
-        {/* <TabletMenu /> */}
-        <MobileMenu />
+        <div className="flex-1 flex justify-center">
+          <DesktopMenu />
+        </div>
+
+        <div className="flex-1 flex justify-end">
+          <MobileMenu />
+        </div>
       </div>
     </nav>
   );

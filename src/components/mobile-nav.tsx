@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import MenuItems from "./menu-items";
-// import MenuItems from "./MenuItems";
 
 export default function MobileMenu() {
   const [menuOpen, setMenuOpen] = useState(false);

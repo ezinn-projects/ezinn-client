@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const menuItems = [
   { href: "/", label: "Trang chủ" },
+  { href: "/register", label: "Đăng ký" },
   { href: "/policies", label: "Chính sách" },
   { href: "/about", label: "Giới thiệu" },
   { href: "/contact", label: "Liên hệ" },
