@@ -59,7 +59,7 @@ export default function Nav() {
           <Link href="/" className="inline-block">
             {/* Desktop Logo */}
             <Image
-              src="/images/Screenshot_11.png"
+              src="/images/Screenshot_11-removebg-preview.png"
               alt="Ezinn Homestay"
               width={120}
               height={30}
@@ -67,7 +67,7 @@ export default function Nav() {
             />
             {/* Mobile Logo */}
             <Image
-              src="/images/Screenshot_11.png"
+              src="/images/Screenshot_11-removebg-preview.png"
               alt="Ezinn Homestay"
               width={80}
               height={20}

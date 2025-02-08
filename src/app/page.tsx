@@ -6,7 +6,7 @@ import { Room } from "@/types/room";
 export const dynamic = "force-dynamic";
 
 async function getRooms(): Promise<Room[]> {
-  const response = await fetch("http://localhost:3000/apis/rooms", {
+  const response = await fetch("http://localhost:3000/api/rooms", {
     cache: "no-store", // Không cache dữ liệu
   });
 

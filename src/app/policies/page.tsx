@@ -2,35 +2,36 @@ export default function PoliciesPage() {
   return (
     <div className="container mx-auto px-4 py-8 text-gray-200">
       <h1 className="text-4xl font-bold dark:text-white text-black mb-6">
-        Chính Sách Ezinn Homestay
+        Chính Sách JOZO Music Box - Phòng Hát Karaoke Norebang Biên Hòa
       </h1>
 
       {/* Chính Sách Đặt Phòng */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
-          Chính Sách Đặt Phòng
+          Chính Sách Đặt Phòng tại Jozo
         </h2>
         <p className="text-gray-400">
-          Ezinn Homestay cung cấp dịch vụ đặt phòng linh hoạt với các tùy chọn
-          theo giờ, qua đêm, hoặc cả ngày.
+          JOZO Music Box - Phòng hát karaoke theo phong cách Norebang Hàn Quốc
+          đầu tiên tại Biên Hòa, với không gian hiện đại, âm thanh chuẩn studio
+          và giá cả phù hợp cho giới trẻ.
         </p>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
-          <li>Đặt phòng qua website hoặc mạng xã hội.</li>
-          <li>Xác nhận đặt phòng qua email hoặc tin nhắn.</li>
+          <li>Đặt phòng dễ dàng qua Zalo, Facebook hoặc website.</li>
+          <li>Xác nhận đặt phòng nhanh chóng qua tin nhắn.</li>
           <li>
-            <strong>Thời gian thuê linh hoạt:</strong>
+            <strong>Ưu đãi đặc biệt:</strong>
             <ul className="list-disc pl-8 mt-2 space-y-1">
               <li>
-                <strong>Theo giờ (Hourly):</strong> Tối thiểu 2 giờ, tối đa 6
-                giờ.
+                <strong>Miễn phí Photobooth:</strong> Chụp ảnh không giới hạn
+                trong thời gian thuê phòng.
               </li>
               <li>
-                <strong>Qua đêm:</strong> Từ 22:00 đến 8:00 sáng hôm sau, tiết
-                kiệm 20%.
+                <strong>Phòng hát rộng rãi:</strong> Sức chứa lên đến 10
+                người/phòng.
               </li>
               <li>
-                <strong>Cả ngày:</strong> Lưu trú 12 giờ trở lên, giảm giá khi ở
-                từ 3 ngày.
+                <strong>Giá sinh viên:</strong> Giảm 20% khi xuất trình thẻ sinh
+                viên.
               </li>
             </ul>
           </li>
@@ -40,72 +41,71 @@ export default function PoliciesPage() {
       {/* Chính Sách Hủy Phòng */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
-          Chính Sách Hủy Phòng
+          Chính Sách Hủy Đặt Phòng Music Box JOZO
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
-          <li>Hủy trước 24 giờ: hoàn tiền 100%.</li>
-          <li>Hủy trong 12-24 giờ: hoàn tiền 50%.</li>
-          <li>Hủy dưới 12 giờ: không hoàn tiền.</li>
+          <li>Vui lòng liên hệ trực tiếp với JOZO để hủy đặt phòng.</li>
+          <li>JOZO sẽ giữ phòng cho quý khách tối đa 15 phút kể từ giờ đặt.</li>
+          <li>
+            Sau 15 phút, JOZO có quyền nhận khách khác nếu quý khách không đến.
+          </li>
         </ul>
       </section>
 
       {/* Chính Sách Giá */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
-          Chính Sách Giá
+          Bảng Giá Music Box JOZO Biên Hòa
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
           <li>
-            <strong>Giá theo giờ:</strong> từ 200,000 VND/giờ.
+            <strong>Giờ thường (8:00 - 17:00):</strong> Chỉ từ 100,000 VND/giờ.
           </li>
           <li>
-            <strong>Giá qua đêm:</strong> từ 22:00 đến 8:00, rẻ hơn 20%.
+            <strong>Giờ cao điểm (17:00 - 22:00):</strong> 150,000 VND/giờ.
           </li>
           <li>
-            <strong>Giá theo ngày:</strong> giảm 15% khi ở từ 3 ngày trở lên.
+            <strong>Combo 3 giờ:</strong> Giảm 20%, tặng nước uống.
           </li>
         </ul>
       </section>
 
-      {/* Trách Nhiệm Khách Hàng */}
+      {/* Quy Định Sử Dụng */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
-          Trách Nhiệm Của Khách Hàng
+          Quy Định Sử Dụng Phòng Hát
         </h2>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
-          <li>Khách hàng có trách nhiệm trả phòng đúng thời gian quy định.</li>
-          <li>Thông báo cho Ezinn nếu muốn gia hạn thời gian lưu trú.</li>
+          <li>Giữ gìn thiết bị âm thanh, micro chuyên nghiệp.</li>
+          <li>Không hút thuốc trong phòng hát.</li>
           <li>
-            Trong trường hợp không trả phòng đúng giờ và không thông báo:
+            Quy định về âm lượng:
             <ul className="list-disc pl-8 mt-2 space-y-1">
-              <li>Ezinn sẽ liên hệ khách hàng để nhắc nhở.</li>
-              <li>
-                Nếu khách không phản hồi sau **30 phút**, Ezinn có quyền vào
-                phòng để kiểm tra nhằm đảm bảo lịch trình cho khách tiếp theo.
-              </li>
-              <li>Phụ thu thêm giờ sẽ được tính theo giá thuê hiện hành.</li>
+              <li>Duy trì âm lượng phù hợp.</li>
+              <li>Tôn trọng không gian chung.</li>
+              <li>Tuân thủ hướng dẫn của nhân viên.</li>
             </ul>
           </li>
         </ul>
         <p className="text-gray-400 mt-4">
-          Quy định này nhằm đảm bảo quyền lợi cho tất cả khách hàng và tránh ảnh
-          hưởng đến lịch trình đặt phòng.
+          JOZO cam kết mang đến trải nghiệm karaoke Hàn Quốc chất lượng nhất tại
+          Biên Hòa.
         </p>
       </section>
 
       {/* Chính Sách Bảo Mật */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold dark:text-white mb-4 text-black">
-          Chính Sách Bảo Mật
+          Chính Sách Bảo Mật Thông Tin
         </h2>
         <p className="text-gray-400">
-          Ezinn Homestay cam kết bảo mật thông tin khách hàng. Chúng tôi chỉ thu
-          thập thông tin cần thiết để đảm bảo trải nghiệm dịch vụ tốt nhất.
+          JOZO Music Box cam kết bảo mật tuyệt đối thông tin khách hàng theo quy
+          định pháp luật.
         </p>
         <ul className="list-disc list-inside text-gray-400 mt-4 space-y-2">
-          <li>Thông tin thu thập: họ tên, số điện thoại, email.</li>
-          <li>Không chia sẻ thông tin với bên thứ ba.</li>
-          <li>Khách hàng có quyền kiểm tra và chỉnh sửa thông tin cá nhân.</li>
+          <li>Bảo mật thông tin cá nhân: số điện thoại, email.</li>
+          <li>Không chia sẻ hình ảnh photobooth khi chưa được phép.</li>
+          <li>Bảo vệ quyền riêng tư của khách hàng là ưu tiên hàng đầu.</li>
         </ul>
       </section>
     </div>

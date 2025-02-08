@@ -12,6 +12,7 @@ const config: Config = {
     extend: {
       animation: {
         buttonheartbeat: "buttonheartbeat 2s infinite ease-in-out",
+        shake: "shake 0.6s ease-in-out",
       },
       keyframes: {
         buttonheartbeat: {
@@ -24,6 +25,11 @@ const config: Config = {
           "100%": {
             "box-shadow": "0 0 0 0 hsl(var(--lightpink)/0)",
           },
+        },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-2px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(2px)" },
         },
       },
       colors: {

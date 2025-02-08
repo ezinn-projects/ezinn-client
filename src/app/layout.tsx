@@ -1,3 +1,4 @@
+import BackgroundCross from "@/components/background-cross";
 import Nav from "@/components/nav";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
@@ -18,19 +19,35 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ezinn Homestay - Giá tốt, Chill & Free",
+  title: "JOZO Music Box - Phòng Hát Karaoke Norebang Biên Hòa",
   icons: {
-    icon: "/images/ezinn-logo.png",
+    icon: "/Screenshot_11-removebg-preview.png",
   },
   keywords: [
-    "Ezinn Homestay",
-    "Giá tốt",
-    "Homestay",
-    "Chill & Free",
-    "Self check-in",
+    "JOZO Music Box",
+    "Karaoke Biên Hòa",
+    "Norebang Hàn Quốc",
+    "Photobooth miễn phí",
+    "Phòng hát giá rẻ",
+    "Karaoke sinh viên",
+    "Phòng hát đẹp",
+    "Studio karaoke",
+    "Hát hò Biên Hòa",
+    "Giá sinh viên",
+    "Phụ kiện chụp hình",
+    "Âm thanh chất lượng",
   ],
-  description:
-    "Ezinn Homestay - Music box chuẩn mô hình Hàn Quốc với norebang giá rẻ nhất Biên Hòa. Tận hưởng không gian riêng tư cùng photobooth miễn phí, tạo nên những khoảnh khắc đáng nhớ. Trải nghiệm không gian giải trí đẳng cấp với chi phí hợp lý nhất.",
+  description: `JOZO Music Box - Phòng hát karaoke theo phong cách Norebang Hàn Quốc đầu tiên tại Biên Hòa. 
+    Trang bị âm thanh chuẩn studio, phụ kiện chụp hình xịn xò và photobooth miễn phí. 
+    Không gian riêng tư, hiện đại với giá cả phù hợp cho học sinh, sinh viên. 
+    Đặc biệt giảm 20% cho sinh viên có thẻ. 
+    Trải nghiệm karaoke chuẩn Hàn với chi phí hợp lý nhất tại Biên Hòa.`,
+  openGraph: {
+    title: "JOZO Music Box - Karaoke Norebang Biên Hòa",
+    description:
+      "Phòng hát karaoke phong cách Hàn Quốc - Photobooth miễn phí - Giá sinh viên",
+    images: ["/images/jozo-thumbnail.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -44,13 +61,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >
+        <BackgroundCross
+          className="fixed -z-10"
+          crossColor="#fb3a5d"
+          fade={true}
+          crossSize={40}
+        />
         {/* Header */}
         <header>
           <Nav />
         </header>
 
         {/* Main */}
-        <main className="flex-grow md:mt-16 mt-24">{children}</main>
+        <main className="flex-grow md:mt-16 mt-24 mb-8">{children}</main>
 
         {/* Footer */}
         <footer className="bg-black text-white py-6 border-t border-white">

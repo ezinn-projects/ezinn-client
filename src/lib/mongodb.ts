@@ -38,3 +38,26 @@ export async function checkMongoConnection() {
 }
 
 export default clientPromise;
+
+if (process.env.NODE_ENV === "development") {
+  ensureIndexes().catch(console.error);
+}
+
+export async function ensureIndexes() {
+  try {
+    const client = await clientPromise;
+    const db = client.db("jozo");
+    const collection = db.collection("users");
+
+    await collection.createIndex({ phone_number: 1 }, { unique: true });
+
+    await collection.createIndex(
+      { email: 1 },
+      { unique: true, sparse: true } // sparse: true cho phép null
+    );
+
+    console.log("Indexes created successfully");
+  } catch (error) {
+    console.error("Error creating indexes:", error);
+  }
+}
