@@ -6,11 +6,10 @@ import { Room } from "@/types/room";
 export const dynamic = "force-dynamic";
 
 async function getRooms(): Promise<Room[]> {
-  const response = await fetch("http://localhost:3000/apis/rooms", {
+  const response = await fetch("http://localhost:3000/api/rooms", {
     cache: "no-store", // Không cache dữ liệu
   });
 
-  console.log(response);
   const data = await response.json();
   if (data.success) {
     return data.data;
@@ -23,7 +22,10 @@ export default async function Home() {
   const rooms = await getRooms();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div
+      className="container mx-auto px-4 py-8"
+      suppressHydrationWarning={true}
+    >
       {/* Header */}
       <header className="md:hidden h-20">
         <Nav />
