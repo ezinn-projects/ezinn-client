@@ -1,10 +1,9 @@
 import BackgroundCross from "@/components/background-cross";
 import Nav from "@/components/nav";
+import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Image from "next/image";
-import Link from "next/link";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -57,7 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" href="/images/ezinn-logo.png" />
+      <link rel="icon" href="/images/Screenshot_11-removebg-preview.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >
@@ -76,48 +75,7 @@ export default function RootLayout({
         <main className="flex-grow md:mt-16 mt-24 mb-8">{children}</main>
 
         {/* Footer */}
-        <footer className="bg-black text-white py-6 border-t border-white">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <Link href="/" className="mb-4 md:mb-0">
-              <Image
-                src="/images/ezinn-logo.png"
-                alt="Ezinn Homestay"
-                width={200}
-                height={50}
-              />
-            </Link>
-            <div className="text-center md:text-right text-sm">
-              <p>© {new Date().getFullYear()} Ezinn. All rights reserved.</p>
-              <p className="text-gray-200">
-                Tận hưởng không gian riêng tư và dịch vụ đẳng cấp như ở Ezinn.
-                Theo dõi chúng tôi trên mạng xã hội.
-              </p>
-              <div className="flex space-x-4 mt-2">
-                <Link
-                  href="https://www.facebook.com"
-                  target="_blank"
-                  className="hover:underline hover:text-lightpink transition-colors"
-                >
-                  Facebook
-                </Link>
-                <Link
-                  href="https://www.tiktok.com/@ezinnhomestay"
-                  target="_blank"
-                  className="hover:underline hover:text-lightpink transition-colors"
-                >
-                  Tiktok
-                </Link>
-                <Link
-                  href="https://www.instagram.com"
-                  target="_blank"
-                  className="hover:underline hover:text-lightpink transition-colors"
-                >
-                  Instagram
-                </Link>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <TwoColumnFooter />
         <Toaster />
       </body>
     </html>
