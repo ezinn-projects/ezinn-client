@@ -77,8 +77,10 @@ export default async function Home() {
       {/* Promotion Section */}
 
       {/* Room Types Section */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-bold text-center mb-6">Các loại phòng</h2>
+      <section className="mb-16 bg-red-50 p-8 rounded-lg">
+        <h2 className="text-3xl font-bold text-center mb-6 text-lightpink">
+          Các loại phòng
+        </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {roomTypes.map((type) => (
             <Link
@@ -100,10 +102,17 @@ export default async function Home() {
                   {type.title}
                 </h2>
                 <p className="text-gray-600 font-semibold">{type.capacity}</p>
-                <p className="mt-2 text-gray-700">{type.description}</p>
-                <p className="mt-2 text-blue-600 font-semibold">
-                  Chỉ từ {type.price.toLocaleString("vi-VN")}đ/giờ
+                <p className="mt-2 text-gray-700 min-h-[3rem]">
+                  {type.description}
                 </p>
+                <div className="mt-4 flex flex-col sm:flex-row gap-4 sm:items-center">
+                  <p className="text-blue-600 font-semibold whitespace-nowrap">
+                    Chỉ từ {type.price.toLocaleString("vi-VN")}đ/giờ
+                  </p>
+                  <button className="bg-lightpink text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition animate-buttonheartbeat whitespace-nowrap">
+                    Đặt phòng ngay
+                  </button>
+                </div>
               </div>
             </Link>
           ))}
@@ -111,22 +120,30 @@ export default async function Home() {
       </section>
 
       <section className="mb-16 bg-red-50 p-8 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-6">Ưu đãi đặc biệt</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-lightpink">
+          Ưu đãi đặc biệt
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2">Khai trương giảm giá</h3>
+            <h3 className="text-xl font-bold mb-2 text-lightpink">
+              Khai trương giảm giá
+            </h3>
             <p className="text-gray-600">
               Giảm 20% cho tất cả các phòng từ 10h-17h
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2">Ưu đãi sinh nhật</h3>
+            <h3 className="text-xl font-bold mb-2 text-lightpink">
+              Ưu đãi sinh nhật
+            </h3>
             <p className="text-gray-600">
               Tặng 2 giờ hát cho nhóm trên 6 người
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2">Khách hàng thân thiết</h3>
+            <h3 className="text-xl font-bold mb-2 text-lightpink">
+              Khách hàng thân thiết
+            </h3>
             <p className="text-gray-600">Tích điểm đổi quà hấp dẫn</p>
           </div>
         </div>

@@ -55,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <link rel="icon" href="/images/Screenshot_11-removebg-preview.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
@@ -72,7 +72,9 @@ export default function RootLayout({
         </header>
 
         {/* Main */}
-        <main className="flex-grow md:mt-16 mt-24 mb-8">{children}</main>
+        <main className="flex-grow mt-32 mb-8 container mx-auto">
+          {children}
+        </main>
 
         {/* Footer */}
         <TwoColumnFooter />

@@ -6,7 +6,6 @@ const menuItems = [
   { href: "/login", label: "Đăng nhập" },
   { href: "/policies", label: "Chính sách" },
   { href: "/about", label: "Giới thiệu" },
-  { href: "/contact", label: "Liên hệ" },
   { href: "/faq", label: "Câu hỏi thường gặp" },
 ];
 

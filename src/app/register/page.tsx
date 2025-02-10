@@ -66,7 +66,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto mt-8 p-6 bg-black rounded-lg shadow-md">
+    <div className="max-w-md w-full mx-auto p-6 bg-black rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center text-lightpink">
         Đăng ký tài khoản
       </h2>

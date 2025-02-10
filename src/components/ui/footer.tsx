@@ -19,12 +19,12 @@ const TwoColumnFooter = () => {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="font-inter w-full max-w-7xl bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm"
+      className="font-inter w-full bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm pt-2"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-2">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between lg:flex-row">
           <div className="space-y-8">
             <Image
