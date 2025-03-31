@@ -87,5 +87,6 @@ jobs:
             docker run -d \
               --name jozo-client \
               --env-file .env \
+              -e PORT=3003 \
               -p 3003:3003 \
               ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }}
