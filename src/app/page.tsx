@@ -2,7 +2,6 @@ import TestimonialCarousel from "@/components/carousel";
 import { Price } from "@/types/price";
 import { RoomType } from "@/types/room";
 import Image from "next/image";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -98,9 +97,8 @@ export default async function Home() {
               const minPrice = getMinPriceForRoomType(type.type);
 
               return (
-                <Link
+                <div
                   key={type._id}
-                  href={`/rooms/${type.type}`}
                   className="block group hover:shadow-xl transition-all duration-300 rounded-lg overflow-hidden transform hover:-translate-y-1"
                 >
                   <div className="aspect-video relative">
@@ -142,7 +140,7 @@ export default async function Home() {
                       </button>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
         </div>
