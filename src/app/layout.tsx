@@ -47,6 +47,19 @@ export const metadata: Metadata = {
       "Phòng hát karaoke phong cách Hàn Quốc - Photobooth miễn phí - Giá sinh viên",
     images: ["/images/jozo-thumbnail.jpg"],
   },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      nocache: true,
+    },
+  },
+  verification: {
+    google: "98YQhoi7X-ortJRFDLt2rR7atA-SHjjNkjak8wXSjHU",
+  },
 };
 
 export default function RootLayout({
