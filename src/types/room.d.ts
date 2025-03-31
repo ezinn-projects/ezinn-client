@@ -1,7 +1,7 @@
 export type RoomType = {
   _id: string;
   roomName: string;
-  roomType: "small" | "medium" | "large";
+  type: "small" | "medium" | "large";
   maxCapacity: number;
   status: "available" | "occupied";
   description: string;
