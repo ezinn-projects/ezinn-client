@@ -1,14 +1,17 @@
 import TestimonialCarousel from "@/components/carousel";
-import { Room } from "@/types/room";
+import { RoomType } from "@/types/room";
 import Image from "next/image";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-async function getRooms(): Promise<Room[]> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/rooms`, {
-    cache: "no-store",
-  });
+async function getRooms(): Promise<RoomType[]> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/room-types`,
+    {
+      cache: "no-store",
+    }
+  );
 
   const data = await response.json();
   if (data.success) {
@@ -21,53 +24,7 @@ async function getRooms(): Promise<Room[]> {
 export default async function Home() {
   const rooms = await getRooms();
 
-  // Tạo thông tin cho 3 loại phòng
-  const roomTypes = [
-    {
-      id: "small",
-      title: "Phòng nhỏ",
-      capacity: "Dành cho 1-3 người",
-      description: "Dành cho cá nhân hoặc nhóm nhỏ muốn không gian riêng tư",
-      image:
-        rooms.find((room) => room.maxCapacity <= 3)?.images[0] ||
-        "/default-small-room.jpg",
-      price: Math.min(
-        ...rooms
-          .filter((room) => room.maxCapacity <= 3)
-          .flatMap((room) => room.prices.map((p) => p.price))
-      ),
-    },
-    {
-      id: "medium",
-      title: "Phòng vừa",
-      capacity: "Dành cho 4-6 người",
-      description: "Dành cho nhóm bạn hoặc gia đình muốn không gian thoải mái",
-      image:
-        rooms.find((room) => room.maxCapacity >= 4 && room.maxCapacity <= 6)
-          ?.images[0] || "/default-medium-room.jpg",
-      price:
-        Math.min(
-          ...rooms
-            .filter((room) => room.maxCapacity >= 4 && room.maxCapacity <= 6)
-            .flatMap((room) => room.prices.map((p) => p.price))
-        ) || 80000,
-    },
-    {
-      id: "large",
-      title: "Phòng lớn",
-      capacity: "Dành cho 7-10 người",
-      description: "Dành cho nhóm lớn, họp công ty hoặc tổ chức tiệc",
-      image:
-        rooms.find((room) => room.maxCapacity >= 7)?.images[0] ||
-        "/default-large-room.jpg",
-      price:
-        Math.min(
-          ...rooms
-            .filter((room) => room.maxCapacity >= 7)
-            .flatMap((room) => room.prices.map((p) => p.price))
-        ) || 120000,
-    },
-  ];
+  console.log("rooms", rooms);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -82,16 +39,16 @@ export default async function Home() {
           Các loại phòng
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {roomTypes.map((type) => (
+          {rooms.map((type) => (
             <Link
-              key={type.id}
-              href={`/rooms/${type.id}`}
+              key={type._id}
+              href={`/rooms/${type.roomType}`}
               className="block group hover:shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden"
             >
               <div className="aspect-video relative">
                 <Image
-                  src={type.image}
-                  alt={type.title}
+                  src={type.images[0] || `/default-${type.roomType}-room.jpg`}
+                  alt={type.roomName}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -99,15 +56,21 @@ export default async function Home() {
               </div>
               <div className="p-4 bg-white">
                 <h2 className="text-2xl font-bold text-lightpink">
-                  {type.title}
+                  {type.roomName}
                 </h2>
-                <p className="text-gray-600 font-semibold">{type.capacity}</p>
-                <p className="mt-2 text-gray-700 min-h-[3rem]">
+                <p className="text-gray-600 font-semibold">
                   {type.description}
+                </p>
+                <p className="mt-2 text-gray-700 min-h-[3rem]">
+                  {`Diện tích: ${type.maxCapacity}m²`}
                 </p>
                 <div className="mt-4 flex flex-col sm:flex-row gap-4 sm:items-center">
                   <p className="text-blue-600 font-semibold whitespace-nowrap">
-                    Chỉ từ {type.price.toLocaleString("vi-VN")}đ/giờ
+                    Chỉ từ{" "}
+                    {/* {Math.min(
+                      ...type?.prices?.map((slot) => slot.price)
+                    ).toLocaleString("vi-VN")} */}
+                    đ/giờ
                   </p>
                   <button className="bg-lightpink text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition animate-buttonheartbeat whitespace-nowrap">
                     Đặt phòng ngay

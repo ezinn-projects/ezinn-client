@@ -47,7 +47,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build --build-arg ENV_FILE=.env -t ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }}
 
   deploy:
@@ -79,10 +79,13 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: 22
           script: |
+            cd /home/ubuntu/jozo
+            echo "${{ secrets.ENV_FILE }}" > .env
             docker pull ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }}
             docker stop jozo-client || true
             docker rm jozo-client || true
             docker run -d \
               --name jozo-client \
-              -p 3000:3000 \
+              --env-file .env \
+              -p 3003:3003 \
               ${{ secrets.DOCKER_USERNAME }}/jozo-client:${{ env.docker_tag }}
