@@ -6,7 +6,7 @@ const menuItems = [
   { href: "/login", label: "Đăng nhập" },
   { href: "/policies", label: "Chính sách" },
   { href: "/about", label: "Giới thiệu" },
-  { href: "/faq", label: "Câu hỏi thường gặp" },
+  // { href: "/faq", label: "Câu hỏi thường gặp" },
 ];
 
 export default function MenuItems({ onClick }: { onClick?: () => void }) {
