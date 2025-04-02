@@ -4,7 +4,10 @@ const navigation = {
   connect: [
     { name: "Facebook", href: "https://facebook.com" },
     { name: "Instagram", href: "https://instagram.com" },
-    { name: "TikTok", href: "https://tiktok.com" },
+    {
+      name: "TikTok",
+      href: "https://www.tiktok.com/@jozomusicbox?lang=vi",
+    },
     { name: "YouTube", href: "https://youtube.com" },
   ],
   explore: [

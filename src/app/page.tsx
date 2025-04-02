@@ -53,6 +53,8 @@ export default async function Home() {
     return minPrice !== Infinity ? minPrice : 0;
   };
 
+  console.log("rooms", rooms);
+
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section với Slider */}
@@ -63,7 +65,7 @@ export default async function Home() {
       {/* Room Types Section */}
       <section className="mb-16 bg-red-50 p-8 rounded-lg">
         <h2 className="text-3xl font-bold text-center mb-6 text-lightpink">
-          Phòng Theo Nhóm
+          Jozo có 3 loại phòng
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {rooms
@@ -109,7 +111,7 @@ export default async function Home() {
                       src={
                         type.images && type.images.length > 0
                           ? type.images[0]
-                          : `/default-${type.type}-room.jpg`
+                          : `/images/room-${type.type}.jpg`
                       }
                       alt={type.roomName}
                       fill

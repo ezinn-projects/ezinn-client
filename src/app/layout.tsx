@@ -18,11 +18,12 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jozo.com.vn"),
   title: "JOZO Music Box - Music Box Biên Hòa",
   icons: {
-    icon: "/images/logo.jpg",
-    apple: "/images/logo.jpg",
-    shortcut: "/images/logo.jpg",
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+    shortcut: "/images/logo.png",
   },
   keywords: [
     "JOZO Music Box",
