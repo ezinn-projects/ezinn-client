@@ -18,9 +18,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "JOZO Music Box - Phòng Hát Karaoke Norebang Biên Hòa",
+  title: "JOZO Music Box - Music Box Biên Hòa",
   icons: {
-    icon: "/Screenshot_11-removebg-preview.png",
+    icon: "/images/logo.jpg",
+    apple: "/images/logo.jpg",
+    shortcut: "/images/logo.jpg",
   },
   keywords: [
     "JOZO Music Box",
@@ -36,13 +38,13 @@ export const metadata: Metadata = {
     "Phụ kiện chụp hình",
     "Âm thanh chất lượng",
   ],
-  description: `JOZO Music Box - Phòng hát karaoke theo phong cách Norebang Hàn Quốc đầu tiên tại Biên Hòa. 
+  description: `JOZO Music Box - Phòng hát karaoke theo phong cách Norebang Hàn Quốc tại Biên Hòa. 
     Trang bị âm thanh chuẩn studio, phụ kiện chụp hình xịn xò và photobooth miễn phí. 
     Không gian riêng tư, hiện đại với giá cả phù hợp cho học sinh, sinh viên. 
     Đặc biệt giảm 20% cho sinh viên có thẻ. 
     Trải nghiệm karaoke chuẩn Hàn với chi phí hợp lý nhất tại Biên Hòa.`,
   openGraph: {
-    title: "JOZO Music Box - Karaoke Norebang Biên Hòa",
+    title: "JOZO Music Box - Music Box Biên Hòa",
     description:
       "Phòng hát karaoke phong cách Hàn Quốc - Photobooth miễn phí - Giá sinh viên",
     images: ["/images/jozo-thumbnail.jpg"],
@@ -69,7 +71,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <link rel="icon" href="/images/Screenshot_11-removebg-preview.png" />
+      <link rel="icon" href="/images/logo.jpg" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >
