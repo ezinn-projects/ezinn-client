@@ -72,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <link rel="icon" href="/images/logo.jpg" />
+      <link rel="icon" href="/images/logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >

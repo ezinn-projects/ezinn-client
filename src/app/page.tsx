@@ -53,8 +53,6 @@ export default async function Home() {
     return minPrice !== Infinity ? minPrice : 0;
   };
 
-  console.log("rooms", rooms);
-
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section với Slider */}
@@ -90,9 +88,9 @@ export default async function Home() {
               // Xác định số người
               let capacityText = "1-3 homies";
               if (type.type === "medium") {
-                capacityText = "4-6 homies";
+                capacityText = "4-5 homies";
               } else if (type.type === "large") {
-                capacityText = "7-10 homies";
+                capacityText = "6-8 homies";
               }
 
               // Lấy giá thấp nhất cho loại phòng này từ dữ liệu prices
@@ -154,23 +152,23 @@ export default async function Home() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-lightpink">
+            <h3 className="text-xl font-bold mb-2 text-center text-lightpink">
               Khai trương giảm giá
             </h3>
             <p className="text-gray-600">
-              Giảm 20% cho tất cả các phòng từ 10h-17h
+              Giảm 50% cho tất cả các phòng từ ngày 19/04 đến 25/04
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-lightpink">
+            <h3 className="text-xl font-bold mb-2 text-center text-lightpink">
               Ưu đãi sinh nhật
             </h3>
             <p className="text-gray-600">
-              Tặng 2 giờ hát cho nhóm trên 6 người
+              Tặng 30 phút hát cho nhóm trên 6 người
             </p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-lightpink">
+            <h3 className="text-xl font-bold mb-2 text-center text-lightpink">
               Khách hàng thân thiết
             </h3>
             <p className="text-gray-600">Tích điểm đổi quà hấp dẫn</p>

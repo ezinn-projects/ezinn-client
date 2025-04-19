@@ -33,7 +33,6 @@ export async function POST(request: Request) {
 
     // Validate and clean email
     const cleanEmail = validatedData.email?.trim() || null;
-    console.log("Clean email:", cleanEmail);
 
     // Check if email exists (only if email is provided and not null)
     if (cleanEmail) {
@@ -51,10 +50,6 @@ export async function POST(request: Request) {
     // Check if phone number exists
     const existingPhone = await collection.findOne({
       phone_number: validatedData.phone_number,
-    });
-    console.log("Phone check:", {
-      input: validatedData.phone_number,
-      existing: existingPhone,
     });
 
     if (existingPhone) {

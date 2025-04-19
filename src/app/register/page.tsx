@@ -46,7 +46,7 @@ export default function RegisterForm() {
 
       if (!response.ok) {
         if (response.status === 400) {
-          throw new Error("Email đã tồn tại trong hệ thống");
+          throw new Error(result.message || "Đăng ký thất bại");
         }
         throw new Error(result.message || "Đăng ký thất bại");
       }

@@ -6,24 +6,19 @@ import Image from "next/image";
 
 const banners = [
   {
-    image:
-      "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/t2awrrfzdvmg1chnzyfr.svg",
+    // "thêm banner 1 trong assets",
+    image: "/images/banner-1.png",
     alt: "Banner 1",
   },
   {
-    image:
-      "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/pmblusboe7vkw8vxdknx.svg",
+    // "thêm banner 2 trong assets",
+    image: "/images/banner-2.png",
     alt: "Banner 2",
   },
   {
-    image:
-      "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg",
+    // "thêm banner 3 trong assets",
+    image: "/images/banner-3.png",
     alt: "Banner 3",
-  },
-  {
-    image:
-      "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/nymiivu48d5lywhf9rpf.svg",
-    alt: "Banner 4",
   },
 ];
 
