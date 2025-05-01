@@ -5,7 +5,7 @@ import clientPromise, { checkMongoConnection } from "@/lib/mongodb";
 export async function POST() {
   try {
     // Lấy auth token từ cookie
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const authToken = cookieStore.get("auth_token")?.value;
 
     if (authToken) {
@@ -22,7 +22,7 @@ export async function POST() {
       }
 
       // Xóa cookie auth_token
-      cookieStore.delete("auth_token");
+      (await cookies()).delete("auth_token");
     }
 
     return NextResponse.json({
