@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
   _id: string;
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkUserLoggedIn = async () => {
       try {
         setLoading(true);
-        const success = await checkAuth();
+
         setLoading(false);
 
         // Nếu không đăng nhập, không cần redirect ở đây

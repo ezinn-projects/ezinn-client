@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
 import clientPromise, { checkMongoConnection } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Kiểm tra auth cookie
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const authToken = cookieStore.get("auth_token")?.value;
 
     if (!authToken) {
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     if (!session) {
       // Xóa cookie nếu session không tồn tại hoặc đã hết hạn
-      cookies().delete("auth_token");
+      (await cookies()).delete("auth_token");
       return NextResponse.json(
         { success: false, message: "Phiên đăng nhập đã hết hạn" },
         { status: 401 }
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     if (!user) {
       // Xóa session nếu không tìm thấy user
       await sessionsCollection.deleteOne({ _id: session._id });
-      cookies().delete("auth_token");
+      (await cookies()).delete("auth_token");
       return NextResponse.json(
         { success: false, message: "Người dùng không tồn tại" },
         { status: 401 }

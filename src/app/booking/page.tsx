@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -249,6 +249,96 @@ export default function BookingPage() {
     return selectedTimeSlots.every((slot) => availableSlots.includes(slot));
   };
 
+  // Tính toán các giờ bắt đầu khả dụng dựa trên slots trống
+  const calculateAvailableStartTimes = useCallback(
+    (availableSlots: TimeSlot[]) => {
+      const availableTimes: string[] = [];
+
+      // Bổ sung giờ bắt đầu từ mỗi slot chuẩn 1 giờ (ví dụ: 10:00-11:00 -> 10:00)
+      availableSlots.forEach((slot) => {
+        const startTime = slot.split("-")[0];
+        // Chỉ thêm vào các giờ từ 10h sáng trở đi
+        if (!availableTimes.includes(startTime) && startTime >= "10:00") {
+          availableTimes.push(startTime);
+        }
+      });
+
+      // Thêm các giờ bắt đầu từ 30 phút (ví dụ: 10:30) nếu có cả slot hiện tại và slot tiếp theo khả dụng
+      START_TIMES.filter((time) => time.endsWith(":30")).forEach(
+        (halfHourTime) => {
+          // Chỉ xử lý các giờ từ 10:30 trở đi
+          if (halfHourTime < "10:00") return;
+
+          const hour = parseInt(halfHourTime.split(":")[0]);
+
+          // Cần kiểm tra slot chứa giờ bắt đầu
+          const currentSlot = `${hour.toString().padStart(2, "0")}:00-${(
+            hour + 1
+          )
+            .toString()
+            .padStart(2, "0")}:00`;
+
+          // Và slot tiếp theo
+          const nextSlot = `${(hour + 1).toString().padStart(2, "0")}:00-${(
+            hour + 2
+          )
+            .toString()
+            .padStart(2, "0")}:00`;
+
+          // Kiểm tra cả hai slot đều phải có sẵn trong danh sách khả dụng
+          if (
+            availableSlots.includes(currentSlot) &&
+            availableSlots.includes(nextSlot)
+          ) {
+            availableTimes.push(halfHourTime);
+          }
+        }
+      );
+
+      // Sắp xếp theo thứ tự thời gian và loại bỏ tất cả giờ trước 10h sáng
+      availableTimes.sort();
+      const filteredByMinTime = availableTimes.filter(
+        (time) => time >= "10:00"
+      );
+
+      // Nếu là ngày hiện tại, lọc bỏ các giờ đã qua
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const selectedDateNoTime = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate()
+      );
+
+      // Chỉ lọc giờ nếu ngày được chọn là hôm nay
+      if (selectedDateNoTime.getTime() === today.getTime()) {
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // Lọc bỏ các giờ đã qua
+        const filteredTimes = filteredByMinTime.filter((time) => {
+          const [hour, minute] = time.split(":").map(Number);
+
+          // Nếu giờ trong quá khứ, loại bỏ
+          if (hour < currentHour) return false;
+
+          // Nếu cùng giờ nhưng phút đã qua, loại bỏ
+          if (hour === currentHour && minute <= currentMinute) return false;
+
+          // Thêm buffer 30 phút để người dùng có thời gian đến
+          if (hour === currentHour && minute < currentMinute + 30) return false;
+
+          return true;
+        });
+
+        setAvailableStartTimes(filteredTimes);
+      } else {
+        setAvailableStartTimes(filteredByMinTime);
+      }
+    },
+    [selectedDate]
+  );
+
   // Fetch available time slots when date or room type changes
   useEffect(() => {
     async function fetchAvailableSlots() {
@@ -300,90 +390,7 @@ export default function BookingPage() {
     }
 
     fetchAvailableSlots();
-  }, [selectedDate, selectedRoomType]);
-
-  // Tính toán các giờ bắt đầu khả dụng dựa trên slots trống
-  const calculateAvailableStartTimes = (availableSlots: TimeSlot[]) => {
-    const availableTimes: string[] = [];
-
-    // Bổ sung giờ bắt đầu từ mỗi slot chuẩn 1 giờ (ví dụ: 10:00-11:00 -> 10:00)
-    availableSlots.forEach((slot) => {
-      const startTime = slot.split("-")[0];
-      // Chỉ thêm vào các giờ từ 10h sáng trở đi
-      if (!availableTimes.includes(startTime) && startTime >= "10:00") {
-        availableTimes.push(startTime);
-      }
-    });
-
-    // Thêm các giờ bắt đầu từ 30 phút (ví dụ: 10:30) nếu có cả slot hiện tại và slot tiếp theo khả dụng
-    START_TIMES.filter((time) => time.endsWith(":30")).forEach(
-      (halfHourTime) => {
-        // Chỉ xử lý các giờ từ 10:30 trở đi
-        if (halfHourTime < "10:00") return;
-
-        const hour = parseInt(halfHourTime.split(":")[0]);
-
-        // Cần kiểm tra slot chứa giờ bắt đầu
-        const currentSlot = `${hour.toString().padStart(2, "0")}:00-${(hour + 1)
-          .toString()
-          .padStart(2, "0")}:00`;
-
-        // Và slot tiếp theo
-        const nextSlot = `${(hour + 1).toString().padStart(2, "0")}:00-${(
-          hour + 2
-        )
-          .toString()
-          .padStart(2, "0")}:00`;
-
-        // Kiểm tra cả hai slot đều phải có sẵn trong danh sách khả dụng
-        if (
-          availableSlots.includes(currentSlot) &&
-          availableSlots.includes(nextSlot)
-        ) {
-          availableTimes.push(halfHourTime);
-        }
-      }
-    );
-
-    // Sắp xếp theo thứ tự thời gian và loại bỏ tất cả giờ trước 10h sáng
-    availableTimes.sort();
-    const filteredByMinTime = availableTimes.filter((time) => time >= "10:00");
-
-    // Nếu là ngày hiện tại, lọc bỏ các giờ đã qua
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const selectedDateNoTime = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate()
-    );
-
-    // Chỉ lọc giờ nếu ngày được chọn là hôm nay
-    if (selectedDateNoTime.getTime() === today.getTime()) {
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-
-      // Lọc bỏ các giờ đã qua
-      const filteredTimes = filteredByMinTime.filter((time) => {
-        const [hour, minute] = time.split(":").map(Number);
-
-        // Nếu giờ trong quá khứ, loại bỏ
-        if (hour < currentHour) return false;
-
-        // Nếu cùng giờ nhưng phút đã qua, loại bỏ
-        if (hour === currentHour && minute <= currentMinute) return false;
-
-        // Thêm buffer 30 phút để người dùng có thời gian đến
-        if (hour === currentHour && minute < currentMinute + 30) return false;
-
-        return true;
-      });
-
-      setAvailableStartTimes(filteredTimes);
-    } else {
-      setAvailableStartTimes(filteredByMinTime);
-    }
-  };
+  }, [selectedDate, selectedRoomType, calculateAvailableStartTimes]);
 
   // Theo dõi thay đổi giờ bắt đầu để cập nhật giới hạn thời lượng
   useEffect(() => {
