@@ -79,8 +79,7 @@ export async function POST(request: Request) {
     });
 
     // Lưu token vào cookie
-    const cookieStore = cookies();
-    cookieStore.set("auth_token", token, {
+    (await cookies()).set("auth_token", token, {
       expires: expiryDate,
       httpOnly: true,
       path: "/",
