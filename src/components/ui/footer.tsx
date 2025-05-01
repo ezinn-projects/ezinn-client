@@ -35,7 +35,7 @@ const TwoColumnFooter = () => {
               unoptimized={true}
               width={100}
               height={40}
-              src="/images/Screenshot_11-removebg-preview.png"
+              src="/images/logo.png"
               alt="logo"
               className="h-7 w-auto"
             />

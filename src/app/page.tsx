@@ -2,6 +2,7 @@ import TestimonialCarousel from "@/components/carousel";
 import { Price } from "@/types/price";
 import { RoomType } from "@/types/room";
 import Image from "next/image";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -135,9 +136,12 @@ export default async function Home() {
                           : "---"}{" "}
                         đ/giờ
                       </p>
-                      <button className="bg-lightpink text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition animate-buttonheartbeat whitespace-nowrap font-bold">
+                      <Link
+                        href={`/booking?roomType=${type.type}`}
+                        className="bg-lightpink text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition animate-buttonheartbeat whitespace-nowrap font-bold"
+                      >
                         Đặt ngay
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

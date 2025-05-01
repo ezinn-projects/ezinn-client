@@ -45,17 +45,7 @@ export default function PoliciesPage() {
                 <span className="text-lightpink mr-2">◦</span>
                 <span>
                   <span className="font-medium">Phòng hát siêu rộng:</span> Đủ
-                  chỗ cho cả squad 10 người/phòng.
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-lightpink mr-2">◦</span>
-                <span>
-                  <span className="font-medium">
-                    Giá ưu đãi cho học sinh, sinh viên:
-                  </span>{" "}
-                  Giảm ngay 20% khi show thẻ sinh viên - quẩy hết mình không lo
-                  về giá!
+                  chỗ cho cả squad 8 người/phòng.
                 </span>
               </li>
               <li className="flex items-start">
@@ -92,13 +82,6 @@ export default function PoliciesPage() {
             <span>
               Sau 15 phút, JOZO có quyền nhận khách khác nếu bạn không đến
               (sorry nha, nhưng phải công bằng với mọi người).
-            </span>
-          </li>
-          <li className="flex items-start">
-            <span className="text-lightpink mr-2">•</span>
-            <span>
-              Hủy trước 2 giờ: không mất phí. Hủy trễ hơn: có thể áp dụng phí
-              nhỏ (tùy trường hợp).
             </span>
           </li>
         </ul>

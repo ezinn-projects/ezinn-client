@@ -9,9 +9,17 @@ interface DateSelectProps {
   value: Date | undefined;
   onChange: (date: Date) => void;
   error?: string;
+  label?: string;
+  required?: boolean;
 }
 
-export function DateSelect({ value, onChange, error }: DateSelectProps) {
+export function DateSelect({
+  value,
+  onChange,
+  error,
+  label = "Ngày sinh",
+  required = false,
+}: DateSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dayRef = useRef<HTMLDivElement>(null);
   const monthRef = useRef<HTMLDivElement>(null);
@@ -102,7 +110,10 @@ export function DateSelect({ value, onChange, error }: DateSelectProps) {
 
   return (
     <div className="relative">
-      <label className="block font-medium text-lightpink mb-1">Ngày sinh</label>
+      <label className="block font-medium text-lightpink mb-1">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}

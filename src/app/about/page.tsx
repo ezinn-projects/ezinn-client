@@ -57,11 +57,6 @@ export default function AboutPage() {
                 desc: "Thoải mái pose dáng, chụp bao nhiêu cũng được!",
               },
               {
-                icon: "🎓",
-                title: "Giá Sinh Viên",
-                desc: "Giảm 20% khi show thẻ sinh viên - quẩy hết mình không lo về giá!",
-              },
-              {
                 icon: "📱",
                 title: "Đặt Phòng Dễ Ẹc",
                 desc: "Book phòng chỉ với vài click qua web, Zalo hoặc Facebook!",

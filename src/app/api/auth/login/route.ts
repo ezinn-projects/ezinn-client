@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import clientPromise, { checkMongoConnection } from "@/lib/mongodb";
 import { z } from "zod";
+import { cookies } from "next/headers";
+import { v4 as uuidv4 } from "uuid";
 
 const loginSchema = z.object({
   phone_number: z.string().min(10).max(10),
@@ -59,6 +61,32 @@ export async function POST(request: Request) {
         { status: 403 }
       );
     }
+
+    // Tạo session cho người dùng đã đăng nhập
+    const sessionsCollection = db.collection("sessions");
+    const token = uuidv4(); // Generate a random UUID as token
+
+    // Thời gian hết hạn (ví dụ 7 ngày)
+    const expiresIn = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+    const expiryDate = new Date(Date.now() + expiresIn);
+
+    // Lưu session vào database
+    await sessionsCollection.insertOne({
+      userId: user._id,
+      token,
+      createdAt: new Date(),
+      expires: expiryDate,
+    });
+
+    // Lưu token vào cookie
+    const cookieStore = cookies();
+    cookieStore.set("auth_token", token, {
+      expires: expiryDate,
+      httpOnly: true,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     // Return only necessary user data
     const userData = {
