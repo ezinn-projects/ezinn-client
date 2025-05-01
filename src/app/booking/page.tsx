@@ -12,6 +12,8 @@ import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { DateSelect } from "@/components/ui/date-select";
 
+export const dynamic = "force-dynamic";
+
 type TimeSlot = string;
 type RoomType = "small" | "medium" | "large";
 
