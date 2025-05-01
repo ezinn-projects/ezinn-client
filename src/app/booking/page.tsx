@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -98,11 +98,26 @@ const TIME_FRAMES = [
   { start: "18:00", end: "23:00", label: "Khung giờ buổi tối" },
 ];
 
-export default function BookingPage() {
-  const router = useRouter();
+// Component để handle search params
+function BookingWithSearchParams({
+  onRoomTypeChange,
+}: {
+  onRoomTypeChange: (roomType: RoomType) => void;
+}) {
   const searchParams = useSearchParams();
   const roomTypeParam = searchParams.get("roomType") as RoomType | null;
 
+  useEffect(() => {
+    if (roomTypeParam && ["small", "medium", "large"].includes(roomTypeParam)) {
+      onRoomTypeChange(roomTypeParam);
+    }
+  }, [roomTypeParam, onRoomTypeChange]);
+
+  return null;
+}
+
+export default function BookingPage() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedRoomType, setSelectedRoomType] = useState<RoomType>("small");
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
@@ -112,12 +127,9 @@ export default function BookingPage() {
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
 
-  // Set room type from URL parameter when component mounts
-  useEffect(() => {
-    if (roomTypeParam && ["small", "medium", "large"].includes(roomTypeParam)) {
-      setSelectedRoomType(roomTypeParam);
-    }
-  }, [roomTypeParam]);
+  const handleRoomTypeChange = useCallback((roomType: RoomType) => {
+    setSelectedRoomType(roomType);
+  }, []);
 
   const {
     register,
@@ -801,6 +813,10 @@ export default function BookingPage() {
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-2xl">
+      <Suspense fallback={<div>Loading...</div>}>
+        <BookingWithSearchParams onRoomTypeChange={handleRoomTypeChange} />
+      </Suspense>
+
       <h1 className="text-3xl font-bold text-lightpink mb-8 text-center">
         Đặt Phòng {ROOM_TYPE_LABELS[selectedRoomType]}
       </h1>
