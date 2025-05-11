@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import Input from "@/components/ui/input";
-import { Mail, Phone, User, Clock } from "lucide-react";
+import { Mail, Phone, User, Clock, Check, Copy } from "lucide-react";
 import { bookingSchema, BookingFormData } from "@/schemas/booking.schema";
 import { toast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -127,6 +127,18 @@ export default function BookingPage() {
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
 
+  // Modal state
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [bookingCode, setBookingCode] = useState("");
+  const [bookingDetails, setBookingDetails] = useState<{
+    name: string;
+    phone: string;
+    date: string;
+    time: string;
+    roomType: string;
+    price: number;
+  } | null>(null);
+
   const handleRoomTypeChange = useCallback((roomType: RoomType) => {
     setSelectedRoomType(roomType);
   }, []);
@@ -203,64 +215,84 @@ export default function BookingPage() {
   const isSelectedTimeAvailable = (): boolean => {
     if (selectedTimeSlots.length === 0) return false;
 
-    // Đối với các giờ bắt đầu có phút là :30, cần xử lý đặc biệt
-    if (selectedStartTime.endsWith(":30")) {
-      // Lấy giờ từ thời gian bắt đầu (ví dụ: từ "18:30" lấy ra 18)
-      const hour = parseInt(selectedStartTime.split(":")[0]);
+    // Tính toán thời điểm bắt đầu và kết thúc chính xác
+    const [startHour, startMinute] = selectedStartTime.split(":").map(Number);
+    const totalStartMinutes = startHour * 60 + startMinute;
+    const totalEndMinutes = totalStartMinutes + selectedDuration * 60;
+    const endHour = Math.floor(totalEndMinutes / 60);
+    const endMinute = totalEndMinutes % 60;
 
-      // Giờ bắt đầu là HH:30, cần kiểm tra xem HH:00-HH+1:00 có trống không
-      const firstRequiredSlot = `${hour.toString().padStart(2, "0")}:00-${(
-        hour + 1
+    // Kiểm tra xem thời gian kết thúc có vượt quá 23:00 không
+    if (endHour > 23 || (endHour === 23 && endMinute > 0)) {
+      return false;
+    }
+
+    // Tạo danh sách các khung giờ cần kiểm tra
+    const requiredSlots: string[] = [];
+
+    // Thêm các khung giờ cần thiết
+    for (let currentHour = startHour; currentHour < endHour; currentHour++) {
+      // Thêm khung giờ hiện tại
+      const currentSlot = `${currentHour.toString().padStart(2, "0")}:00-${(
+        currentHour + 1
+      )
+        .toString()
+        .padStart(2, "0")}:00`;
+      requiredSlots.push(currentSlot);
+
+      // Nếu là giờ cuối và có phút kết thúc > 0, thêm khung giờ tiếp theo
+      if (currentHour === endHour - 1 && endMinute > 0) {
+        const nextSlot = `${(currentHour + 1)
+          .toString()
+          .padStart(2, "0")}:00-${(currentHour + 2)
+          .toString()
+          .padStart(2, "0")}:00`;
+        requiredSlots.push(nextSlot);
+      }
+    }
+
+    // Kiểm tra xem tất cả các khung giờ cần thiết có khả dụng không
+    const allSlotsAvailable = requiredSlots.every((slot) =>
+      availableSlots.includes(slot)
+    );
+    if (!allSlotsAvailable) {
+      return false;
+    }
+
+    // Kiểm tra thêm các trường hợp đặc biệt
+    if (selectedStartTime.endsWith(":30")) {
+      // Đối với giờ bắt đầu là :30, cần đảm bảo không có booking nào bắt đầu trong khoảng thời gian này
+      const startSlot = `${startHour.toString().padStart(2, "0")}:00-${(
+        startHour + 1
+      )
+        .toString()
+        .padStart(2, "0")}:00`;
+      const nextSlot = `${(startHour + 1).toString().padStart(2, "0")}:00-${(
+        startHour + 2
       )
         .toString()
         .padStart(2, "0")}:00`;
 
-      // Đồng thời cần kiểm tra slot tiếp theo HH+1:00-HH+2:00 cũng phải trống
-      const secondRequiredSlot = `${(hour + 1)
-        .toString()
-        .padStart(2, "0")}:00-${(hour + 2).toString().padStart(2, "0")}:00`;
-
-      // Nếu một trong hai slot không khả dụng, trả về false
+      // Kiểm tra cả hai khung giờ liền kề
       if (
-        !availableSlots.includes(firstRequiredSlot) ||
-        !availableSlots.includes(secondRequiredSlot)
+        !availableSlots.includes(startSlot) ||
+        !availableSlots.includes(nextSlot)
       ) {
         return false;
       }
-
-      // Nếu cần kiểm tra thêm các slot sau đó (cho thời lượng > 1.5 giờ)
-      if (selectedDuration > 1.5) {
-        // Lấy các slot kể từ slot thứ 3 (nếu có)
-        const remainingHours = selectedDuration - 1.5;
-        // Nếu còn giờ, cần kiểm tra thêm các slot tiếp theo
-        if (remainingHours > 0) {
-          // Giờ bắt đầu từ 2 slot sau giờ bắt đầu ban đầu
-          let checkHour = hour + 2;
-          let hoursLeft = remainingHours;
-
-          // Kiểm tra từng slot tiếp theo cho đến khi đủ thời lượng
-          while (hoursLeft > 0) {
-            const nextSlot = `${checkHour.toString().padStart(2, "0")}:00-${(
-              checkHour + 1
-            )
-              .toString()
-              .padStart(2, "0")}:00`;
-
-            if (!availableSlots.includes(nextSlot)) {
-              return false;
-            }
-
-            checkHour += 1;
-            hoursLeft -= 1;
-          }
-        }
-      }
-
-      return true;
     }
 
-    // Trường hợp thông thường cho giờ tròn: kiểm tra từng slot đã chọn có trong danh sách available không
-    return selectedTimeSlots.every((slot) => availableSlots.includes(slot));
+    // Kiểm tra xem có booking nào kết thúc trong khoảng thời gian này không
+    if (endMinute > 0) {
+      const endSlot = `${endHour.toString().padStart(2, "0")}:00-${(endHour + 1)
+        .toString()
+        .padStart(2, "0")}:00`;
+      if (!availableSlots.includes(endSlot)) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   // Tính toán các giờ bắt đầu khả dụng dựa trên slots trống
@@ -523,16 +555,17 @@ export default function BookingPage() {
       const result = await response.json();
 
       if (result.success) {
-        // Show success toast
-        toast({
-          title: "Đặt phòng thành công!",
-          description: "Chúng tôi sẽ liên hệ với bạn sớm nhất có thể.",
+        // Hiển thị modal xác nhận thay vì toast và redirect
+        setBookingCode(result.data._id.slice(-6).toUpperCase());
+        setBookingDetails({
+          name: data.name,
+          phone: data.phone,
+          date: format(selectedDate, "dd/MM/yyyy", { locale: vi }),
+          time: formatTimeDisplay(selectedTimeSlots),
+          roomType: ROOM_TYPE_LABELS[selectedRoomType],
+          price: calculateTotalPrice(selectedRoomType, selectedTimeSlots),
         });
-
-        // Redirect to home page after delay
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
+        setShowConfirmModal(true);
       } else {
         // Show error message
         toast({
@@ -549,6 +582,15 @@ export default function BookingPage() {
         variant: "destructive",
       });
     }
+  };
+
+  // Copy booking code to clipboard
+  const copyBookingCode = () => {
+    navigator.clipboard.writeText(bookingCode);
+    toast({
+      title: "Đã sao chép",
+      description: "Mã đặt phòng đã được sao chép vào clipboard",
+    });
   };
 
   // Kiểm tra một thời điểm thuộc khung giờ nào
@@ -1050,6 +1092,89 @@ export default function BookingPage() {
           </button>
         </form>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && bookingDetails && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 relative">
+            <div className="bg-lightpink rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <Check className="text-white w-8 h-8" />
+            </div>
+            <h2 className="text-2xl font-bold text-center text-lightpink mb-4">
+              Đặt phòng thành công!
+            </h2>
+
+            <div className="mb-6 border-2 border-dashed border-lightpink/40 rounded-lg p-4 bg-lightpink/5">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-bold">Mã đặt phòng:</span>
+                <div className="flex items-center">
+                  <span className="font-mono text-lg font-bold tracking-wider text-lightpink mr-2">
+                    {bookingCode}
+                  </span>
+                  <button
+                    onClick={copyBookingCode}
+                    className="text-lightpink hover:text-pink-700"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 italic mb-3">
+                Vui lòng lưu lại mã đặt phòng để tra cứu sau này
+              </p>
+
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Tên khách hàng:</span>
+                  <span className="font-medium">{bookingDetails.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Số điện thoại:</span>
+                  <span className="font-medium">{bookingDetails.phone}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Loại phòng:</span>
+                  <span className="font-medium">{bookingDetails.roomType}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Ngày đặt:</span>
+                  <span className="font-medium">{bookingDetails.date}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Thời gian:</span>
+                  <span className="font-medium">{bookingDetails.time}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-gray-200 mt-2">
+                  <span className="text-gray-600 font-medium">Tổng tiền:</span>
+                  <span className="font-bold text-lightpink">
+                    {bookingDetails.price.toLocaleString("vi-VN")}đ
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-center text-gray-600 mb-6">
+              Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận. Vui
+              lòng đến đúng giờ!
+            </p>
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => router.push("/")}
+                className="w-full py-3 bg-lightpink text-white rounded-lg hover:bg-pink-600 transition-colors animate-buttonheartbeat"
+              >
+                Về trang chủ
+              </button>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="w-full py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
