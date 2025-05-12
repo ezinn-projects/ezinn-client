@@ -1120,23 +1120,33 @@ export default function BookingPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tên khách hàng:</span>
-                  <span className="font-medium">{bookingDetails.name}</span>
+                  <span className="font-medium text-lightpink">
+                    {bookingDetails.name}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Số điện thoại:</span>
-                  <span className="font-medium">{bookingDetails.phone}</span>
+                  <span className="font-medium text-lightpink">
+                    {bookingDetails.phone}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Loại phòng:</span>
-                  <span className="font-medium">{bookingDetails.roomType}</span>
+                  <span className="font-medium text-lightpink">
+                    {bookingDetails.roomType}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Ngày đặt:</span>
-                  <span className="font-medium">{bookingDetails.date}</span>
+                  <span className="font-medium text-lightpink">
+                    {bookingDetails.date}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Thời gian:</span>
-                  <span className="font-medium">{bookingDetails.time}</span>
+                  <span className="font-medium text-lightpink">
+                    {bookingDetails.time}
+                  </span>
                 </div>
                 <div className="flex justify-between pt-2 border-t border-gray-200 mt-2">
                   <span className="text-gray-600 font-medium">Tổng tiền:</span>
