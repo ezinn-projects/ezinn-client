@@ -126,6 +126,7 @@ export default function BookingPage() {
   const [selectedDuration, setSelectedDuration] = useState<number>(1);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const [priceData, setPriceData] = useState<PriceData[]>([]);
+  const [isRoomAvailable, setIsRoomAvailable] = useState(true);
 
   // Modal state
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -399,36 +400,60 @@ export default function BookingPage() {
 
         const data: AvailableSlotsResponse = await response.json();
 
-        if (data.success && data.data) {
-          // Sắp xếp các slot theo thứ tự thời gian
-          const sortedSlots = [...data.data.available_slots].sort((a, b) => {
-            const startTimeA = parseInt(a.split("-")[0].split(":")[0]);
-            const startTimeB = parseInt(b.split("-")[0].split(":")[0]);
-            return startTimeA - startTimeB;
+        if (!data.success) {
+          setIsRoomAvailable(false);
+          toast({
+            title: "Thông báo",
+            description: data.message || "Phòng đang được bảo trì",
+            variant: "destructive",
+            duration: 5000, // Hiển thị trong 5 giây
           });
-
-          setAvailableSlots(sortedSlots);
-
-          // Tính toán các giờ bắt đầu khả dụng
-          calculateAvailableStartTimes(sortedSlots);
-
-          // Reset selections
+          setAvailableSlots([]);
+          setAvailableStartTimes([]);
           setSelectedStartTime("");
           setSelectedDuration(1);
-        } else {
-          toast({
-            title: "Lỗi",
-            description:
-              data.message || "Không thể lấy thông tin khung giờ trống",
-            variant: "destructive",
-          });
+          return;
         }
+
+        if (!data.data || data.data.available_slots.length === 0) {
+          setIsRoomAvailable(false);
+          toast({
+            title: "Thông báo",
+            description: "Phòng đang được bảo trì",
+            variant: "destructive",
+            duration: 5000, // Hiển thị trong 5 giây
+          });
+          setAvailableSlots([]);
+          setAvailableStartTimes([]);
+          setSelectedStartTime("");
+          setSelectedDuration(1);
+          return;
+        }
+
+        setIsRoomAvailable(true);
+        // Sắp xếp các slot theo thứ tự thời gian
+        const sortedSlots = [...data.data.available_slots].sort((a, b) => {
+          const startTimeA = parseInt(a.split("-")[0].split(":")[0]);
+          const startTimeB = parseInt(b.split("-")[0].split(":")[0]);
+          return startTimeA - startTimeB;
+        });
+
+        setAvailableSlots(sortedSlots);
+
+        // Tính toán các giờ bắt đầu khả dụng
+        calculateAvailableStartTimes(sortedSlots);
+
+        // Reset selections
+        setSelectedStartTime("");
+        setSelectedDuration(1);
       } catch (error) {
         console.error("Error fetching available slots:", error);
+        setIsRoomAvailable(false);
         toast({
           title: "Lỗi",
           description: "Không thể kết nối đến máy chủ",
           variant: "destructive",
+          duration: 5000, // Hiển thị trong 5 giây
         });
       } finally {
         setIsLoadingSlots(false);
@@ -857,115 +882,101 @@ export default function BookingPage() {
         Đặt Phòng {ROOM_TYPE_LABELS[selectedRoomType]}
       </h1>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Customer Information */}
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-lightpink mb-4">
-              Thông tin khách hàng
-            </h2>
+      {!isRoomAvailable ? (
+        <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <div className="text-6xl mb-4">🔧</div>
+          <h2 className="text-2xl font-bold text-lightpink mb-4">
+            Phòng đang được bảo trì
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Rất tiếc, phòng này hiện đang trong quá trình bảo trì. Vui lòng thử
+            lại sau hoặc chọn phòng khác.
+          </p>
+          <button
+            onClick={() => router.push("/")}
+            className="px-6 py-3 bg-lightpink text-white rounded-lg hover:bg-pink-600 transition-colors animate-buttonheartbeat"
+          >
+            Về trang chủ
+          </button>
+        </div>
+      ) : (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* Customer Information */}
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-lightpink mb-4">
+                Thông tin khách hàng
+              </h2>
 
-            <Input
-              label="Họ và tên"
-              {...register("name")}
-              placeholder="Nhập họ và tên của bạn"
-              required
-              error={errors.name?.message}
-              prefix={<User className="h-4 w-4" />}
-            />
+              <Input
+                label="Họ và tên"
+                {...register("name")}
+                placeholder="Nhập họ và tên của bạn"
+                required
+                error={errors.name?.message}
+                prefix={<User className="h-4 w-4" />}
+              />
 
-            <Input
-              label="Số điện thoại"
-              {...register("phone")}
-              placeholder="Nhập số điện thoại của bạn"
-              type="number"
-              maxLength={10}
-              required
-              error={errors.phone?.message}
-              prefix={<Phone className="h-4 w-4" />}
-            />
+              <Input
+                label="Số điện thoại"
+                {...register("phone")}
+                placeholder="Nhập số điện thoại của bạn"
+                type="number"
+                maxLength={10}
+                required
+                error={errors.phone?.message}
+                prefix={<Phone className="h-4 w-4" />}
+              />
 
-            <Input
-              label="Email"
-              {...register("email")}
-              placeholder="Nhập email của bạn (không bắt buộc)"
-              error={errors.email?.message}
-              prefix={<Mail className="h-4 w-4" />}
-              helpText="Chúng tôi sẽ gửi thông tin xác nhận đến email này"
-            />
+              <Input
+                label="Email"
+                {...register("email")}
+                placeholder="Nhập email của bạn (không bắt buộc)"
+                error={errors.email?.message}
+                prefix={<Mail className="h-4 w-4" />}
+                helpText="Chúng tôi sẽ gửi thông tin xác nhận đến email này"
+              />
 
-            {/* add note */}
-            <Input
-              label="Ghi chú"
-              {...register("note")}
-              placeholder="Nhập ghi chú của bạn"
-              helpText="Ghi chú cho chúng tôi"
-            />
-          </div>
-
-          {/* Booking Information */}
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-lightpink mb-4">
-              Thông tin đặt phòng
-            </h2>
-
-            <div className="mb-4">
-              <label className="block text-lightpink mb-1"></label>
-              <div className="relative">
-                <DateSelect
-                  value={selectedDate}
-                  onChange={setSelectedDate}
-                  label="Ngày đặt"
-                  required
-                />
-              </div>
+              {/* add note */}
+              <Input
+                label="Ghi chú"
+                {...register("note")}
+                placeholder="Nhập ghi chú của bạn"
+                helpText="Ghi chú cho chúng tôi"
+              />
             </div>
 
-            {isLoadingSlots ? (
-              <div className="text-center py-4">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-lightpink border-t-transparent"></div>
-                <p className="mt-2 text-gray-600">
-                  Đang kiểm tra khung giờ trống...
-                </p>
-              </div>
-            ) : (
-              <>
-                {/* Chọn giờ bắt đầu */}
-                <div className="mb-4">
-                  <label className="block text-lightpink mb-1">
-                    Giờ bắt đầu
-                    <span className="text-red-500 ml-1">*</span>
-                  </label>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                      <Clock className="h-4 w-4" />
-                    </div>
-                    <select
-                      value={selectedStartTime}
-                      onChange={(e) => setSelectedStartTime(e.target.value)}
-                      className="w-full border rounded px-3 py-2 pl-10 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
-                      disabled={availableStartTimes.length === 0}
-                    >
-                      <option value="">Chọn giờ bắt đầu</option>
-                      {availableStartTimes.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {availableStartTimes.length === 0 && !isLoadingSlots && (
-                    <p className="mt-1 text-sm text-red-500">
-                      Không có khung giờ trống cho ngày đã chọn
-                    </p>
-                  )}
-                </div>
+            {/* Booking Information */}
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-lightpink mb-4">
+                Thông tin đặt phòng
+              </h2>
 
-                {/* Chọn thời lượng */}
-                {selectedStartTime && (
+              <div className="mb-4">
+                <label className="block text-lightpink mb-1"></label>
+                <div className="relative">
+                  <DateSelect
+                    value={selectedDate}
+                    onChange={setSelectedDate}
+                    label="Ngày đặt"
+                    required
+                  />
+                </div>
+              </div>
+
+              {isLoadingSlots ? (
+                <div className="text-center py-4">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-lightpink border-t-transparent"></div>
+                  <p className="mt-2 text-gray-600">
+                    Đang kiểm tra khung giờ trống...
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Chọn giờ bắt đầu */}
                   <div className="mb-4">
                     <label className="block text-lightpink mb-1">
-                      Thời lượng
+                      Giờ bắt đầu
                       <span className="text-red-500 ml-1">*</span>
                     </label>
                     <div className="relative">
@@ -973,119 +984,153 @@ export default function BookingPage() {
                         <Clock className="h-4 w-4" />
                       </div>
                       <select
-                        value={selectedDuration}
-                        onChange={(e) =>
-                          setSelectedDuration(parseFloat(e.target.value))
-                        }
+                        value={selectedStartTime}
+                        onChange={(e) => setSelectedStartTime(e.target.value)}
                         className="w-full border rounded px-3 py-2 pl-10 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                        disabled={availableStartTimes.length === 0}
                       >
-                        {availableDurations.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
+                        <option value="">Chọn giờ bắt đầu</option>
+                        {availableStartTimes.map((time) => (
+                          <option key={time} value={time}>
+                            {time}
                           </option>
                         ))}
                       </select>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Thời gian tối đa có thể đặt: {maxDuration} giờ
-                    </p>
+                    {availableStartTimes.length === 0 && !isLoadingSlots && (
+                      <p className="mt-1 text-sm text-red-500">
+                        Không có khung giờ trống cho ngày đã chọn
+                      </p>
+                    )}
                   </div>
-                )}
-              </>
-            )}
 
-            {/* Hiển thị giờ đã chọn */}
+                  {/* Chọn thời lượng */}
+                  {selectedStartTime && (
+                    <div className="mb-4">
+                      <label className="block text-lightpink mb-1">
+                        Thời lượng
+                        <span className="text-red-500 ml-1">*</span>
+                      </label>
+                      <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                          <Clock className="h-4 w-4" />
+                        </div>
+                        <select
+                          value={selectedDuration}
+                          onChange={(e) =>
+                            setSelectedDuration(parseFloat(e.target.value))
+                          }
+                          className="w-full border rounded px-3 py-2 pl-10 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                        >
+                          {availableDurations.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-500">
+                        Thời gian tối đa có thể đặt: {maxDuration} giờ
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Hiển thị giờ đã chọn */}
+              {selectedTimeSlots.length > 0 && isSelectedTimeAvailable() && (
+                <div className="mt-4 p-3 bg-green-50 rounded-md">
+                  <p className="text-green-600 font-medium">
+                    Thời gian đã chọn:{" "}
+                    <span className="font-bold">
+                      {formatTimeDisplay(selectedTimeSlots)}
+                    </span>
+                  </p>
+                  <p className="text-sm text-green-600">{getSelectedHours()}</p>
+                </div>
+              )}
+
+              {selectedTimeSlots.length > 0 && !isSelectedTimeAvailable() && (
+                <div className="mt-4 p-3 bg-red-50 rounded-md">
+                  <p className="text-red-600">
+                    Thời gian đã chọn không khả dụng. Vui lòng chọn thời gian
+                    khác.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Summary */}
             {selectedTimeSlots.length > 0 && isSelectedTimeAvailable() && (
-              <div className="mt-4 p-3 bg-green-50 rounded-md">
-                <p className="text-green-600 font-medium">
-                  Thời gian đã chọn:{" "}
-                  <span className="font-bold">
+              <div className="mb-6 p-4 bg-gray-50 rounded-md">
+                <h2 className="text-lg font-semibold text-lightpink mb-2">
+                  Tóm tắt đặt phòng
+                </h2>
+                <div className="flex justify-between mb-2">
+                  <span className="text-lightpink">Loại phòng:</span>
+                  <span className="font-medium text-lightpink">
+                    {ROOM_TYPE_LABELS[selectedRoomType]}
+                  </span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-lightpink">Ngày:</span>
+                  <span className="font-medium text-lightpink">
+                    {format(selectedDate, "dd/MM/yyyy", { locale: vi })}
+                  </span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-lightpink">Thời gian:</span>
+                  <span className="font-medium text-lightpink">
                     {formatTimeDisplay(selectedTimeSlots)}
                   </span>
-                </p>
-                <p className="text-sm text-green-600">{getSelectedHours()}</p>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span className="text-lightpink">Số giờ:</span>
+                  <span className="font-medium text-lightpink">
+                    {getSelectedHours()}
+                  </span>
+                </div>
+                <div className="flex justify-between font-bold text-lg mt-2 pt-2 border-t">
+                  <span className="text-lightpink">Tổng tiền dự tính:</span>
+                  <span className="text-lightpink">
+                    {calculateTotalPrice(
+                      selectedRoomType,
+                      selectedTimeSlots
+                    ).toLocaleString("vi-VN")}
+                    đ
+                  </span>
+                </div>
+
+                <div className="mt-4 text-sm border-t pt-3 text-gray-600">
+                  <p className="mb-1">
+                    <span className="font-medium">Lưu ý về thanh toán:</span>{" "}
+                    Jozo áp dụng chính sách thanh toán trực tiếp tại Jozo sau
+                    khi sử dụng dịch vụ. Chúng tôi không nhận đặt cọc hoặc
+                    chuyển khoản trước để đảm bảo trải nghiệm thuận tiện nhất
+                    cho quý khách.
+                  </p>
+                  <p className="text-red-500">
+                    Nếu đến trễ quá 15 phút so với giờ đặt, phòng sẽ được hủy và
+                    có thể được sắp xếp cho khách khác.
+                  </p>
+                </div>
               </div>
             )}
 
-            {selectedTimeSlots.length > 0 && !isSelectedTimeAvailable() && (
-              <div className="mt-4 p-3 bg-red-50 rounded-md">
-                <p className="text-red-600">
-                  Thời gian đã chọn không khả dụng. Vui lòng chọn thời gian
-                  khác.
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Summary */}
-          {selectedTimeSlots.length > 0 && isSelectedTimeAvailable() && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-md">
-              <h2 className="text-lg font-semibold text-lightpink mb-2">
-                Tóm tắt đặt phòng
-              </h2>
-              <div className="flex justify-between mb-2">
-                <span className="text-lightpink">Loại phòng:</span>
-                <span className="font-medium text-lightpink">
-                  {ROOM_TYPE_LABELS[selectedRoomType]}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span className="text-lightpink">Ngày:</span>
-                <span className="font-medium text-lightpink">
-                  {format(selectedDate, "dd/MM/yyyy", { locale: vi })}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span className="text-lightpink">Thời gian:</span>
-                <span className="font-medium text-lightpink">
-                  {formatTimeDisplay(selectedTimeSlots)}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <span className="text-lightpink">Số giờ:</span>
-                <span className="font-medium text-lightpink">
-                  {getSelectedHours()}
-                </span>
-              </div>
-              <div className="flex justify-between font-bold text-lg mt-2 pt-2 border-t">
-                <span className="text-lightpink">Tổng tiền dự tính:</span>
-                <span className="text-lightpink">
-                  {calculateTotalPrice(
-                    selectedRoomType,
-                    selectedTimeSlots
-                  ).toLocaleString("vi-VN")}
-                  đ
-                </span>
-              </div>
-
-              <div className="mt-4 text-sm border-t pt-3 text-gray-600">
-                <p className="mb-1">
-                  <span className="font-medium">Lưu ý về thanh toán:</span> Jozo
-                  áp dụng chính sách thanh toán trực tiếp tại Jozo sau khi sử
-                  dụng dịch vụ. Chúng tôi không nhận đặt cọc hoặc chuyển khoản
-                  trước để đảm bảo trải nghiệm thuận tiện nhất cho quý khách.
-                </p>
-                <p className="text-red-500">
-                  Nếu đến trễ quá 15 phút so với giờ đặt, phòng sẽ được hủy và
-                  có thể được sắp xếp cho khách khác.
-                </p>
-              </div>
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              selectedTimeSlots.length === 0 ||
-              !isSelectedTimeAvailable()
-            }
-            className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? "Đang xử lý..." : "Đặt phòng ngay"}
-          </button>
-        </form>
-      </div>
+            <button
+              type="submit"
+              disabled={
+                isSubmitting ||
+                selectedTimeSlots.length === 0 ||
+                !isSelectedTimeAvailable()
+              }
+              className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? "Đang xử lý..." : "Đặt phòng ngay"}
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Confirmation Modal */}
       {showConfirmModal && bookingDetails && (
@@ -1159,7 +1204,7 @@ export default function BookingPage() {
 
             <p className="text-center text-gray-600 mb-6">
               Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận. Vui
-              lòng đến đúng giờ!
+              lòng đến đúng giờ thôi!
             </p>
 
             <div className="flex flex-col gap-2">

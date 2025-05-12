@@ -73,13 +73,13 @@ export async function GET(request: NextRequest) {
     const roomsCollection = db.collection("rooms");
     const rooms = await roomsCollection
       .find({
-        roomType: roomType,
+        $or: [{ type: roomType }, { roomType: roomType }],
       })
       .toArray();
 
     if (!rooms || rooms.length === 0) {
       return NextResponse.json(
-        { success: false, message: "Không tìm thấy phòng với loại đã chọn" },
+        { success: false, message: "Phòng đang được bảo trì" },
         { status: 404 }
       );
     }
