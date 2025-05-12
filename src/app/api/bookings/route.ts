@@ -16,6 +16,7 @@ export async function POST(request: Request) {
       customer_name: validatedData.name,
       customer_phone: validatedData.phone,
       customer_email: validatedData.email || null,
+      note: validatedData.note || null,
       room_type: body.room_type,
       booking_date: body.booking_date,
       time_slots: body.time_slots,

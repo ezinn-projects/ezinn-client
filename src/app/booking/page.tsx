@@ -451,27 +451,21 @@ export default function BookingPage() {
     if (!selectedStartTime || availableSlots.length === 0) return 1;
 
     // Tách giờ và phút từ thời gian bắt đầu
-    const [startHour, startMinute] = selectedStartTime.split(":").map(Number);
+    const [startHour] = selectedStartTime.split(":").map(Number);
     let currentHour = startHour;
-    const currentMinute = startMinute;
     let maxDuration = 0;
 
     // Tìm số lượng slots liên tiếp khả dụng từ giờ bắt đầu
     while (true) {
-      const nextHour = currentMinute === 0 ? currentHour + 1 : currentHour + 2;
-      const nextMinute = currentMinute === 0 ? 0 : 30;
-
       // Kiểm tra nếu thời gian vượt quá 23:00
-      if (nextHour > 23 || (nextHour === 23 && nextMinute > 0)) break;
+      if (currentHour >= 23) break;
 
-      // Slot 1 giờ hiện tại cần kiểm tra
-      const currentSlot = `${currentHour
-        .toString()
-        .padStart(2, "0")}:${currentMinute.toString().padStart(2, "0")}-${(
+      // Slot 1 giờ hiện tại cần kiểm tra (luôn kiểm tra theo giờ tròn)
+      const currentSlot = `${currentHour.toString().padStart(2, "0")}:00-${(
         currentHour + 1
       )
         .toString()
-        .padStart(2, "0")}:${currentMinute.toString().padStart(2, "0")}`;
+        .padStart(2, "0")}:00`;
 
       // Kiểm tra nếu slot không khả dụng
       if (!availableSlots.includes(currentSlot)) break;
@@ -859,7 +853,7 @@ export default function BookingPage() {
         <BookingWithSearchParams onRoomTypeChange={handleRoomTypeChange} />
       </Suspense>
 
-      <h1 className="text-3xl font-bold text-lightpink mb-8 text-center">
+      <h1 className="text-3xl font-bold text-lightpink mb-8 text-center text-white">
         Đặt Phòng {ROOM_TYPE_LABELS[selectedRoomType]}
       </h1>
 

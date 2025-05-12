@@ -21,7 +21,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://jozo.com.vn"),
   title: "JOZO Music Box - Music Box Biên Hòa",
   icons: {
-    icon: "/images/logo.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/logo.png", type: "image/png" },
+    ],
     apple: "/images/logo.png",
     shortcut: "/images/logo.png",
   },
@@ -72,7 +75,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <link rel="icon" href="/images/logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >

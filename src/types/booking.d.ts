@@ -3,6 +3,7 @@ export type Booking = {
   customer_name: string;
   customer_phone: string;
   customer_email?: string;
+  note?: string;
   room_type: "small" | "medium" | "large";
   room_id?: string;
   booking_date: string;
