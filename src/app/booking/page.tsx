@@ -1194,7 +1194,9 @@ export default function BookingPage() {
                   </span>
                 </div>
                 <div className="flex justify-between pt-2 border-t border-gray-200 mt-2">
-                  <span className="text-gray-600 font-medium">Tổng tiền:</span>
+                  <span className="text-gray-600 font-medium">
+                    Tổng tiền dự kiến:
+                  </span>
                   <span className="font-bold text-lightpink">
                     {bookingDetails.price.toLocaleString("vi-VN")}đ
                   </span>
@@ -1203,8 +1205,8 @@ export default function BookingPage() {
             </div>
 
             <p className="text-center text-gray-600 mb-6">
-              Chúng tôi sẽ liên hệ với bạn qua số điện thoại để xác nhận. Vui
-              lòng đến đúng giờ thôi!
+              Yay! Đặt phòng thành công rồi nè! 🎉 Hẹn gặp bạn đúng giờ để cùng
+              quẩy tung nóc nha! ✨
             </p>
 
             <div className="flex flex-col gap-2">
