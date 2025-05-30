@@ -1205,8 +1205,8 @@ export default function BookingPage() {
             </div>
 
             <p className="text-center text-gray-600 mb-6">
-              Yay! Đặt phòng thành công rồi nè! 🎉 Hẹn gặp bạn đúng giờ để cùng
-              quẩy tung nóc nha! ✨
+              Yay! Đặt box thành công rồi nè! 🎉 Hẹn gặp khách iu đúng giờ để
+              cùng quẩy tung nóc nha! ✨
             </p>
 
             <div className="flex flex-col gap-2">
