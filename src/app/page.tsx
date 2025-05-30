@@ -163,20 +163,7 @@ export default async function Home() {
               Giảm 50% cho tất cả các phòng từ ngày 19/04 đến 25/04
             </p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-center text-lightpink">
-              Ưu đãi sinh nhật
-            </h3>
-            <p className="text-gray-600">
-              Tặng 30 phút hát cho nhóm trên 6 người
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-2 text-center text-lightpink">
-              Khách hàng thân thiết
-            </h3>
-            <p className="text-gray-600">Tích điểm đổi quà hấp dẫn</p>
-          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md"></div>
         </div>
       </section>
     </div>

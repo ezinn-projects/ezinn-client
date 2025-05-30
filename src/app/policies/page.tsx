@@ -48,13 +48,6 @@ export default function PoliciesPage() {
                   chỗ cho cả squad 8 người/phòng.
                 </span>
               </li>
-              <li className="flex items-start">
-                <span className="text-lightpink mr-2">◦</span>
-                <span>
-                  <span className="font-medium">Sinh nhật free nước:</span> Đặt
-                  phòng vào ngày sinh nhật và nhận ngay nước miễn phí.
-                </span>
-              </li>
             </ul>
           </li>
         </ul>
