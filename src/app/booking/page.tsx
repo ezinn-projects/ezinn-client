@@ -147,7 +147,7 @@ export default function BookingPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -1119,14 +1119,18 @@ export default function BookingPage() {
 
             <button
               type="submit"
-              disabled={
-                isSubmitting ||
-                selectedTimeSlots.length === 0 ||
-                !isSelectedTimeAvailable()
-              }
-              className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-70 disabled:cursor-not-allowed"
+              onClick={(e) => {
+                e.preventDefault();
+                toast({
+                  title: "Thông báo",
+                  description: "Tính năng đang trong quá trình phát triển",
+                  variant: "destructive",
+                  duration: 5000,
+                });
+              }}
+              className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat opacity-70 cursor-not-allowed"
             >
-              {isSubmitting ? "Đang xử lý..." : "Đặt phòng ngay"}
+              Đặt phòng ngay
             </button>
           </form>
         </div>
