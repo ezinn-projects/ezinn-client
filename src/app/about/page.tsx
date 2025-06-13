@@ -112,7 +112,7 @@ export default function AboutPage() {
                   href="tel:0123456789"
                   className="text-gray-700 hover:text-lightpink transition"
                 >
-                  0123.456.789
+                  0366051204
                 </a>
               </div>
             </div>
@@ -121,7 +121,7 @@ export default function AboutPage() {
               <div>
                 <p className="font-bold text-lightpink">Địa chỉ</p>
                 <p className="text-gray-700">
-                  123 Đường ABC, Phường XYZ, TP. Biên Hòa
+                  78 Phan Trung, Tân Mai, Biên Hòa, Đồng Nai
                 </p>
               </div>
             </div>
