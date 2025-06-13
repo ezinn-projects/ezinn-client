@@ -88,7 +88,7 @@ export default function RootLayout({
         </header>
 
         {/* Main */}
-        <main className="flex-grow mt-32 mb-8 container mx-auto">
+        <main className="flex-grow mt-40 mb-8 container mx-auto">
           {children}
         </main>
 

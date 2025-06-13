@@ -2,7 +2,7 @@ import TestimonialCarousel from "@/components/carousel";
 import { Price } from "@/types/price";
 import { RoomType } from "@/types/room";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -136,12 +136,19 @@ export default async function Home() {
                           : "---"}{" "}
                         đ/giờ
                       </p>
-                      <Link
-                        href={`/booking?roomType=${type.type}`}
+                      {/* <button
+                        // href={`/booking?roomType=${type.type}`}
+                        // onClick={() => {
+                        //   toast({
+                        //     title: "Chức năng đang phát triển",
+                        //     description:
+                        //       "Jozo sẽ có chức năng đặt phòng trong thời gian sớm nhất. Hứa trong tháng 6 sẽ có chức năng đặt phòng. Khách iu có thể đặt phòng qua facebook nhé",
+                        //   });
+                        // }}
                         className="bg-lightpink text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition animate-buttonheartbeat whitespace-nowrap font-bold"
                       >
                         Đặt ngay
-                      </Link>
+                      </button> */}
                     </div>
                   </div>
                 </div>
