@@ -105,7 +105,7 @@ export default function RecruitmentPage() {
           </h2>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-            <p className="text-blue-800 font-medium">📅 Đăng tuyển: 1/8/2024</p>
+            <p className="text-blue-800 font-medium">📅 Đăng tuyển: 1/8/2025</p>
           </div>
           <p className="text-gray-600 mt-4 text-lg">
             Cảm ơn bạn đã tìm đến Jozo! 🥰 Chúng mình đang tìm những người bạn
