@@ -5,7 +5,6 @@ const menuItems = [
   { href: "/register", label: "Đăng ký thành viên" },
   { href: "/login", label: "Đăng nhập" },
   { href: "/recruitment", label: "Tuyển dụng" },
-  { href: "/policies", label: "Chính sách" },
   { href: "/about", label: "Giới thiệu" },
   // { href: "/faq", label: "Câu hỏi thường gặp" },
 ];
