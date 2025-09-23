@@ -7,18 +7,8 @@ import Image from "next/image";
 const banners = [
   {
     // "thêm banner 1 trong assets",
-    image: "/images/banner-1.png",
+    image: "/images/banner-1.jpg",
     alt: "Banner 1",
-  },
-  {
-    // "thêm banner 2 trong assets",
-    image: "/images/banner-2.png",
-    alt: "Banner 2",
-  },
-  {
-    // "thêm banner 3 trong assets",
-    image: "/images/banner-3.png",
-    alt: "Banner 3",
   },
 ];
 

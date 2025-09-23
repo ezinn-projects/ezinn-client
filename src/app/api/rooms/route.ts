@@ -38,9 +38,7 @@ export async function GET() {
           end: string;
           prices: Array<{ room_type: string; price: number }>;
         }) => {
-          const priceInfo = slot.prices.find(
-            (p) => p.room_type === room.roomType
-          );
+          const priceInfo = slot.prices.find((p) => p.room_type === room.type);
           return {
             timeSlot: `${slot.start}-${slot.end}`,
             price: priceInfo ? priceInfo.price : 0,

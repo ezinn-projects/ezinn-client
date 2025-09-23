@@ -24,7 +24,6 @@ const ALL_TIME_SLOTS = [
 const UNAVAILABLE_STATUSES = [
   RoomScheduleStatus.Booked,
   RoomScheduleStatus.InUse,
-  RoomScheduleStatus.Maintenance,
   RoomScheduleStatus.Locked,
 ];
 
