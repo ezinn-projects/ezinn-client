@@ -1,15 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  X,
-  MessageCircle,
-  Facebook,
-  Share2,
-  Copy,
-  Mail,
-  Link,
-} from "lucide-react";
+import { MessageCircle, Facebook, Copy, Mail, Link } from "lucide-react";
 import { ZaloIcon, TelegramIcon, WhatsAppIcon } from "./share-icons";
 
 interface ShareBottomSheetProps {
