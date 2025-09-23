@@ -553,7 +553,7 @@ export default function BookingPage() {
           {/* Customer Information */}
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-lightpink mb-4">
-              Thông tin khách hàng
+              Thông tin
             </h2>
 
             <Input
