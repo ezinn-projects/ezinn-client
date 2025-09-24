@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DesktopMenu from "./desktop-nav";
 import MobileMenu from "./mobile-nav";
-import BetaBanner from "./beta-banner";
 
 export default function Nav() {
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
@@ -47,7 +46,6 @@ export default function Nav() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
-      <BetaBanner />
       <nav
         className={`mx-auto px-4 transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"

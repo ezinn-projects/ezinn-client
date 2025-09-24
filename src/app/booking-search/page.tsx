@@ -248,7 +248,7 @@ export default function BookingSearchPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="font-bold text-gray-900 mb-4 text-2xl text-lightpink">
-            Tra cứu đặt phòng
+            Tra cứu đặt box
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Nhập số điện thoại để tra cứu thông tin đặt box

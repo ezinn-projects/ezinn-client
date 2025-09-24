@@ -4,7 +4,7 @@ const menuItems = [
   { href: "/", label: "Trang chủ" },
   { href: "/register", label: "Đăng ký thành viên" },
   { href: "/login", label: "Đăng nhập" },
-  { href: "/booking-search", label: "Tra cứu đặt phòng" },
+  { href: "/booking-search", label: "Tra cứu đặt box" },
   { href: "/recruitment", label: "Tuyển dụng" },
   // { href: "/faq", label: "Câu hỏi thường gặp" },
 ];

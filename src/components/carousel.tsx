@@ -38,7 +38,7 @@ const BannerCarousel = () => {
   };
 
   return (
-    <section className="py-12 md:py-24">
+    <section className="py-8 md:py-12">
       <div className="w-full max-w-6xl mx-auto">
         <AnimatePresence mode="popLayout">
           <motion.div
