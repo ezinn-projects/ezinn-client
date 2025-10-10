@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { DateSelect } from "@/components/ui/date-select";
 import Input from "@/components/ui/input";
-import { Mail, Phone, User, Clock, Check, Copy, Download } from "lucide-react";
-import { bookingSchema, BookingFormData } from "@/schemas/booking.schema";
+import { usePrices } from "@/hooks/use-prices";
+import { useTicketActions } from "@/hooks/use-ticket-actions";
 import { toast } from "@/hooks/use-toast";
+import { cancelBooking, createApiEndpoint } from "@/lib/api-utils";
+import { BookingFormData, bookingSchema } from "@/schemas/booking.schema";
+import { BookingRequest } from "@/types/booking.d";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { DateSelect } from "@/components/ui/date-select";
-import { BookingRequest } from "@/types/booking.d";
-import { createApiEndpoint, cancelBooking } from "@/lib/api-utils";
-import { useTicketActions } from "@/hooks/use-ticket-actions";
-import { usePrices } from "@/hooks/use-prices";
+import { Check, Copy, Download, Mail, Phone, User } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 export const dynamic = "force-dynamic";
 
@@ -519,36 +519,40 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-2xl">
+    <div className="container mx-auto px-4 max-w-2xl">
       {/* Quay về button */}
-      <button
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors mb-6"
-      >
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        <span className="text-sm font-medium">Quay về</span>
-      </button>
 
       <Suspense fallback={<div>Loading...</div>}>
         <BookingWithSearchParams onRoomTypeChange={handleRoomTypeChange} />
       </Suspense>
 
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-lightpink mb-8 text-center ">
-          {ROOM_TYPE_LABELS[selectedRoomType]}
-        </h1>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-2 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors mb-6 md:mb-0"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="text-sm font-medium">Quay về</span>
+          </button>
+
+          <h1 className="md:text-3xl text-2xl font-bold text-lightpink mb-8 text-center">
+            {ROOM_TYPE_LABELS[selectedRoomType]}
+          </h1>
+        </div>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Customer Information */}
           <div className="mb-6">
@@ -619,16 +623,13 @@ export default function BookingPage() {
                 <span className="text-red-500 ml-1">*</span>
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  <Clock className="h-4 w-4" />
-                </div>
                 <select
                   value={selectedStartTime}
                   onChange={(e) => {
                     setSelectedStartTime(e.target.value);
                     setValue("startTime", e.target.value);
                   }}
-                  className="w-full border rounded px-3 py-2 pl-10 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                  className="w-full border rounded px-3 py-2 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
                 >
                   <option value="">Chọn giờ bắt đầu</option>
                   {getAvailableStartTimes(selectedDate).map((time) => (
@@ -658,9 +659,6 @@ export default function BookingPage() {
                   <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                    <Clock className="h-4 w-4" />
-                  </div>
                   <select
                     value={selectedDuration}
                     onChange={(e) => {
@@ -672,7 +670,7 @@ export default function BookingPage() {
                       );
                       setValue("endTime", endTime);
                     }}
-                    className="w-full border rounded px-3 py-2 pl-10 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                    className="w-full border rounded px-3 py-2 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
                   >
                     {DURATION_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -681,6 +679,9 @@ export default function BookingPage() {
                     ))}
                   </select>
                 </div>
+                <p className="mt-1 text-sm text-gray-500">
+                  Bạn có thể chọn số giờ sử dụng phù hợp với nhu cầu của mình
+                </p>
                 {errors.endTime && (
                   <p className="mt-1 text-sm text-red-500">
                     {errors.endTime.message}
@@ -697,7 +698,7 @@ export default function BookingPage() {
                 Thông tin đặt box
               </h2>
               <div className="flex justify-between mb-2">
-                <span className="text-lightpink">Loại phòng:</span>
+                <span className="text-lightpink">loại box:</span>
                 <span className="font-medium text-lightpink">
                   {ROOM_TYPE_LABELS[selectedRoomType]}
                 </span>
@@ -816,7 +817,7 @@ export default function BookingPage() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Loại phòng:</span>
+                  <span className="text-gray-600">loại box:</span>
                   <span className="font-medium text-lightpink">
                     {bookingDetails.roomType}
                   </span>
@@ -842,6 +843,12 @@ export default function BookingPage() {
             </p>
 
             <div className="flex flex-col gap-2">
+              <button
+                onClick={() => router.push("/booking-search")}
+                className="w-full py-3 bg-white text-lightpink border-2 border-lightpink rounded-lg hover:bg-lightpink hover:text-white transition-colors"
+              >
+                Tra cứu đặt phòng
+              </button>
               <button
                 onClick={() => router.push("/")}
                 className="w-full py-3 bg-lightpink text-white rounded-lg hover:bg-pink-600 transition-colors animate-buttonheartbeat"

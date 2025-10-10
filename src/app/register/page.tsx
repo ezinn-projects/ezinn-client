@@ -56,7 +56,7 @@ export default function RegisterForm() {
         title: "Đăng ký thành công!",
         description: "Bạn đã đăng ký thành công!",
       });
-      router.push("/login");
+      router.push("/");
     } catch (error: any) {
       toast({
         title: "Đăng ký thất bại!",
