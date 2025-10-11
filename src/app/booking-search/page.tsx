@@ -389,10 +389,10 @@ export default function BookingSearchPage() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                    Không tìm thấy đặt phòng
+                    Không tìm thấy đặt box
                   </h3>
                   <p className="text-gray-500 max-w-md mx-auto">
-                    Không có đặt phòng nào được tìm thấy với số điện thoại này.
+                    Không có đặt box nào được tìm thấy với số điện thoại này.
                     Vui lòng kiểm tra lại số điện thoại.
                   </p>
                 </div>

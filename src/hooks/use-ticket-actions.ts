@@ -37,7 +37,7 @@ export const useTicketActions = () => {
             <!-- Booking Code -->
             <div style="background: white; border-radius: 8px; padding: 16px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px dashed #f9a8d4;">
               <div style="text-align: center;">
-                <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px; margin: 0;">Mã đặt phòng</p>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px; margin: 0;">Mã đặt box</p>
                 <p style="font-size: 24px; font-weight: bold; color: #db2777; letter-spacing: 0.1em; font-family: monospace; margin: 0;">
                   ${bookingDetails.bookingCode}
                 </p>
@@ -91,7 +91,7 @@ export const useTicketActions = () => {
             <!-- Footer -->
             <div style="margin-top: 24px; text-align: center;">
               <p style="font-size: 12px; color: #6b7280; margin-bottom: 8px; margin: 0;">
-                Vui lòng mang theo mã đặt phòng khi đến
+                Vui lòng mang theo mã đặt box khi đến
               </p>
               <p style="font-size: 12px; color: #9ca3af; margin: 0;">
                 Cảm ơn bạn đã tin tưởng JOZO! 🎉
@@ -149,7 +149,7 @@ export const useTicketActions = () => {
       const shareText = `🎉 Tôi vừa đặt box thành công tại JOZO!
       
 📋 Thông tin đặt box:
-• Mã đặt phòng: ${bookingDetails.bookingCode}
+• Mã đặt box: ${bookingDetails.bookingCode}
 • Tên: ${bookingDetails.name}
 • Số điện thoại: ${bookingDetails.phone}
 • Loại box: ${bookingDetails.roomType}

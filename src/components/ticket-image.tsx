@@ -34,7 +34,7 @@ const TicketImage: React.FC<TicketImageProps> = ({ bookingDetails }) => {
         {/* Booking Code */}
         <div className="bg-white rounded-lg p-4 mb-6 shadow-lg border-2 border-dashed border-pink-300">
           <div className="text-center">
-            <p className="text-sm text-gray-600 mb-2">Mã đặt phòng</p>
+            <p className="text-sm text-gray-600 mb-2">Mã đặt box</p>
             <p className="text-2xl font-bold text-pink-600 tracking-wider font-mono">
               {bookingDetails.bookingCode}
             </p>
@@ -88,7 +88,7 @@ const TicketImage: React.FC<TicketImageProps> = ({ bookingDetails }) => {
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500 mb-2">
-            Vui lòng mang theo mã đặt phòng khi đến
+            Vui lòng mang theo mã đặt box khi đến
           </p>
           <p className="text-xs text-gray-400">
             Cảm ơn bạn đã tin tưởng JOZO! 🎉

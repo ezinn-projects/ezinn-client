@@ -57,12 +57,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: bookings,
-      message: `Tìm thấy ${bookings.length} đặt phòng`,
+      message: `Tìm thấy ${bookings.length} đặt box`,
     });
   } catch (error) {
     console.error("Error searching bookings:", error);
     return NextResponse.json(
-      { success: false, message: "Lỗi server khi tìm kiếm đặt phòng" },
+      { success: false, message: "Lỗi server khi tìm kiếm đặt box" },
       { status: 500 }
     );
   }

@@ -316,7 +316,7 @@ export default function BookingPage() {
     navigator.clipboard.writeText(bookingCode);
     toast({
       title: "Đã sao chép",
-      description: "Mã đặt phòng đã được sao chép vào clipboard",
+      description: "Mã đặt box đã được sao chép vào clipboard",
     });
   };
 
@@ -332,7 +332,7 @@ export default function BookingPage() {
     if (success) {
       toast({
         title: "Tải xuống thành công!",
-        description: "Vé đặt phòng đã được tải xuống.",
+        description: "Vé đặt box đã được tải xuống.",
       });
     } else {
       toast({
@@ -519,18 +519,18 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 max-w-2xl">
+    <div className="container mx-auto max-w-2xl">
       {/* Quay về button */}
 
       <Suspense fallback={<div>Loading...</div>}>
         <BookingWithSearchParams onRoomTypeChange={handleRoomTypeChange} />
       </Suspense>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex items-center justify-between">
+      <div className="bg-white p-3 rounded-lg shadow-md">
+        <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => router.push("/")}
-            className="flex items-center gap-2 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors mb-6 md:mb-0"
+            className="flex items-center gap-2 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <svg
               className="w-4 h-4"
@@ -548,9 +548,11 @@ export default function BookingPage() {
             <span className="text-sm font-medium">Quay về</span>
           </button>
 
-          <h1 className="md:text-3xl text-2xl font-bold text-lightpink mb-8 text-center">
+          <h1 className="md:text-3xl text-xl font-bold text-lightpink text-center">
             {ROOM_TYPE_LABELS[selectedRoomType]}
           </h1>
+
+          <div className="hidden md:block" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -602,7 +604,7 @@ export default function BookingPage() {
           {/* Booking Information */}
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-lightpink mb-4">
-              Thông tin đặt phòng
+              Thông tin đặt box
             </h2>
 
             <div className="mb-4">
@@ -741,8 +743,8 @@ export default function BookingPage() {
                 </p>
 
                 <p className="text-red-500">
-                  Nếu đến trễ quá 15 phút so với giờ đặt, phòng sẽ được hủy và
-                  có thể được sắp xếp cho khách khác.
+                  Nếu đến trễ quá 15 phút so với giờ đặt, box sẽ được hủy và có
+                  thể được sắp xếp cho khách khác.
                 </p>
               </div>
             </div>
@@ -786,7 +788,7 @@ export default function BookingPage() {
 
             <div className="mb-6 border-2 border-dashed border-lightpink/40 rounded-lg p-4 bg-lightpink/5">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-lightpink">Mã đặt phòng:</span>
+                <span className="font-bold text-lightpink">Mã đặt box:</span>
                 <div className="flex items-center">
                   <span className="font-mono text-lg font-bold tracking-wider text-lightpink mr-2">
                     {bookingCode}
@@ -800,7 +802,7 @@ export default function BookingPage() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 italic mb-3">
-                Vui lòng lưu lại mã đặt phòng để tra cứu sau này
+                Vui lòng lưu lại mã đặt box để tra cứu sau này
               </p>
 
               <div className="space-y-2 text-sm">
@@ -847,7 +849,7 @@ export default function BookingPage() {
                 onClick={() => router.push("/booking-search")}
                 className="w-full py-3 bg-white text-lightpink border-2 border-lightpink rounded-lg hover:bg-lightpink hover:text-white transition-colors"
               >
-                Tra cứu đặt phòng
+                Tra cứu đặt box
               </button>
               <button
                 onClick={() => router.push("/")}

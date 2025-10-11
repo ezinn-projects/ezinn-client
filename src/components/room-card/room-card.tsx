@@ -110,7 +110,7 @@ export default function RoomCard({
           </div>
         </Link>
 
-        {/* Nút đặt phòng */}
+        {/* Nút đặt box */}
         <Button
           onClick={handleBookNow}
           className="w-full bg-lightpink hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat"

@@ -126,7 +126,7 @@ export default function RecruitmentPage() {
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">📞</span>
                       <p className="text-gray-700">
-                        Trực tin nhắn và điện thoại hotline để nhận đặt phòng
+                        Trực tin nhắn và điện thoại hotline để nhận đặt box
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
