@@ -38,11 +38,8 @@ export const metadata: Metadata = {
     "Phụ kiện chụp hình",
     "Âm thanh chất lượng",
   ],
-  description: `JOZO Music Box - Không gian chill và giải trí hiện đại tại Biên Hòa. 
-    Trang bị âm thanh chuẩn studio, phụ kiện chụp hình xịn xò và photobooth miễn phí. 
-    Không gian riêng tư, hiện đại với giá cả phù hợp cho học sinh, sinh viên. 
-    Đặc biệt giảm 20% cho sinh viên có thẻ. 
-    Trải nghiệm giải trí tuyệt vời với chi phí hợp lý nhất tại Biên Hòa.`,
+  description:
+    "JOZO Music Box - Không gian chill và giải trí hiện đại tại Biên Hòa. Trang bị âm thanh chuẩn studio, phụ kiện chụp hình xịn xò và photobooth miễn phí. Không gian riêng tư, hiện đại với giá cả phù hợp cho học sinh, sinh viên. Trải nghiệm giải trí tuyệt vời với chi phí hợp lý nhất tại Biên Hòa.",
   openGraph: {
     title: "JOZO Music Box - Music Box Biên Hòa",
     description:

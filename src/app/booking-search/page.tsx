@@ -300,8 +300,8 @@ function BookingSearchContent() {
         </div>
 
         {/* Search Form */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-12 hover:shadow-3xl transition-all duration-500">
-          <div className="flex flex-col lg:flex-row gap-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-4 mb-8 hover:shadow-3xl transition-all duration-500">
+          <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1">
               <Input
                 id="phone"
@@ -323,7 +323,7 @@ function BookingSearchContent() {
               onClick={handleSearch}
               disabled={loading}
               type="button"
-              className="h-14 px-10 bg-gradient-to-r from-lightpink to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-3"
+              className="h-14 px-10 bg-lightpink animate-buttonheartbeat text-white font-semibold rounded-xl transition-all duration-1000 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-3"
             >
               {loading ? (
                 <>
@@ -406,7 +406,7 @@ function BookingSearchContent() {
             </div>
 
             {/* Results */}
-            <div className="p-8">
+            <div className="p-4">
               {loading ? (
                 <div className="text-center py-16">
                   <JozoLoaderWithText
@@ -545,7 +545,7 @@ function BookingSearchContent() {
                                 </svg>
                                 {booking.customerName}
                               </h3>
-                              <div className="space-y-2 pl-7">
+                              <div className="space-y-2">
                                 <p className="text-sm text-gray-600 flex items-center gap-2">
                                   <svg
                                     className="w-4 h-4 text-lightpink flex-shrink-0"
@@ -601,7 +601,7 @@ function BookingSearchContent() {
                                 </svg>
                                 {ROOM_NAME[booking.actualRoomType]}
                               </h3>
-                              <div className="space-y-2 pl-7">
+                              <div className="space-y-2">
                                 <p className="text-sm text-gray-600 flex items-center gap-2">
                                   <svg
                                     className="w-4 h-4 text-blue-500 flex-shrink-0"
