@@ -6,7 +6,7 @@ import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
 import { cancelBooking } from "@/lib/api-utils";
 import { Booking, RoomType } from "@/types/booking.d";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ const ROOM_NAME: Record<RoomType, string> = {
   Large: "Mega Squad (L - BOX)",
 };
 
-export default function BookingSearchPage() {
+function BookingSearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -977,5 +977,23 @@ export default function BookingSearchPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function BookingSearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-pink-50 to-rose-100 flex items-center justify-center">
+          <JozoLoaderWithText
+            text="Đang tải trang..."
+            size="lg"
+            className="text-lg"
+          />
+        </div>
+      }
+    >
+      <BookingSearchContent />
+    </Suspense>
   );
 }
