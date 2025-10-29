@@ -84,7 +84,6 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    console.error("Error registering user:", error);
     return NextResponse.json(
       {
         success: false,

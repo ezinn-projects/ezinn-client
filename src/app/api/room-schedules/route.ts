@@ -19,8 +19,7 @@ export async function GET() {
 
     const roomSchedules = await collection.find({}).toArray();
     return NextResponse.json({ success: true, data: roomSchedules });
-  } catch (error) {
-    console.error("Error fetching room schedules:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

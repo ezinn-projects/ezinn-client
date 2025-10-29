@@ -21,17 +21,28 @@ export function DateSelect({
   required = false,
 }: DateSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const dayRef = useRef<HTMLDivElement>(null);
   const monthRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  const currentYear = new Date().getFullYear();
+  // Initialize client-side state
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const currentYear = isClient ? new Date().getFullYear() : 2024;
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-  const selectedDate = useMemo(() => value || new Date(), [value]);
+  const selectedDate = useMemo(() => {
+    if (isClient) {
+      return value || new Date();
+    }
+    return value || new Date(2024, 0, 1); // Default date for SSR
+  }, [value, isClient]);
 
   const scrollToCenter = (element: HTMLElement, container: HTMLElement) => {
     const elementRect = element.getBoundingClientRect();
@@ -48,6 +59,8 @@ export function DateSelect({
   };
 
   const handleSelect = (type: "day" | "month" | "year", val: number) => {
+    if (!isClient) return;
+
     const newDate = new Date(selectedDate);
     if (type === "day") newDate.setDate(val);
     if (type === "month") newDate.setMonth(val - 1);
@@ -68,7 +81,7 @@ export function DateSelect({
 
   // Initial scroll to selected values when opened
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && isClient) {
       setTimeout(() => {
         const containers = {
           day: { ref: dayRef.current, value: selectedDate.getDate() },
@@ -86,10 +99,12 @@ export function DateSelect({
         });
       }, 0);
     }
-  }, [isOpen, selectedDate]);
+  }, [isOpen, selectedDate, isClient]);
 
   // Click outside handler
   useEffect(() => {
+    if (!isClient) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         popoverRef.current &&
@@ -106,7 +121,7 @@ export function DateSelect({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, isClient]);
 
   return (
     <div className="relative">
@@ -125,17 +140,19 @@ export function DateSelect({
         )}
       >
         <span>
-          {selectedDate.toLocaleDateString("vi-VN", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })}
+          {isClient
+            ? selectedDate.toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })
+            : "Đang tải..."}
         </span>
         {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </button>
 
       <AnimatePresence>
-        {isOpen && (
+        {isOpen && isClient && (
           <motion.div
             ref={popoverRef}
             initial={{ opacity: 0, y: -20 }}
@@ -162,7 +179,7 @@ export function DateSelect({
                       onClick={() => handleSelect("day", day)}
                       className={cn(
                         "w-full px-2 py-1 text-sm rounded-md text-black",
-                        selectedDate.getDate() === day
+                        isClient && selectedDate.getDate() === day
                           ? "bg-lightpink text-white"
                           : "hover:bg-lightpink/5"
                       )}
@@ -191,7 +208,7 @@ export function DateSelect({
                       onClick={() => handleSelect("month", month)}
                       className={cn(
                         "w-full px-2 py-1 text-sm rounded-md text-black",
-                        selectedDate.getMonth() + 1 === month
+                        isClient && selectedDate.getMonth() + 1 === month
                           ? "bg-lightpink text-white"
                           : "hover:bg-lightpink/5"
                       )}
@@ -218,7 +235,7 @@ export function DateSelect({
                       onClick={() => handleSelect("year", year)}
                       className={cn(
                         "w-full px-2 py-1 text-sm rounded-md text-black",
-                        selectedDate.getFullYear() === year
+                        isClient && selectedDate.getFullYear() === year
                           ? "bg-lightpink text-white"
                           : "hover:bg-lightpink/5"
                       )}

@@ -1,9 +1,7 @@
 import TestimonialCarousel from "@/components/carousel";
+import RoomCard from "@/components/room-card/room-card";
 import { Price } from "@/types/price";
 import { RoomType } from "@/types/room";
-import RoomCard from "@/components/room-card/room-card";
-// import Link from "next/link";
-
 export const dynamic = "force-dynamic";
 
 async function getRooms(): Promise<RoomType[]> {
@@ -35,9 +33,6 @@ export default async function Home() {
   const rooms = await getRooms();
   const prices = await getPrices();
 
-  // console.log("rooms", rooms);
-  // console.log("prices", prices);
-
   // Hàm helper để lấy giá thấp nhất cho từng loại phòng
   const getMinPriceForRoomType = (roomType: string, prices: Price[]) => {
     let minPrice = Infinity;
@@ -54,8 +49,6 @@ export default async function Home() {
 
     return minPrice === Infinity ? 0 : minPrice;
   };
-
-  console.log("prices", prices);
 
   //   [
   //     {
@@ -293,23 +286,27 @@ export default async function Home() {
       {/* Promotion Section */}
 
       {/* Room Types Section */}
-      <section className="mb-16 bg-red-50 p-8 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-6 text-lightpink">
-          Jozo có 3 loại box
-        </h2>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mb-16 bg-gradient-to-br from-pink-50 to-rose-100 p-8 rounded-2xl shadow-lg">
+        
+        {/* Room Types Preview */}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-3 mb-8">
           {rooms
             .sort((a, b) => {
-              // Sắp xếp theo loại phòng (small, medium, large)
               const typeOrder = { small: 1, medium: 2, large: 3 };
               const orderA = typeOrder[a.type as keyof typeof typeOrder] || 0;
               const orderB = typeOrder[b.type as keyof typeof typeOrder] || 0;
               return orderA - orderB;
             })
-            .map((room) => {
+            .map((room, index) => {
               const minPrice = getMinPriceForRoomType(room.type, prices);
               return (
-                <RoomCard key={room._id} room={room} minPrice={minPrice} />
+                <div
+                  key={room._id}
+                  className="transform hover:scale-105 transition-all duration-300"
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
+                  <RoomCard room={room} minPrice={minPrice} />
+                </div>
               );
             })}
         </div>

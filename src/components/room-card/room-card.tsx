@@ -1,19 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Typography from "../ui/typography";
 import { RoomType } from "@/types/room";
-import { Button } from "../ui/button";
 import { Calendar, Users } from "lucide-react";
-import Image from "next/image";
-
-// Mapping từ room type cũ sang mới
-const ROOM_TYPE_MAPPING: Record<string, string> = {
-  small: "Small",
-  medium: "Medium",
-  large: "Large",
-};
+import RoomImageCarousel from "./images-list";
 
 // Mapping tên phòng
 const ROOM_NAME_MAPPING: Record<string, string> = {
@@ -36,48 +27,27 @@ export default function RoomCard({
   room: RoomType;
   minPrice: number;
 }) {
-  const router = useRouter();
-
-  const handleBookNow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Chuyển đổi room type từ format cũ sang mới
-    const newRoomType = ROOM_TYPE_MAPPING[room.type] || "Small";
-
-    // Redirect đến trang booking với roomType parameter
-    router.push(`/booking?roomType=${newRoomType}`);
-  };
+  // Chuyển đổi room type từ format cũ sang mới để tạo href
+  const bookingUrl = `/${room.type}`;
 
   const roomSizeName = ROOM_NAME_MAPPING[room.type] || "Standard";
   const capacityText = CAPACITY_MAPPING[room.type] || "1-3 người";
 
-  // Sử dụng minPrice từ props thay vì từ room.prices
+  // Sử dụng minPrice từ props
   const displayPrice = minPrice || 0;
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
       {/* Image Section */}
-      <div className="aspect-video relative">
-        <div className="absolute top-0 right-0 bg-lightpink text-white px-3 py-1 z-10 rounded-bl-lg font-bold">
-          {roomSizeName}
-        </div>
-        <Image
-          src={
-            room.images && room.images.length > 0
-              ? room.images[0]
-              : `/images/room-${room.type}.jpg`
-          }
-          alt={room.roomName || "Room Image"}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-      </div>
+      <RoomImageCarousel
+        images={room.images || []}
+        roomName={room.roomName || "Room"}
+        roomType={roomSizeName}
+      />
 
       {/* Content Section */}
       <div className="p-5">
-        <Link href={`/room-detail/${room._id}`} className="block">
+        <Link href={bookingUrl} className="block">
           <Typography
             as="h4"
             variant="semibold"
@@ -103,21 +73,23 @@ export default function RoomCard({
                 Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
               </Typography>
             ) : (
-              <Typography as="p" variant="bold" className="text-lightpink">
-                Liên hệ để biết giá
-              </Typography>
+              <div className="text-center py-4">
+                <Typography as="p" variant="bold" className="text-lightpink">
+                  Liên hệ để biết giá
+                </Typography>
+              </div>
             )}
           </div>
         </Link>
 
         {/* Nút đặt box */}
-        <Button
-          onClick={handleBookNow}
-          className="w-full bg-lightpink hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat"
+        <Link
+          href={bookingUrl}
+          className="w-full bg-lightpink hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center"
         >
           <Calendar className="w-4 h-4 mr-2" />
           Đặt ngay
-        </Button>
+        </Link>
       </div>
     </div>
   );

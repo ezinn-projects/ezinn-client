@@ -6,7 +6,9 @@ import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
 import { cancelBooking } from "@/lib/api-utils";
 import { Booking, RoomType } from "@/types/booking.d";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 type TabType = "all" | "booked" | "in use" | "cancelled" | "finished";
 
@@ -17,6 +19,9 @@ const ROOM_NAME: Record<RoomType, string> = {
 };
 
 export default function BookingSearchPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [phone, setPhone] = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -31,6 +36,28 @@ export default function BookingSearchPage() {
   const [isCancelling, setIsCancelling] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null);
+
+  // Kiểm tra booking param từ URL khi component mount
+  useEffect(() => {
+    const bookingId = searchParams.get("booking");
+    if (bookingId && allBookings.length > 0) {
+      // Tìm booking theo _id
+      const booking = allBookings.find((b) => b._id === bookingId);
+      if (booking) {
+        setSelectedBooking(booking);
+        setShowDetailModal(true);
+      }
+    }
+  }, [searchParams, allBookings]);
+
+  // Kiểm tra booking param từ URL khi chưa có dữ liệu
+  useEffect(() => {
+    const bookingId = searchParams.get("booking");
+    if (bookingId && allBookings.length === 0 && !searched) {
+      // Hiển thị thông báo để người dùng tìm kiếm trước
+      setError(`Vui lòng nhập số điện thoại để xem chi tiết booking`);
+    }
+  }, [searchParams, allBookings.length, searched]);
 
   // Hàm filter bookings theo tab
   const filterBookingsByTab = (
@@ -152,19 +179,37 @@ export default function BookingSearchPage() {
     }
   };
 
-  const getBookingCode = (id?: string) => {
-    if (!id) return "N/A";
-    return id.slice(0, 6).toUpperCase();
+  const getBookingCode = (booking?: Booking) => {
+    if (!booking) return "N/A";
+    // Sử dụng bookingCode từ API nếu có, fallback về _id nếu không có
+    return (
+      booking.bookingCode ||
+      booking._id?.toString().slice(0, 6).toUpperCase() ||
+      "N/A"
+    );
   };
 
   const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowDetailModal(true);
+
+    // Thêm booking _id vào URL params
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("booking", booking._id || "");
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   const closeDetailModal = () => {
     setShowDetailModal(false);
     setSelectedBooking(null);
+
+    // Xóa booking param khỏi URL
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("booking");
+    const newUrl = params.toString()
+      ? `?${params.toString()}`
+      : window.location.pathname;
+    router.push(newUrl, { scroll: false });
   };
 
   // Handle cancel booking
@@ -214,8 +259,7 @@ export default function BookingSearchPage() {
           variant: "destructive",
         });
       }
-    } catch (error) {
-      console.error("Cancel booking error:", error);
+    } catch {
       toast({
         title: "Hủy booking thất bại!",
         description: "Có lỗi xảy ra khi hủy booking. Vui lòng thử lại sau.",
@@ -413,37 +457,98 @@ export default function BookingSearchPage() {
                       <div
                         key={booking._id}
                         onClick={() => handleBookingClick(booking)}
-                        className="group bg-gradient-to-r from-white to-gray-50/50 border border-gray-200 rounded-2xl p-6 hover:shadow-xl hover:border-pink-200 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                        className="group bg-gradient-to-r from-white to-gray-50/50 border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-pink-200 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                          {/* Status & Actions */}
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <p
-                                  className={`text-lg font-bold ${getStatusColor(
-                                    booking.status
-                                  )}`}
-                                >
-                                  {getStatusText(booking.status)}
-                                </p>
-                                <span className="bg-gradient-to-r from-lightpink to-pink-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
-                                  #{getBookingCode(booking._id)}
-                                </span>
-                              </div>
+                        {/* Header - Status & Action Buttons */}
+                        <div className="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <p
+                              className={`text-lg font-bold ${getStatusColor(
+                                booking.status
+                              )}`}
+                            >
+                              {getStatusText(booking.status)}
+                            </p>
+                            <span className="bg-gradient-to-r from-lightpink to-pink-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                              #{getBookingCode(booking)}
+                            </span>
+                          </div>
 
-                              {/* Cancel Button - chỉ hiển thị cho booking có trạng thái booked */}
-                              {booking.status === "booked" && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation(); // Ngăn không cho click vào card
-                                    openCancelModal(booking);
-                                  }}
-                                  className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+                          {/* Action Buttons */}
+                          {booking.status === "booked" && (
+                            <div className="flex gap-2 flex-wrap">
+                              <Link
+                                href={`/search-songs/${booking._id}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-gradient-to-r from-lightpink to-pink-500 text-white px-4 py-2 rounded-lg hover:from-pink-500 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-md text-sm font-medium"
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
                                 >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                                  />
+                                </svg>
+                                Tìm video
+                              </Link>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openCancelModal(booking);
+                                }}
+                                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-md text-sm font-medium"
+                              >
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                                Hủy box
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Content - Customer Info & Booking Details */}
+                        <div className="p-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Customer Info */}
+                            <div className="space-y-3">
+                              <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+                                <svg
+                                  className="w-5 h-5 text-lightpink"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                  />
+                                </svg>
+                                {booking.customerName}
+                              </h3>
+                              <div className="space-y-2 pl-7">
+                                <p className="text-sm text-gray-600 flex items-center gap-2">
                                   <svg
-                                    className="w-4 h-4"
+                                    className="w-4 h-4 text-lightpink flex-shrink-0"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -452,26 +557,15 @@ export default function BookingSearchPage() {
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
                                       strokeWidth={2}
-                                      d="M6 18L18 6M6 6l12 12"
+                                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                                     />
                                   </svg>
-                                  Hủy phòng
-                                </button>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Customer Info */}
-                          <div className="space-y-3">
-                            <div className="flex items-start gap-3">
-                              <div className="flex-1">
-                                <h3 className="font-bold text-lg text-gray-900 mb-2">
-                                  {booking.customerName}
-                                </h3>
-                                <div className="space-y-1">
-                                  <p className="text-sm text-gray-600 flex items-center gap-2">
+                                  {booking.customerPhone}
+                                </p>
+                                {booking.customerEmail && (
+                                  <p className="text-sm text-gray-600 flex items-center gap-2 break-all">
                                     <svg
-                                      className="w-4 h-4 text-lightpink"
+                                      className="w-4 h-4 text-lightpink flex-shrink-0"
                                       fill="none"
                                       stroke="currentColor"
                                       viewBox="0 0 24 24"
@@ -480,92 +574,85 @@ export default function BookingSearchPage() {
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth={2}
-                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                                        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                                       />
                                     </svg>
-                                    {booking.customerPhone}
+                                    {booking.customerEmail}
                                   </p>
-                                  {booking.customerEmail && (
-                                    <p className="text-sm text-gray-600 flex items-center gap-2">
-                                      <svg
-                                        className="w-4 h-4 text-lightpink"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                        />
-                                      </svg>
-                                      {booking.customerEmail}
-                                    </p>
-                                  )}
-                                </div>
+                                )}
                               </div>
                             </div>
-                          </div>
 
-                          {/* Booking Details */}
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                              <div>
-                                <p className="text-sm font-semibold text-gray-700 mb-1">
-                                  {ROOM_NAME[booking.actualRoomType]}
+                            {/* Booking Details */}
+                            <div className="space-y-3">
+                              <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+                                <svg
+                                  className="w-5 h-5 text-lightpink"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                                  />
+                                </svg>
+                                {ROOM_NAME[booking.actualRoomType]}
+                              </h3>
+                              <div className="space-y-2 pl-7">
+                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                  <svg
+                                    className="w-4 h-4 text-blue-500 flex-shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                  <span className="font-medium">Ngày đặt:</span>
+                                  {formatDateTime(booking.createdAt || "")}
                                 </p>
-                                <div className="space-y-1">
-                                  <p className="text-sm text-gray-600 flex items-center gap-2">
-                                    <svg
-                                      className="w-4 h-4 text-green-500"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                    Ngày đặt:{" "}
-                                    {formatDateTime(booking.createdAt || "")}
-                                  </p>
-                                  <p className="text-sm text-gray-600 flex items-center gap-2">
-                                    <svg
-                                      className="w-4 h-4 text-green-500"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                    Bắt đầu: {formatDateTime(booking.startTime)}
-                                  </p>
-                                  <p className="text-sm text-gray-600 flex items-center gap-2">
-                                    <svg
-                                      className="w-4 h-4 text-red-500"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                    Kết thúc: {formatDateTime(booking.endTime)}
-                                  </p>
-                                </div>
+                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                  <svg
+                                    className="w-4 h-4 text-green-500 flex-shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  <span className="font-medium">Bắt đầu:</span>
+                                  {formatDateTime(booking.startTime)}
+                                </p>
+                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                  <svg
+                                    className="w-4 h-4 text-red-500 flex-shrink-0"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  <span className="font-medium">Kết thúc:</span>
+                                  {formatDateTime(booking.endTime)}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -590,7 +677,7 @@ export default function BookingSearchPage() {
                 <div>
                   <h2 className="text-2xl font-bold">Chi tiết đặt box</h2>
                   <p className="text-pink-100 mt-1">
-                    Mã đặt box: #{getBookingCode(selectedBooking._id)}
+                    Mã đặt box: #{getBookingCode(selectedBooking)}
                   </p>
                 </div>
                 <button
@@ -705,37 +792,50 @@ export default function BookingSearchPage() {
             <div className="bg-gray-50 px-6 py-4 rounded-b-3xl">
               <div className="flex gap-3">
                 {selectedBooking.status === "booked" && (
-                  <button
-                    onClick={() => {
-                      setShowDetailModal(false);
-                      openCancelModal(selectedBooking);
-                    }}
-                    className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  <>
+                    <Link
+                      href={`/search-songs/${selectedBooking._id}`}
+                      className="flex-1 bg-gradient-to-r from-lightpink to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                    Hủy đặt box
-                  </button>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                        />
+                      </svg>
+                      Tìm video
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setShowDetailModal(false);
+                        openCancelModal(selectedBooking);
+                      }}
+                      className="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                      Hủy đặt box
+                    </button>
+                  </>
                 )}
-                <button
-                  onClick={closeDetailModal}
-                  className={`${
-                    selectedBooking.status === "booked" ? "flex-1" : "w-full"
-                  } bg-gradient-to-r from-lightpink to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105`}
-                >
-                  Đóng
-                </button>
               </div>
             </div>
           </div>
@@ -752,7 +852,7 @@ export default function BookingSearchPage() {
                 <div>
                   <h2 className="text-xl font-bold">Xác nhận hủy</h2>
                   <p className="text-red-100 mt-1">
-                    Mã đặt box: #{getBookingCode(bookingToCancel._id)}
+                    Mã đặt box: #{getBookingCode(bookingToCancel)}
                   </p>
                 </div>
                 <button

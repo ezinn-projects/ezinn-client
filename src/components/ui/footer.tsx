@@ -41,7 +41,7 @@ const TwoColumnFooter = () => {
             />
 
             <div className="flex space-x-6 text-sm text-gray-700  dark:text-gray-300">
-              <div>Được phát triển với ❤️ bởi JOZO</div>
+              <span>Được phát triển với ❤️ bởi JOZO</span>
             </div>
           </div>
           {/* Navigations */}

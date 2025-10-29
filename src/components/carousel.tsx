@@ -14,8 +14,15 @@ const banners = [
 
 const BannerCarousel = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const intervalId = setInterval(() => {
       setCurrentBanner((prevBanner) => (prevBanner + 1) % banners.length);
     }, 5000);
@@ -23,7 +30,7 @@ const BannerCarousel = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [isClient]);
 
   const { image, alt } = banners[currentBanner];
 
@@ -36,6 +43,25 @@ const BannerCarousel = () => {
     active: { scale: 1.2, backgroundColor: "#3f3f46" },
     inactive: { scale: 1, backgroundColor: "#D1D5DB" },
   };
+
+  if (!isClient) {
+    return (
+      <section className="pb-8 md:pb-12">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="flex w-full items-center justify-center">
+            <Image
+              src={banners[0].image}
+              alt={banners[0].alt}
+              className="w-full h-auto rounded-lg"
+              width={1200}
+              height={400}
+              priority
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="pb-8 md:pb-12">

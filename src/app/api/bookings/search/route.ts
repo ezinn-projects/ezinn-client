@@ -59,8 +59,7 @@ export async function GET(request: NextRequest) {
       data: bookings,
       message: `Tìm thấy ${bookings.length} đặt box`,
     });
-  } catch (error) {
-    console.error("Error searching bookings:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Lỗi server khi tìm kiếm đặt box" },
       { status: 500 }

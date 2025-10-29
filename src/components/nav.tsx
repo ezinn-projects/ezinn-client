@@ -9,9 +9,16 @@ import MobileMenu from "./mobile-nav";
 export default function Nav() {
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
   const [scrollY, setScrollY] = useState(0); // Theo dõi vị trí cuộn
+  const [isClient, setIsClient] = useState(false); // Kiểm tra client-side
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // Tham chiếu timeout để kiểm tra dừng cuộn
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
@@ -42,7 +49,7 @@ export default function Nav() {
         clearTimeout(timeoutIdRef.current);
       }
     };
-  }, []);
+  }, [isClient]);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
@@ -50,7 +57,7 @@ export default function Nav() {
         className={`mx-auto px-4 transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
         } ${
-          scrollY > 0
+          isClient && scrollY > 0
             ? "bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm"
             : "bg-black"
         }`}

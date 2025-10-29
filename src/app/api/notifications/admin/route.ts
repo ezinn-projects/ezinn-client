@@ -42,8 +42,7 @@ export async function POST(request: Request) {
       success: true,
       message: "Thông báo đã được gửi đến admin",
     });
-  } catch (error) {
-    console.error("Error sending admin notification:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Có lỗi xảy ra khi gửi thông báo" },
       { status: 500 }
@@ -78,8 +77,7 @@ export async function GET() {
       success: true,
       data: notifications,
     });
-  } catch (error) {
-    console.error("Error fetching admin notifications:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Có lỗi xảy ra khi lấy thông báo" },
       { status: 500 }
@@ -132,8 +130,7 @@ export async function PUT(request: Request) {
       success: true,
       message: "Đã đánh dấu thông báo là đã đọc",
     });
-  } catch (error) {
-    console.error("Error marking notification as read:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Có lỗi xảy ra khi cập nhật thông báo" },
       { status: 500 }

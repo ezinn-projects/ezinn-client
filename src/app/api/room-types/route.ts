@@ -19,8 +19,7 @@ export async function GET() {
 
     const roomTypes = await collection.find({}).toArray();
     return NextResponse.json({ success: true, data: roomTypes });
-  } catch (error) {
-    console.error("Error fetching room types:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

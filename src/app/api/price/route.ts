@@ -19,8 +19,7 @@ export async function GET() {
 
     const prices = await collection.find({}).toArray();
     return NextResponse.json({ success: true, data: prices });
-  } catch (error) {
-    console.error("Error fetching prices:", error);
+  } catch {
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

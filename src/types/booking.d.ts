@@ -1,6 +1,17 @@
 export type RoomType = "Small" | "Medium" | "Large";
+
+export type QueueSong = {
+  video_id: string;
+  title: string;
+  thumbnail: string;
+  author: string;
+  duration: number;
+  position?: string;
+};
+
 export type Booking = {
-  _id?: string;
+  _id: ObjectId;
+  bookingCode?: string;
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
@@ -12,6 +23,7 @@ export type Booking = {
   status?: "booked" | "cancelled" | "completed" | "in use";
   createdAt?: string;
   updatedAt?: string;
+  queueSongs?: QueueSong[];
 };
 
 export type BookingResponse = {

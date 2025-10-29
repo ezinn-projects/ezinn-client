@@ -10,10 +10,18 @@ import { Controller, useForm } from "react-hook-form";
 // import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 export default function RegisterForm() {
-  const defaultBirthDate = new Date();
-  defaultBirthDate.setFullYear(defaultBirthDate.getFullYear() - 18);
+  const [isClient, setIsClient] = useState(false);
+  const [defaultBirthDate, setDefaultBirthDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 18);
+    setDefaultBirthDate(date);
+  }, []);
 
   const {
     control,
@@ -23,7 +31,7 @@ export default function RegisterForm() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      date_of_birth: defaultBirthDate,
+      date_of_birth: defaultBirthDate || new Date(2006, 0, 1), // Fallback date for SSR
     },
   });
 
@@ -148,13 +156,19 @@ export default function RegisterForm() {
           <Controller
             control={control}
             name="date_of_birth"
-            render={({ field }) => (
-              <DateSelect
-                value={field.value}
-                onChange={field.onChange}
-                error={errors.date_of_birth?.message}
-              />
-            )}
+            render={({ field }) =>
+              isClient ? (
+                <DateSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.date_of_birth?.message}
+                />
+              ) : (
+                <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
+                  Đang tải...
+                </div>
+              )
+            }
           />
         </div>
 

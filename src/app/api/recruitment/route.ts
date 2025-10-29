@@ -52,8 +52,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Error submitting application:", error);
+  } catch {
     return NextResponse.json(
       { error: "Có lỗi xảy ra khi gửi đơn ứng tuyển" },
       { status: 500 }
@@ -75,8 +74,7 @@ export async function GET() {
       .toArray();
 
     return NextResponse.json({ applications });
-  } catch (error) {
-    console.error("Error fetching applications:", error);
+  } catch {
     return NextResponse.json(
       { error: "Có lỗi xảy ra khi lấy danh sách ứng tuyển" },
       { status: 500 }

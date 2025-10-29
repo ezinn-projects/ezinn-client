@@ -29,8 +29,7 @@ export const metadata: Metadata = {
     "JOZO Music Box",
     "Karaoke Biên Hòa",
     "Norebang Hàn Quốc",
-    "Photobooth miễn phí",
-    "Phòng hát giá rẻ",
+    "box karaoke giá rẻ",
     "Karaoke sinh viên",
     "Phòng hát đẹp",
     "Studio karaoke",
@@ -39,15 +38,15 @@ export const metadata: Metadata = {
     "Phụ kiện chụp hình",
     "Âm thanh chất lượng",
   ],
-  description: `JOZO Music Box - Phòng hát karaoke theo phong cách Norebang Hàn Quốc tại Biên Hòa. 
+  description: `JOZO Music Box - Không gian chill và giải trí hiện đại tại Biên Hòa. 
     Trang bị âm thanh chuẩn studio, phụ kiện chụp hình xịn xò và photobooth miễn phí. 
     Không gian riêng tư, hiện đại với giá cả phù hợp cho học sinh, sinh viên. 
     Đặc biệt giảm 20% cho sinh viên có thẻ. 
-    Trải nghiệm karaoke chuẩn Hàn với chi phí hợp lý nhất tại Biên Hòa.`,
+    Trải nghiệm giải trí tuyệt vời với chi phí hợp lý nhất tại Biên Hòa.`,
   openGraph: {
     title: "JOZO Music Box - Music Box Biên Hòa",
     description:
-      "Phòng hát karaoke phong cách Hàn Quốc - Photobooth miễn phí - Giá sinh viên",
+      "Không gian chill và giải trí hiện đại - Phụ kiện miễn phí - Giá sinh viên",
     images: ["/images/jozo-thumbnail.jpg"],
   },
   robots: {
@@ -71,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <link rel="icon" href="/images/logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
@@ -88,7 +87,7 @@ export default function RootLayout({
         </header>
 
         {/* Main */}
-        <main className="flex-grow mt-40 mb-8 container mx-auto">
+        <main className="flex-grow mt-32 mb-8 container mx-auto">
           {children}
         </main>
 
