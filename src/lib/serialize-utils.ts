@@ -23,17 +23,16 @@ export function serializeMongoDocument<T extends Record<string, unknown>>(
         item instanceof ObjectId
           ? item.toString()
           : typeof item === "object" && item !== null
-          ? serializeMongoDocument(item)
+          ? serializeMongoDocument(item as Record<string, unknown>)
           : item
-      );
+      ) as T[Extract<keyof T, string>];
     } else if (
       typeof serialized[key] === "object" &&
       serialized[key] !== null
     ) {
-      serialized[key] = serializeMongoDocument(serialized[key]) as T[Extract<
-        keyof T,
-        string
-      >];
+      serialized[key] = serializeMongoDocument(
+        serialized[key] as Record<string, unknown>
+      ) as T[Extract<keyof T, string>];
     }
   }
 
