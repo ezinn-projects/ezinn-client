@@ -72,6 +72,19 @@ const getAvailableStartTimes = (selectedDate: Date): string[] => {
     selectedDate.getDate()
   );
 
+  // Kiểm tra nếu là ngày 9/11/2025 (Chủ nhật)
+  const specialDate = new Date(2025, 10, 9); // Tháng 10 = tháng 11 (vì tháng bắt đầu từ 0)
+  const isSpecialDate = selectedDay.getTime() === specialDate.getTime();
+
+  if (isSpecialDate) {
+    // Chỉ hiển thị các khung giờ từ 15:30 trở đi cho ngày 9/11/2025
+    return ALL_START_TIMES.filter((time) => {
+      const [hour, minute] = time.split(":").map(Number);
+      const timeInMinutes = hour * 60 + minute;
+      return timeInMinutes >= 15 * 60 + 30; // 15:30 = 930 phút
+    });
+  }
+
   if (selectedDay.getTime() !== today.getTime()) {
     return ALL_START_TIMES;
   }
@@ -589,6 +602,15 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                   </div>
                 )}
               </div>
+              {isClient &&
+                selectedDate &&
+                selectedDate.getDate() === 9 &&
+                selectedDate.getMonth() === 10 &&
+                selectedDate.getFullYear() === 2025 && (
+                  <p className="mt-1 text-sm text-orange-500">
+                    Jozo có hỷ nên hoạt động từ 15h30 nhé 💒
+                  </p>
+                )}
             </div>
 
             {/* Start Time Selection */}
