@@ -27,30 +27,30 @@ const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Large: "L-Box (6-8 người)",
 };
 
-const ALL_START_TIMES = [
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-  "18:00",
-  "18:30",
-  "19:00",
-  "19:30",
-  "20:00",
-  "22:00",
-];
+// Generate time slots function
+const generateTimeSlots = (
+  startHour: number,
+  endHour: number,
+  intervalMinutes: number = 30
+): string[] => {
+  const times: string[] = [];
+
+  for (let hour = startHour; hour <= endHour; hour++) {
+    for (let minute = 0; minute < 60; minute += intervalMinutes) {
+      if (hour === endHour && minute > 0) break; // Dừng ở endHour:00
+
+      const timeString = `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`;
+      times.push(timeString);
+    }
+  }
+
+  return times;
+};
+
+// Generate all time slots from 10:00 to 22:00
+const ALL_START_TIMES = generateTimeSlots(10, 22, 30);
 
 const DURATION_OPTIONS = [
   { value: 1, label: "1 giờ" },
@@ -71,19 +71,6 @@ const getAvailableStartTimes = (selectedDate: Date): string[] => {
     selectedDate.getMonth(),
     selectedDate.getDate()
   );
-
-  // Kiểm tra nếu là ngày 9/11/2025 (Chủ nhật)
-  const specialDate = new Date(2025, 10, 9); // Tháng 10 = tháng 11 (vì tháng bắt đầu từ 0)
-  const isSpecialDate = selectedDay.getTime() === specialDate.getTime();
-
-  if (isSpecialDate) {
-    // Chỉ hiển thị các khung giờ từ 15:30 trở đi cho ngày 9/11/2025
-    return ALL_START_TIMES.filter((time) => {
-      const [hour, minute] = time.split(":").map(Number);
-      const timeInMinutes = hour * 60 + minute;
-      return timeInMinutes >= 15 * 60 + 30; // 15:30 = 930 phút
-    });
-  }
 
   if (selectedDay.getTime() !== today.getTime()) {
     return ALL_START_TIMES;
@@ -602,15 +589,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                   </div>
                 )}
               </div>
-              {isClient &&
-                selectedDate &&
-                selectedDate.getDate() === 9 &&
-                selectedDate.getMonth() === 10 &&
-                selectedDate.getFullYear() === 2025 && (
-                  <p className="mt-1 text-sm text-orange-500">
-                    Jozo có hỷ nên hoạt động từ 15h30 nhé 💒
-                  </p>
-                )}
             </div>
 
             {/* Start Time Selection */}
