@@ -103,9 +103,11 @@ export const getRoomDataByType = unstable_cache(
 
       // Lấy danh sách phòng theo type (field trong DB là "type", không phải "roomType")
       const rooms = await db
-        .collection("rooms")
+        .collection("roomTypes")
         .find({ type: roomType.toLowerCase() })
         .toArray();
+
+      console.log("rooms", rooms);
 
       if (!rooms.length) {
         return {

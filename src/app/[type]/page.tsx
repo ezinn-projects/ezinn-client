@@ -1,5 +1,6 @@
 import { getRoomDataByType } from "@/lib/data-cache";
 import BookingForm from "@/components/booking-form";
+import RoomImageGallery from "@/components/room-image-gallery";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Price } from "@/types/price";
@@ -73,8 +74,20 @@ export default async function BookingPage({ params }: BookingPageProps) {
     notFound();
   }
 
+  // Lấy danh sách ảnh từ API (lấy từ phòng đầu tiên của loại phòng này)
+  const roomImages =
+    roomData.rooms && roomData.rooms.length > 0 && roomData.rooms[0].images
+      ? roomData.rooms[0].images
+      : [];
+
   return (
     <div className="container mx-auto max-w-2xl">
+      {/* Room Images Gallery */}
+      <RoomImageGallery
+        images={roomImages}
+        roomLabel={ROOM_TYPE_LABELS[roomType]}
+      />
+
       <BookingForm roomType={roomType} prices={prices} />
     </div>
   );
