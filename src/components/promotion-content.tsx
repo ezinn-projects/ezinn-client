@@ -174,6 +174,7 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
             📅 Lưu ý
           </Typography>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <li>Ưu đãi giảm 10%/5% bắt đầu áp dụng từ ngày 02/01/2026.</li>
             <li>Không áp dụng đồng thời với chương trình tặng giờ hoặc lì xì.</li>
             <li>Vui lòng giữ thông tin đặt chỗ (mã/điện thoại) để xác nhận ưu đãi.</li>
             <li>Áp dụng cho đơn phát sinh trong thời gian khuyến mãi, không quy đổi tiền mặt.</li>
