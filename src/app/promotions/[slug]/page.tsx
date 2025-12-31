@@ -7,6 +7,10 @@ import Link from "next/link";
 import { Calendar, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 
+interface PromotionPageProps {
+  params: Promise<{ slug: string }>;
+}
+
 // Force static generation (SSG) - không dùng SSR
 export const dynamic = "force-static";
 export const dynamicParams = false; // 404 nếu slug không có trong generateStaticParams
@@ -20,12 +24,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const promotion = promotions.find((p) => p.slug === params.slug);
+export async function generateMetadata({ params }: PromotionPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const promotion = promotions.find((p) => p.slug === slug);
 
   if (!promotion) {
     return {
@@ -55,12 +56,9 @@ export async function generateMetadata({
   };
 }
 
-export default function PromotionDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const promotion = promotions.find((p) => p.slug === params.slug);
+export default async function PromotionDetailPage({ params }: PromotionPageProps) {
+  const { slug } = await params;
+  const promotion = promotions.find((p) => p.slug === slug);
 
   if (!promotion) {
     notFound();
