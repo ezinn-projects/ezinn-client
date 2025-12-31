@@ -62,6 +62,21 @@ const DURATION_OPTIONS = [
   { value: 4, label: "4 giờ" },
 ];
 
+// Discount rules: weekday (Mon-Fri) 10%, weekend (Sat-Sun) 5%
+const getDiscountRate = (selectedDate: Date | null): number => {
+  if (!selectedDate) return 0;
+  const dayOfWeek = selectedDate.getDay();
+  if (dayOfWeek >= 1 && dayOfWeek <= 5) return 0.1;
+  if (dayOfWeek === 0 || dayOfWeek === 6) return 0.05;
+  return 0;
+};
+
+const applyDiscount = (price: number, rate: number): number => {
+  if (!price || rate <= 0) return price;
+  const discounted = price * (1 - rate);
+  return Math.max(0, Math.floor(discounted / 1000) * 1000);
+};
+
 // Utility functions
 const getAvailableStartTimes = (selectedDate: Date): string[] => {
   const now = new Date();
@@ -190,7 +205,7 @@ const calculateEstimatedPrice = (
       break;
     }
 
-    // Tìm giá cho loại phòng
+    // Tìm giá cho loại box
     const roomPrice = timeSlot.prices.find((p) => p.room_type === roomTypeStr);
     if (!roomPrice) {
       break;
@@ -301,6 +316,12 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       prices
     );
   }, [selectedDate, selectedStartTime, selectedDuration, roomType, prices]);
+
+  const discountRate = useMemo(() => getDiscountRate(selectedDate), [selectedDate]);
+  const finalPrice = useMemo(
+    () => applyDiscount(estimatedPrice, discountRate),
+    [estimatedPrice, discountRate]
+  );
 
   // Effects
   useEffect(() => {
@@ -700,11 +721,23 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
               </div>
               <div className="flex justify-between">
                 <span className="text-lightpink">Giá dự kiến:</span>
-                <span className="font-bold text-green-600 text-lg">
-                  {!isClient || prices.length === 0
-                    ? "Đang tải..."
-                    : `${estimatedPrice.toLocaleString("vi-VN")}đ`}
-                </span>
+                <div className="text-right">
+                  <div className="text-sm text-gray-500 line-through">
+                    {!isClient || prices.length === 0
+                      ? "Đang tải..."
+                      : `${estimatedPrice.toLocaleString("vi-VN")}đ`}
+                  </div>
+                  <div className="text-xs text-orange-500">
+                    {discountRate > 0
+                      ? `Đã áp dụng giảm ${(discountRate * 100).toFixed(0)}%`
+                      : "Chưa áp dụng giảm giá"}
+                  </div>
+                  <div className="font-bold text-green-600 text-lg">
+                    {!isClient || prices.length === 0
+                      ? "Đang tải..."
+                      : `${finalPrice.toLocaleString("vi-VN")}đ`}
+                  </div>
+                </div>
               </div>
             </div>
 

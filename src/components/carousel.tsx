@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import countdownBanner from "@/assets/images/count-down-event.jpeg";
 
 const banners = [
   {
@@ -10,7 +11,22 @@ const banners = [
     image: "/images/banner-1.jpg",
     alt: "Banner 1",
   },
+  {
+    image: "/images/li-xi.png",
+    alt: "Banner lì xì",
+  },
+  {
+    image: "/images/reserve.png",
+    alt: "Banner đặt box trước",
+  },
+  {
+    image: countdownBanner,
+    alt: "Countdown cùng Jozo",
+  },
 ];
+
+const imageWrapperClass =
+  "relative w-full aspect-video overflow-hidden rounded-lg bg-neutral-900";
 
 const BannerCarousel = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -49,14 +65,29 @@ const BannerCarousel = () => {
       <section className="pb-8 md:pb-12">
         <div className="w-full max-w-6xl mx-auto">
           <div className="flex w-full items-center justify-center">
-            <Image
-              src={banners[0].image}
-              alt={banners[0].alt}
-              className="w-full h-auto rounded-lg"
-              width={1200}
-              height={400}
-              priority
-            />
+            <div className={imageWrapperClass}>
+              <div className="absolute inset-0">
+                <Image
+                  src={banners[0].image}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="object-cover blur-2xl scale-110 opacity-60"
+                  aria-hidden
+                  priority
+                />
+              </div>
+              <div className="relative z-10 h-full w-full">
+              <Image
+                src={banners[0].image}
+                alt={banners[0].alt}
+                fill
+                sizes="(min-width: 1024px) 1200px, 100vw"
+                className="object-contain"
+                priority
+              />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -81,14 +112,29 @@ const BannerCarousel = () => {
               duration: 0.5,
             }}
           >
-            <Image
-              src={image}
-              alt={alt}
-              className="w-full h-auto rounded-lg"
-              width={1200}
-              height={400}
-              priority
-            />
+            <div className={imageWrapperClass}>
+              <div className="absolute inset-0">
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="object-cover blur-2xl scale-110 opacity-60"
+                  aria-hidden
+                  priority
+                />
+              </div>
+              <div className="relative z-10 h-full w-full">
+              <Image
+                src={image}
+                alt={alt}
+                fill
+                sizes="(min-width: 1024px) 1200px, 100vw"
+                className="object-contain"
+                priority
+              />
+              </div>
+            </div>
           </motion.div>
           <div className="mt-8 flex justify-center">
             {banners.map((_, index) => (

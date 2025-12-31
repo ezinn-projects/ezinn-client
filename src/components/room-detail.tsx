@@ -2,16 +2,16 @@ import Image from "next/image";
 import React from "react";
 
 type RoomData = {
-  name: string; // Tên phòng
-  description: string; // Mô tả phòng
-  price: number; // Giá gốc của phòng
-  discountedPrice: number; // Giá đã giảm của phòng
+  name: string; // Tên box
+  description: string; // Mô tả box
+  price: number; // Giá gốc của box
+  discountedPrice: number; // Giá đã giảm của box
   amenities: string[]; // Danh sách tiện ích
   images: string[]; // Danh sách URL hình ảnh
 };
 
 interface RoomDetailProps {
-  roomData: RoomData; // Dữ liệu chi tiết của phòng
+  roomData: RoomData; // Dữ liệu chi tiết của box
 }
 
 const RoomDetail: React.FC<RoomDetailProps> = ({ roomData }) => {

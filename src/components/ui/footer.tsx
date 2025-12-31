@@ -2,11 +2,14 @@ import Image from "next/image";
 
 const navigation = {
   connect: [
-    { name: "Facebook", href: "https://facebook.com" },
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/profile.php?id=61575350724412&locale=vi_VN",
+    },
     { name: "Instagram", href: "https://instagram.com" },
     {
       name: "TikTok",
-      href: "https://www.tiktok.com/@jozomusicbox?lang=vi",
+      href: "https://www.tiktok.com/@jozomusicbox?is_from_webapp=1&sender_device=pc",
     },
     { name: "YouTube", href: "https://youtube.com" },
   ],
@@ -88,7 +91,7 @@ const TwoColumnFooter = () => {
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-100/10">
           <p className="text-xs leading-5 text-gray-700 dark:text-gray-300">
-            &copy; 2024 JOZO. Đã đăng ký bản quyền. Mọi quyền được bảo lưu.
+            &copy; 2026 JOZO. Đã đăng ký bản quyền. Mọi quyền được bảo lưu.
           </p>
         </div>
       </div>

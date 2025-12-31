@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "Norebang Hàn Quốc",
     "box karaoke giá rẻ",
     "Karaoke sinh viên",
-    "Phòng hát đẹp",
+    "box hát đẹp",
     "Studio karaoke",
     "Hát hò Biên Hòa",
     "Giá sinh viên",
@@ -67,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <link rel="icon" href="/images/logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}

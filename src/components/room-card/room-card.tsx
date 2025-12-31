@@ -6,7 +6,7 @@ import { RoomType } from "@/types/room";
 import { Calendar, Users } from "lucide-react";
 import RoomImageCarousel from "./images-list";
 
-// Mapping tên phòng
+// Mapping tên box
 const ROOM_NAME_MAPPING: Record<string, string> = {
   small: "Mini Squad",
   medium: "Party Zone",

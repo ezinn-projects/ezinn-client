@@ -39,7 +39,7 @@ export default function RoomImageGallery({
             {roomLabel}
           </h3>
           <p className="text-sm text-gray-600">
-            Hình ảnh phòng sẽ được cập nhật sớm
+            Hình ảnh box sẽ được cập nhật sớm
           </p>
         </div>
       </div>

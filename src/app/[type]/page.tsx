@@ -33,7 +33,7 @@ export async function generateMetadata({
 
   if (!roomType) {
     return {
-      title: "Không tìm thấy loại phòng",
+      title: "Không tìm thấy loại box",
     };
   }
 
@@ -74,7 +74,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
     notFound();
   }
 
-  // Lấy danh sách ảnh từ API (lấy từ phòng đầu tiên của loại phòng này)
+  // Lấy danh sách ảnh từ API (lấy từ box đầu tiên của loại box này)
   const roomImages =
     roomData.rooms && roomData.rooms.length > 0 && roomData.rooms[0].images
       ? roomData.rooms[0].images

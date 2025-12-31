@@ -102,7 +102,7 @@ export default function RecruitmentPage() {
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">👋</span>
                       <p className="text-gray-700">
-                        Tiếp đón khách, tư vấn chọn phòng và báo giá phù hợp
+                        Tiếp đón khách, tư vấn chọn box và báo giá phù hợp
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
@@ -162,19 +162,19 @@ export default function RecruitmentPage() {
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">🎯</span>
                       <p className="text-gray-700">
-                        Setup phòng trước khi khách vào
+                        Setup box trước khi khách vào
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">👋</span>
                       <p className="text-gray-700">
-                        Dẫn khách vào phòng và hướng dẫn sử dụng thiết bị cơ bản
+                        Dẫn khách vào box và hướng dẫn sử dụng thiết bị cơ bản
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">🧹</span>
                       <p className="text-gray-700">
-                        Dọn phòng sau khi khách sử dụng xong
+                        Dọn box sau khi khách sử dụng xong
                       </p>
                     </div>
                     <div className="flex items-start gap-2">
@@ -236,7 +236,7 @@ export default function RecruitmentPage() {
                     <div className="flex items-start gap-2">
                       <span className="text-pink-500 mt-1">🤝</span>
                       <p className="text-gray-700">
-                        Phối hợp với lễ tân để cập nhật tình trạng phòng trống
+                        Phối hợp với lễ tân để cập nhật tình trạng box trống
                         và phản hồi kịp thời tới khách hàng khi tới quán
                       </p>
                     </div>
@@ -300,7 +300,7 @@ export default function RecruitmentPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
               <div className="flex items-center gap-2 text-blue-600">
                 <span className="text-2xl">📞</span>
-                <span className="font-medium">0336051204</span>
+                <span className="font-medium">035 966 0934</span>
               </div>
               <div className="flex items-center gap-2 text-blue-600">
                 <span className="text-2xl">📧</span>
@@ -315,10 +315,10 @@ export default function RecruitmentPage() {
           <p className="text-sm">
             📞 Liên hệ:{" "}
             <a
-              href="tel:0336051204"
+              href="tel:0359660934"
               className="text-blue-600 hover:text-blue-800 underline"
             >
-              0336051204
+              035 966 0934
             </a>
           </p>
           <p className="text-sm mt-2">
