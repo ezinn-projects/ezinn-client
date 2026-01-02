@@ -63,6 +63,12 @@ export default function RoomCard({
             </span>
           </div>
 
+          <div className="mb-2">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded">
+              Ưu đãi đặt trước: -10% (T2-T6) / -5% (T7-CN)
+            </span>
+          </div>
+
           <div className="mb-4">
             {displayPrice > 0 ? (
               <Typography

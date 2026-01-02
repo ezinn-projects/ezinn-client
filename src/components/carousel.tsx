@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import countdownBanner from "@/assets/images/count-down-event.jpeg";
 
 const banners = [
   {
@@ -12,16 +11,8 @@ const banners = [
     alt: "Banner 1",
   },
   {
-    image: "/images/li-xi.png",
-    alt: "Banner lì xì",
-  },
-  {
     image: "/images/reserve.png",
     alt: "Banner đặt box trước",
-  },
-  {
-    image: countdownBanner,
-    alt: "Countdown cùng Jozo",
   },
 ];
 

@@ -83,66 +83,6 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
     );
   }
 
-  if (promotionId === "2") {
-    return (
-      <div className="space-y-6">
-        <Typography as="h1" variant="bold" className="text-3xl text-lightpink mb-4">
-          🎆 Đêm giao thừa rút lì xì may mắn
-        </Typography>
-
-        <Typography as="p" variant="default" className="text-gray-700 leading-relaxed">
-          Thắp lửa countdown cùng Jozo đêm 31/12 giao 1/1/2026! Đặt box hát xuyên
-          đêm, mỗi nhóm khách sẽ được rút lì xì may mắn trị giá lên tới{" "}
-          <strong>50.000đ</strong> ngay khi chuyển giao năm mới.
-        </Typography>
-
-        <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
-            ⏰ Khung giờ áp dụng
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Check-in từ <strong>20:00 31/12</strong> đến <strong>01:30 01/01/2026</strong>.</li>
-            <li>Áp dụng cho mọi loại box, hát tối thiểu <strong>90 phút</strong>.</li>
-            <li>Đặt trước hoặc đến trực tiếp đều được tham gia rút lì xì.</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
-            🎁 Cách nhận lì xì
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Tablet hiển thị <strong>4 bao lì xì</strong> để khách tự chọn.</li>
-            <li>Giá trị ngẫu nhiên từ <strong>5.000đ</strong> đến <strong>100.000đ</strong>.</li>
-            <li>Áp dụng trừ trực tiếp vào bill trong đêm (không quy đổi tiền mặt).</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
-            ⚠️ Lưu ý
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Số lượng phong bì có hạn, ưu tiên theo thứ tự check-in.</li>
-            <li>Không quy đổi lì xì thành tiền mặt; mỗi nhóm chỉ rút một lần.</li>
-            <li>Vui lòng giữ hóa đơn để được hỗ trợ khi cần.</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
-            📞 Liên hệ đặt box
-          </Typography>
-          <Typography as="p" variant="default" className="text-gray-700 leading-relaxed">
-            Hotline: <strong>035 966 0934</strong>
-            <br />
-            Địa chỉ: <strong>78 Phan Trung, Tam Hiệp, Đồng Nai</strong>
-          </Typography>
-        </div>
-      </div>
-    );
-  }
-
   if (promotionId === "3") {
     return (
       <div className="space-y-6">
@@ -175,9 +115,7 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
           </Typography>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
             <li>Ưu đãi giảm 10%/5% bắt đầu áp dụng từ ngày 02/01/2026.</li>
-            <li>Không áp dụng đồng thời với chương trình tặng giờ hoặc lì xì.</li>
-            <li>Vui lòng giữ thông tin đặt chỗ (mã/điện thoại) để xác nhận ưu đãi.</li>
-            <li>Áp dụng cho đơn phát sinh trong thời gian khuyến mãi, không quy đổi tiền mặt.</li>
+            <li>Không áp dụng đồng thời với các chương trình tặng giờ khác.</li>
           </ul>
         </div>
 

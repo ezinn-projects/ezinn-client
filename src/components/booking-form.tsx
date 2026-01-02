@@ -118,20 +118,26 @@ const createISOString = (date: Date, time: string): string => {
 };
 
 // Price calculation function
+type EstimatedPrice = {
+  basePrice: number;
+  discountRate: number;
+  finalPrice: number;
+};
+
 const calculateEstimatedPrice = (
   selectedDate: Date | null,
   selectedStartTime: string,
   selectedDuration: number,
   roomType: RoomType,
   prices: Price[]
-): number => {
+): EstimatedPrice => {
   if (
     !selectedStartTime ||
     !selectedDuration ||
     !selectedDate ||
     prices.length === 0
   ) {
-    return 0;
+    return { basePrice: 0, discountRate: 0, finalPrice: 0 };
   }
 
   // Xác định loại ngày
@@ -152,7 +158,7 @@ const calculateEstimatedPrice = (
 
   // Tìm price rule phù hợp
   const priceRule = prices.find((p) => p.day_type === dayType);
-  if (!priceRule) return 0;
+  if (!priceRule) return { basePrice: 0, discountRate: 0, finalPrice: 0 };
 
   // Tính tổng giá cho thời lượng đã chọn
   let totalPrice = 0;
@@ -229,7 +235,23 @@ const calculateEstimatedPrice = (
   }
 
   // Làm tròn xuống đến hàng nghìn (VD: 50333 -> 50000)
-  return Math.floor(totalPrice / 1000) * 1000;
+  const basePrice = Math.floor(totalPrice / 1000) * 1000;
+
+  // Ưu đãi đặt trước: T2-T6 giảm 10%, T7-CN giảm 5%
+  let discountRate = 0;
+  if (dayType === "weekday") {
+    discountRate = 0.1;
+  } else if (dayType === "weekend") {
+    discountRate = 0.05;
+  }
+
+  const finalPrice = Math.floor((totalPrice * (1 - discountRate)) / 1000) * 1000;
+
+  return {
+    basePrice,
+    discountRate,
+    finalPrice,
+  };
 };
 
 interface BookingFormProps {
@@ -292,7 +314,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return calculateEndTime(selectedStartTime, selectedDuration);
   }, [selectedStartTime, selectedDuration]);
 
-  const estimatedPrice = useMemo(() => {
+  const { basePrice, discountRate, finalPrice } = useMemo(() => {
     return calculateEstimatedPrice(
       selectedDate,
       selectedStartTime,
@@ -699,13 +721,37 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-lightpink">Giá dự kiến:</span>
+                <span className="text-lightpink">Giá dự kiến (đã giảm):</span>
                 <span className="font-bold text-green-600 text-lg">
                   {!isClient || prices.length === 0
                     ? "Đang tải..."
-                    : `${estimatedPrice.toLocaleString("vi-VN")}đ`}
+                    : `${finalPrice.toLocaleString("vi-VN")}đ`}
                 </span>
               </div>
+              {discountRate > 0 && (
+                <>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Giá gốc:</span>
+                    <span className="line-through">
+                      {basePrice.toLocaleString("vi-VN")}đ
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Ưu đãi áp dụng:</span>
+                    <span className="font-semibold text-lightpink">
+                      {discountRate === 0.1
+                        ? "Giảm 10% (Thứ 2 - Thứ 6)"
+                        : "Giảm 5% (Thứ 7 - Chủ nhật)"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Tiết kiệm:</span>
+                    <span className="font-semibold text-green-600">
+                      {(basePrice - finalPrice).toLocaleString("vi-VN")}đ
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="mt-4 text-sm border-t pt-3 text-gray-600">
