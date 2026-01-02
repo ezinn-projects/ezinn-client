@@ -4,25 +4,44 @@ type PromotionContentProps = {
   promotionId: string;
 };
 
-export default function PromotionContent({ promotionId }: PromotionContentProps) {
+export default function PromotionContent({
+  promotionId,
+}: PromotionContentProps) {
   // Render content dựa vào promotion ID
   if (promotionId === "1") {
     return (
       <div className="space-y-6">
-        <Typography as="h1" variant="bold" className="text-3xl text-lightpink mb-4">
+        <Typography
+          as="h1"
+          variant="bold"
+          className="text-3xl text-lightpink mb-4"
+        >
           🎤 Chương trình khuyến mãi đặc biệt
         </Typography>
 
-        <Typography as="h2" variant="bold" className="text-2xl text-lightpink mt-8 mb-4">
+        <Typography
+          as="h2"
+          variant="bold"
+          className="text-2xl text-lightpink mt-8 mb-4"
+        >
           Hát đủ 2 giờ - Miễn phí 1 giờ!
         </Typography>
 
-        <Typography as="p" variant="default" className="text-gray-700 mb-4 leading-relaxed">
-          Bạn là fan cuồng karaoke? Đây là cơ hội vàng để hát thả ga mà không lo hết tiền!
+        <Typography
+          as="p"
+          variant="default"
+          className="text-gray-700 mb-4 leading-relaxed"
+        >
+          Bạn là fan cuồng karaoke? Đây là cơ hội vàng để hát thả ga mà không lo
+          hết tiền!
         </Typography>
 
         <div className="mt-8">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             📋 Điều kiện áp dụng:
           </Typography>
           <ul className="list-disc list-inside mb-4 space-y-2">
@@ -36,7 +55,8 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
               ✅ Thời gian áp dụng: <strong>10:00 - 19:00</strong>
             </li>
             <li className="text-gray-700">
-              ✅ Áp dụng <strong>Thứ 2 - Thứ 6</strong> (không áp dụng cuối tuần)
+              ✅ Áp dụng <strong>Thứ 2 - Thứ 6</strong> (không áp dụng cuối
+              tuần)
             </li>
             <li className="text-gray-700">
               ✅ <strong>Miễn phí 1 giờ</strong> hát
@@ -45,7 +65,11 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
         </div>
 
         <div className="mt-8">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             🎁 Ưu đãi:
           </Typography>
           <ul className="list-disc list-inside mb-4 space-y-2">
@@ -58,10 +82,18 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
         </div>
 
         <div className="mt-8">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             📞 Liên hệ:
           </Typography>
-          <Typography as="p" variant="default" className="text-gray-700 mb-4 leading-relaxed">
+          <Typography
+            as="p"
+            variant="default"
+            className="text-gray-700 mb-4 leading-relaxed"
+          >
             <strong>Hotline:</strong> 035 966 0934
             <br />
             <strong>Địa chỉ:</strong> 78 Phan Trung, Tam Hiệp, Đồng Nai
@@ -69,14 +101,20 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
         </div>
 
         <div className="mt-8">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             ⚠️ Lưu ý:
           </Typography>
           <ul className="list-disc list-inside mb-4 space-y-2">
             <li className="text-gray-700">
               Không áp dụng đồng thời với các chương trình khuyến mãi khác
             </li>
-            <li className="text-gray-700">Giờ tặng không được quy đổi thành tiền mặt</li>
+            <li className="text-gray-700">
+              Giờ tặng không được quy đổi thành tiền mặt
+            </li>
           </ul>
         </div>
       </div>
@@ -86,22 +124,36 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
   if (promotionId === "3") {
     return (
       <div className="space-y-6">
-        <Typography as="h1" variant="bold" className="text-3xl text-lightpink mb-4">
+        <Typography
+          as="h1"
+          variant="bold"
+          className="text-3xl text-lightpink mb-4"
+        >
           🛎️ Book box trước: Giảm 10% (T2–T6) & 5% (T7, CN)
         </Typography>
 
-        <Typography as="p" variant="default" className="text-gray-700 leading-relaxed">
-          Chỉ cần đặt box trước trên <strong>mọi nền tảng của Jozo</strong> (web, app, hotline
-          hoặc trực tiếp), bạn sẽ được giảm <strong>10%</strong> từ <strong>thứ 2 đến thứ 6</strong>{" "}
-          cho tất cả khung giờ. Riêng <strong>thứ 7 và Chủ nhật</strong>, ưu đãi giảm <strong>5%</strong>{" "}
-          áp dụng toàn bộ thời gian trong ngày.
+        <Typography
+          as="p"
+          variant="default"
+          className="text-gray-700 leading-relaxed"
+        >
+          Chỉ cần đặt box trước trên <strong>mọi nền tảng của Jozo</strong>{" "}
+          (web, app, hotline hoặc trực tiếp), bạn sẽ được giảm{" "}
+          <strong>10%</strong> từ <strong>thứ 2 đến thứ 6</strong> cho tất cả
+          khung giờ. Riêng <strong>thứ 7 và Chủ nhật</strong>, ưu đãi giảm{" "}
+          <strong>5%</strong> áp dụng toàn bộ thời gian trong ngày.
         </Typography>
 
         <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             ✅ Điều kiện & cách áp dụng
           </Typography>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <li>Book box trước tối thiểu 1 tiếng</li>
             <li>Đặt trước qua web/app Jozo, hotline, Facebook hoặc TikTok.</li>
             <li>Áp dụng mọi loại box, mọi khung giờ trong tuần.</li>
             <li>Thứ 2–6: giảm 10%; Thứ 7, CN: giảm 5%.</li>
@@ -110,7 +162,11 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
         </div>
 
         <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             📅 Lưu ý
           </Typography>
           <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -120,10 +176,18 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
         </div>
 
         <div className="mt-6">
-          <Typography as="h3" variant="semibold" className="text-xl text-gray-800 mb-3">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
             📞 Hỗ trợ đặt box
           </Typography>
-          <Typography as="p" variant="default" className="text-gray-700 leading-relaxed">
+          <Typography
+            as="p"
+            variant="default"
+            className="text-gray-700 leading-relaxed"
+          >
             Hotline: <strong>035 966 0934</strong>
             <br />
             Địa chỉ: <strong>78 Phan Trung, Tam Hiệp, Đồng Nai</strong>
@@ -140,4 +204,3 @@ export default function PromotionContent({ promotionId }: PromotionContentProps)
     </Typography>
   );
 }
-
