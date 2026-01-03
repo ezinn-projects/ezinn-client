@@ -103,6 +103,30 @@ const calculateEndTime = (startTime: string, duration: number): string => {
     .padStart(2, "0")}`;
 };
 
+// Kiểm tra điều kiện đặt trước ít nhất 1 giờ để áp dụng ưu đãi
+const isEligibleForEarlyBooking = (
+  selectedDate: Date | null,
+  selectedStartTime: string
+): boolean => {
+  if (!selectedDate || !selectedStartTime) return false;
+
+  const [startHour, startMinute] = selectedStartTime.split(":").map(Number);
+  const bookingDateTime = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    selectedDate.getDate(),
+    startHour,
+    startMinute,
+    0,
+    0
+  );
+
+  const now = new Date();
+  const diffMs = bookingDateTime.getTime() - now.getTime();
+
+  return diffMs >= 60 * 60 * 1000; // Ít nhất 1 giờ trước giờ bắt đầu
+};
+
 const createISOString = (date: Date, time: string): string => {
   const [hours, minutes] = time.split(":").map(Number);
   const dateTime = new Date(date);
@@ -239,10 +263,16 @@ const calculateEstimatedPrice = (
 
   // Ưu đãi đặt trước: T2-T6 giảm 10%, T7-CN giảm 5%
   let discountRate = 0;
-  if (dayType === "weekday") {
-    discountRate = 0.1;
-  } else if (dayType === "weekend") {
-    discountRate = 0.05;
+  const eligibleForDiscount = isEligibleForEarlyBooking(
+    selectedDate,
+    selectedStartTime
+  );
+  if (eligibleForDiscount) {
+    if (dayType === "weekday") {
+      discountRate = 0.1;
+    } else if (dayType === "weekend") {
+      discountRate = 0.05;
+    }
   }
 
   const finalPrice = Math.floor((totalPrice * (1 - discountRate)) / 1000) * 1000;
@@ -742,12 +772,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                       {discountRate === 0.1
                         ? "Giảm 10% (Thứ 2 - Thứ 6)"
                         : "Giảm 5% (Thứ 7 - Chủ nhật)"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Tiết kiệm:</span>
-                    <span className="font-semibold text-green-600">
-                      {(basePrice - finalPrice).toLocaleString("vi-VN")}đ
                     </span>
                   </div>
                 </>
