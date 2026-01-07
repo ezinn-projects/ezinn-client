@@ -79,6 +79,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
     roomData.rooms && roomData.rooms.length > 0 && roomData.rooms[0].images
       ? roomData.rooms[0].images
       : [];
+  const isLargeRoom = roomType === "Large";
 
   return (
     <div className="container mx-auto max-w-2xl">
@@ -87,6 +88,12 @@ export default async function BookingPage({ params }: BookingPageProps) {
         images={roomImages}
         roomLabel={ROOM_TYPE_LABELS[roomType]}
       />
+
+      {isLargeRoom && (
+        <div className="mb-4 rounded-lg border border-lightpink/30 bg-pink-50 px-4 py-3 text-sm font-semibold text-lightpink shadow-sm">
+          L-Box được trang bị sẵn 4 mic — thoải mái song ca và hát cùng nhóm đông.
+        </div>
+      )}
 
       <BookingForm roomType={roomType} prices={prices} />
     </div>

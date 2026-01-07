@@ -6,18 +6,16 @@ const navigation = {
       name: "Facebook",
       href: "https://www.facebook.com/profile.php?id=61575350724412&locale=vi_VN",
     },
-    { name: "Instagram", href: "https://instagram.com" },
     {
       name: "TikTok",
       href: "https://www.tiktok.com/@jozomusicbox?is_from_webapp=1&sender_device=pc",
     },
-    { name: "YouTube", href: "https://youtube.com" },
   ],
   explore: [
-    { name: "Nhạc Hot", href: "/hot" },
-    { name: "BXH", href: "/charts" },
-    { name: "Thể Loại", href: "/genres" },
-    { name: "Nghệ Sĩ", href: "/artists" },
+    { name: "Trang Chủ", href: "/" },
+    { name: "Đặt Phòng", href: "/booking-search" },
+    { name: "Tuyển Dụng", href: "/recruitment" },
+    { name: "Đăng Ký", href: "/register" },
   ],
 };
 

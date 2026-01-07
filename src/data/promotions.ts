@@ -1,3 +1,4 @@
+import freeTwoHours from "@/assets/images/free-two-hours.png";
 import { Promotion } from "@/types/promotion";
 
 export const promotions: Promotion[] = [
@@ -7,7 +8,7 @@ export const promotions: Promotion[] = [
     title: "Hát đủ 2 giờ - Tặng ngay 1 giờ",
     shortDescription:
       "Đặt phòng từ 2 giờ trở lên và order snack/nước từ 35k để nhận thêm 1 giờ miễn phí!",
-    image: "/images/banner-1.jpg",
+    image: freeTwoHours.src,
     postedAt: "2026-01-01T00:00:00+07:00",
   },
   {

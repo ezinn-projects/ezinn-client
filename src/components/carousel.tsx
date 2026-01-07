@@ -3,12 +3,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import freeTwoHours from "@/assets/images/free-two-hours.png";
 
 const banners = [
   {
-    // "thêm banner 1 trong assets",
+    image: freeTwoHours.src,
+    alt: "Hát 2 giờ tặng thêm 1 giờ",
+  },
+  {
     image: "/images/banner-1.jpg",
-    alt: "Banner 1",
+    alt: "Banner khuyến mãi hát 2 giờ tặng 1 giờ",
   },
   {
     image: "/images/reserve.png",
