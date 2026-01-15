@@ -30,6 +30,9 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: false,
     defaultValues: {
       date_of_birth: defaultBirthDate || new Date(2006, 0, 1), // Fallback date for SSR
     },
@@ -83,7 +86,7 @@ export default function RegisterForm() {
         triển khai sau.
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Họ và tên"
           required
@@ -179,7 +182,6 @@ export default function RegisterForm() {
         <Button
           type="submit"
           className="w-full animate-buttonheartbeat bg-lightpink text-white"
-          onClick={handleSubmit(onSubmit)}
         >
           Đăng ký
         </Button>

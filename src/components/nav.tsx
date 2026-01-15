@@ -5,8 +5,15 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DesktopMenu from "./desktop-nav";
 import MobileMenu from "./mobile-nav";
+import UserMenu from "./user-menu";
+import type { IMemberProfile } from "@/types/membership";
 
-export default function Nav() {
+export default function Nav({
+  currentUser,
+}: {
+  currentUser?: IMemberProfile | null;
+}) {
+  const authed = Boolean(currentUser);
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
   const [scrollY, setScrollY] = useState(0); // Theo dõi vị trí cuộn
   const [isClient, setIsClient] = useState(false); // Kiểm tra client-side
@@ -85,11 +92,12 @@ export default function Nav() {
           </div>
 
           <div className="flex-1 flex justify-center">
-            <DesktopMenu />
+            <DesktopMenu authed={authed} />
           </div>
 
-          <div className="flex-1 flex justify-end">
-            <MobileMenu />
+          <div className="flex-1 flex justify-end items-center gap-3">
+            <UserMenu currentUser={currentUser} />
+            <MobileMenu authed={authed} />
           </div>
         </div>
       </nav>

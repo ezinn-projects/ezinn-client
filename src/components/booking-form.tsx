@@ -324,6 +324,9 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     setValue,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: false,
     defaultValues: {
       customerName: "",
       customerPhone: "",

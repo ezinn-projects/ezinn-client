@@ -2,6 +2,7 @@ import BackgroundCross from "@/components/background-cross";
 import Nav from "@/components/nav";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { getCurrentUser } from "@/lib/auth-server";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -61,14 +62,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html lang="vi">
-      <link rel="icon" href="/images/logo.png" />
+      <head>
+        <link rel="icon" href="/images/logo.png" />
+        <link rel="apple-touch-icon" href="/images/logo.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
       >
@@ -80,7 +86,7 @@ export default function RootLayout({
         />
         {/* Header */}
         <header>
-          <Nav />
+          <Nav currentUser={currentUser} />
         </header>
 
         {/* Main */}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import MenuItems from "./menu-items";
 
-export default function MobileMenu() {
+export default function MobileMenu({ authed }: { authed?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -50,7 +50,7 @@ export default function MobileMenu() {
           menuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >
-        <MenuItems onClick={() => setMenuOpen(false)} />
+        <MenuItems authed={authed} onClick={() => setMenuOpen(false)} />
       </div>
     </div>
   );
