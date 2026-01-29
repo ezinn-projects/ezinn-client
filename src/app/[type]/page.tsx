@@ -7,6 +7,18 @@ import { Price } from "@/types/price";
 
 type RoomType = "Small" | "Medium" | "Large";
 
+// Thêm generateStaticParams để chỉ generate 3 loại box hợp lệ
+export async function generateStaticParams() {
+  return [
+    { type: "small" },
+    { type: "medium" },
+    { type: "large" },
+  ];
+}
+
+// Chặn dynamic params không có trong generateStaticParams
+export const dynamicParams = false;
+
 // Room type mapping from URL params
 const ROOM_TYPE_MAPPING: Record<string, RoomType> = {
   small: "Small",
