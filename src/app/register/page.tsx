@@ -80,7 +80,7 @@ export default function RegisterForm() {
       </h2>
       <p className="text-sm text-center text-gray-300 mb-4">
         Đang phát triển chương trình membership nhaaaaa. cuối tháng 2 sẽ lên
-        được. Ưu đãi cũng sẽ lên được.
+        được. hehe
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
