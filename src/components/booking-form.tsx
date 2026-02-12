@@ -20,6 +20,22 @@ import { useForm } from "react-hook-form";
 
 type RoomType = "Small" | "Medium" | "Large";
 
+type HolidayItem = {
+  date: string;
+  name: string;
+  description: string | null;
+};
+
+const sameDay = (d1: Date, d2: Date): boolean =>
+  d1.getFullYear() === d2.getFullYear() &&
+  d1.getMonth() === d2.getMonth() &&
+  d1.getDate() === d2.getDate();
+
+// Mùng 1 Tết 2026 - Jozo nghỉ, không nhận đặt
+const TET_DAY_OFF = new Date(2026, 1, 17); // 17/2/2026
+const isTetDay1Off = (date: Date | null): boolean =>
+  !!date && sameDay(date, TET_DAY_OFF);
+
 // Constants và utility functions
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
@@ -31,7 +47,7 @@ const ROOM_TYPE_LABELS: Record<RoomType, string> = {
 const generateTimeSlots = (
   startHour: number,
   endHour: number,
-  intervalMinutes: number = 30
+  intervalMinutes: number = 30,
 ): string[] => {
   const times: string[] = [];
 
@@ -69,7 +85,7 @@ const getAvailableStartTimes = (selectedDate: Date): string[] => {
   const selectedDay = new Date(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
-    selectedDate.getDate()
+    selectedDate.getDate(),
   );
 
   if (selectedDay.getTime() !== today.getTime()) {
@@ -106,7 +122,7 @@ const calculateEndTime = (startTime: string, duration: number): string => {
 // Kiểm tra điều kiện đặt trước ít nhất 1 giờ để áp dụng ưu đãi
 const isEligibleForEarlyBooking = (
   selectedDate: Date | null,
-  selectedStartTime: string
+  selectedStartTime: string,
 ): boolean => {
   if (!selectedDate || !selectedStartTime) return false;
 
@@ -118,7 +134,7 @@ const isEligibleForEarlyBooking = (
     startHour,
     startMinute,
     0,
-    0
+    0,
   );
 
   const now = new Date();
@@ -134,7 +150,7 @@ const createISOString = (date: Date, time: string): string => {
 
   const offset = 7 * 60; // +07:00 in minutes
   const utc = new Date(
-    dateTime.getTime() - dateTime.getTimezoneOffset() * 60000
+    dateTime.getTime() - dateTime.getTimezoneOffset() * 60000,
   );
   const localTime = new Date(utc.getTime() + offset * 60000);
 
@@ -153,7 +169,8 @@ const calculateEstimatedPrice = (
   selectedStartTime: string,
   selectedDuration: number,
   roomType: RoomType,
-  prices: Price[]
+  prices: Price[],
+  holidays: HolidayItem[] = [],
 ): EstimatedPrice => {
   if (
     !selectedStartTime ||
@@ -164,11 +181,14 @@ const calculateEstimatedPrice = (
     return { basePrice: 0, discountRate: 0, finalPrice: 0 };
   }
 
-  // Xác định loại ngày
+  // Xác định loại ngày: weekend (T7/CN) hoặc holiday → dùng giá weekend
   const dayOfWeek = selectedDate.getDay();
+  const isHoliday = holidays.some((h) =>
+    sameDay(selectedDate, new Date(h.date)),
+  );
   let dayType: "weekday" | "weekend" | "holiday" = "weekday";
 
-  if (dayOfWeek === 0 || dayOfWeek === 6) {
+  if (dayOfWeek === 0 || dayOfWeek === 6 || isHoliday) {
     dayType = "weekend";
   }
 
@@ -265,7 +285,7 @@ const calculateEstimatedPrice = (
   let discountRate = 0;
   const eligibleForDiscount = isEligibleForEarlyBooking(
     selectedDate,
-    selectedStartTime
+    selectedStartTime,
   );
   if (eligibleForDiscount) {
     if (dayType === "weekday") {
@@ -275,7 +295,8 @@ const calculateEstimatedPrice = (
     }
   }
 
-  const finalPrice = Math.floor((totalPrice * (1 - discountRate)) / 1000) * 1000;
+  const finalPrice =
+    Math.floor((totalPrice * (1 - discountRate)) / 1000) * 1000;
 
   return {
     basePrice,
@@ -315,6 +336,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   // Cancel booking states
   const [isCancelling, setIsCancelling] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [holidays, setHolidays] = useState<HolidayItem[]>([]);
 
   // Form setup
   const {
@@ -350,14 +372,38 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       selectedStartTime,
       selectedDuration,
       roomType,
-      prices
+      prices,
+      holidays,
     );
-  }, [selectedDate, selectedStartTime, selectedDuration, roomType, prices]);
+  }, [
+    selectedDate,
+    selectedStartTime,
+    selectedDuration,
+    roomType,
+    prices,
+    holidays,
+  ]);
+
+  const selectedHoliday = useMemo(() => {
+    if (!selectedDate || holidays.length === 0) return null;
+    return (
+      holidays.find((h) => sameDay(selectedDate, new Date(h.date))) ?? null
+    );
+  }, [selectedDate, holidays]);
 
   // Effects
   useEffect(() => {
     setIsClient(true);
     setSelectedDate(new Date());
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/holidays")
+      .then((res) => res.json())
+      .then((json: { success?: boolean; data?: HolidayItem[] }) => {
+        if (json.success && Array.isArray(json.data)) setHolidays(json.data);
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -386,6 +432,14 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         toast({
           title: "Lỗi",
           description: "Vui lòng chọn thời gian hợp lệ",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (isTetDay1Off(selectedDate)) {
+        toast({
+          title: "Jozo nghỉ ngày mùng 1 Tết",
+          description: "Hẹn khách iu vào ngày mùng 2.",
           variant: "destructive",
         });
         return;
@@ -465,7 +519,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         setIsSubmitting(false);
       }
     },
-    [selectedStartTime, selectedDuration, selectedDate, endTime]
+    [selectedStartTime, selectedDuration, selectedDate, endTime],
   );
 
   const copyBookingCode = useCallback(() => {
@@ -629,12 +683,24 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
             <div>
               <div className="relative">
                 {isClient && selectedDate ? (
-                  <DateSelect
-                    value={selectedDate}
-                    onChange={setSelectedDate}
-                    label="Ngày đặt"
-                    required
-                  />
+                  <>
+                    <DateSelect
+                      value={selectedDate}
+                      onChange={setSelectedDate}
+                      label="Ngày đặt"
+                      required
+                    />
+                    {selectedHoliday && (
+                      <p className="mt-1.5 text-sm font-medium text-lightpink">
+                        Ngày lễ: {selectedHoliday.name}
+                      </p>
+                    )}
+                    {isTetDay1Off(selectedDate) && (
+                      <p className="mt-1.5 text-sm font-medium text-lightpink bg-pink-50 border border-lightpink/30 rounded px-3 py-2">
+                        Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
+                      </p>
+                    )}
+                  </>
                 ) : (
                   <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
                     Đang tải...
@@ -717,8 +783,12 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
           </div>
         </div>
 
-        {/* Summary */}
-        {isClient && selectedStartTime && selectedDuration && selectedDate && (
+        {/* Summary - ẩn khi chọn ngày mùng 1 Tết */}
+        {isClient &&
+          selectedStartTime &&
+          selectedDuration &&
+          selectedDate &&
+          !isTetDay1Off(selectedDate) && (
           <div className="mb-6 p-4 bg-gray-50 rounded-md">
             <h2 className="text-lg font-semibold text-lightpink mb-2">
               Thông tin đặt box
@@ -736,6 +806,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                   {selectedDate
                     ? format(selectedDate, "dd/MM/yyyy", { locale: vi })
                     : "Đang tải..."}
+                  {selectedHoliday && (
+                    <span className="ml-1 text-lightpink/90 font-normal">
+                      ({selectedHoliday.name})
+                    </span>
+                  )}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -771,7 +846,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                     <span className="font-semibold text-lightpink">
                       {discountRate === 0.1
                         ? "Giảm 10% (Thứ 2 - Thứ 6)"
-                        : "Giảm 5% (Thứ 7 - Chủ nhật)"}
+                        : "Giảm 5% (Thứ 7 - Chủ Nhật/Lễ)"}
                     </span>
                   </div>
                 </>
@@ -793,20 +868,26 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={
-            isSubmitting ||
-            !isClient ||
-            !selectedDate ||
-            !selectedStartTime ||
-            !selectedDuration ||
-            (isClient && selectedDate && availableTimes.length === 0)
-          }
-          className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? "Đang xử lý..." : "Đặt ngay"}
-        </button>
+        {isTetDay1Off(selectedDate) ? (
+          <div className="w-full py-3 mt-6 text-center font-medium text-lightpink bg-pink-50 border border-lightpink/30 rounded-lg">
+            Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
+          </div>
+        ) : (
+          <button
+            type="submit"
+            disabled={
+              isSubmitting ||
+              !isClient ||
+              !selectedDate ||
+              !selectedStartTime ||
+              !selectedDuration ||
+              (isClient && selectedDate && availableTimes.length === 0)
+            }
+            className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Đang xử lý..." : "Đặt ngay"}
+          </button>
+        )}
       </form>
 
       {/* Confirmation Modal */}

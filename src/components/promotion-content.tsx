@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Typography from "./ui/typography";
+import tetScheduleImage from "@/assets/images/Tet.jpg";
 
 type PromotionContentProps = {
   promotionId: string;
@@ -191,6 +193,112 @@ export default function PromotionContent({
             Hotline: <strong>035 966 0934</strong>
             <br />
             Địa chỉ: <strong>78 Phan Trung, Tam Hiệp, Đồng Nai</strong>
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+
+  if (promotionId === "4") {
+    return (
+      <div className="space-y-6">
+        <Typography
+          as="h1"
+          variant="bold"
+          className="text-3xl text-lightpink mb-4"
+        >
+          🧧 Thông báo Lịch hoạt động Tết 2026
+        </Typography>
+
+        <div className="relative w-full rounded-xl overflow-hidden border-2 border-amber-200 shadow-lg my-8">
+          <Image
+            src={tetScheduleImage}
+            alt="Lịch hoạt động Tết Jozo 2026"
+            className="object-contain w-full"
+            priority
+          />
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg my-6">
+          <Typography
+            as="p"
+            variant="semibold"
+            className="text-amber-900 text-lg"
+          >
+            ⚠️ Quan trọng: <strong>Mùng 1 Tết (17/02/2026)</strong> Jozo không hoạt động. Quý khách vui lòng sắp xếp đặt phòng trước hoặc sau ngày này.
+          </Typography>
+        </div>
+
+        <Typography
+          as="p"
+          variant="default"
+          className="text-gray-700 leading-relaxed"
+        >
+          Jozo Music Box kính chúc quý khách một mùa Tết an lành, hạnh phúc. Trong dịp Tết Nguyên Đán 2026, Jozo <strong>không phụ thu, không tăng giá</strong> và dành tặng <strong>giảm 5% khi đặt phòng trước</strong>. Dưới đây là lịch hoạt động chi tiết:
+        </Typography>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
+            📅 Lịch hoạt động Tết
+          </Typography>
+          <ul className="space-y-3 text-gray-700">
+            <li className="flex flex-wrap gap-2">
+              <span className="font-semibold">9/2 – 15/2/2026 (22–28 Âm lịch):</span>
+              <span>Hoạt động 10:00 – 0:30</span>
+            </li>
+            <li className="flex flex-wrap gap-2">
+              <span className="font-semibold">16/2/2026 (29/12 Âm lịch):</span>
+              <span>Hoạt động 10:00 – 21:00</span>
+            </li>
+            <li className="flex flex-wrap gap-2">
+              <span className="font-semibold text-red-600">17/2/2026 (Mùng 1 Tết):</span>
+              <span className="font-semibold text-red-600">NGHỈ – Jozo không hoạt động</span>
+            </li>
+            <li className="flex flex-wrap gap-2">
+              <span className="font-semibold">18/2 – 22/2/2026 (Từ Mùng 2 Tết):</span>
+              <span>Hoạt động 10:00 – 0:30</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
+            🎁 Ưu đãi Tết
+          </Typography>
+          <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <li>Không phụ thu / không tăng giá dịp Tết</li>
+            <li>Giảm 5% khi đặt phòng trước</li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-gray-800 mb-3"
+          >
+            📞 Liên hệ
+          </Typography>
+          <Typography
+            as="p"
+            variant="default"
+            className="text-gray-700 leading-relaxed"
+          >
+            <strong>Hotline:</strong> 0359 660 934
+            <br />
+            <strong>Tiktok:</strong> Jozo Music Box
+            <br />
+            <strong>Website:</strong> jozo.com.vn
+            <br />
+            <strong>Địa chỉ:</strong> 78 Phan Trung, Tam Hiệp, Đồng Nai
           </Typography>
         </div>
       </div>
