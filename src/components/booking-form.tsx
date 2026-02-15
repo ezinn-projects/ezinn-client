@@ -36,6 +36,17 @@ const TET_DAY_OFF = new Date(2026, 1, 17); // 17/2/2026
 const isTetDay1Off = (date: Date | null): boolean =>
   !!date && sameDay(date, TET_DAY_OFF);
 
+// 30 Tết 16/2/2026 - 9h quán đóng để dọn dẹp đón giao thừa; giờ kết thúc tối đa 21:00 (nếu đặt 8h thì 9h phải đóng)
+const EVE_TET_2026 = new Date(2026, 1, 16); // 16/2/2026
+const isEveTet2026 = (date: Date | null): boolean =>
+  !!date && sameDay(date, EVE_TET_2026);
+const EVE_TET_CLOSE_MINUTES = 21 * 60; // 21:00 = 9h tối
+
+// Từ 18/2/2026 trở đi: cho phép đặt đến 23h
+const EXTENDED_HOURS_FROM = new Date(2026, 1, 18);
+const isExtendedHoursDate = (date: Date | null): boolean =>
+  !!date && (date > EXTENDED_HOURS_FROM || sameDay(date, EXTENDED_HOURS_FROM));
+
 // Constants và utility functions
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
@@ -65,7 +76,7 @@ const generateTimeSlots = (
   return times;
 };
 
-// Generate all time slots from 10:00 to 22:00
+// Generate all time slots from 10:00 to 22:00 (giờ kết thúc tối đa 23:00 khi đặt 1h từ 22:00)
 const ALL_START_TIMES = generateTimeSlots(10, 22, 30);
 
 const DURATION_OPTIONS = [
@@ -80,6 +91,22 @@ const DURATION_OPTIONS = [
 
 // Utility functions
 const getAvailableStartTimes = (selectedDate: Date): string[] => {
+  let baseTimes = ALL_START_TIMES;
+
+  // 30 Tết 16/2: chỉ cho đặt đến 8h tối (giờ bắt đầu tối đa 20:00), 9h quán đóng
+  if (isEveTet2026(selectedDate)) {
+    baseTimes = baseTimes.filter((time) => {
+      const [hour, minute] = time.split(":").map(Number);
+      return hour * 60 + minute <= 20 * 60; // 20:00 = 8h tối, 20:00 + 1h = 21:00 (9h đóng)
+    });
+  } else if (!isExtendedHoursDate(selectedDate)) {
+    // Trước 18/2: giới hạn kết thúc 22:00 (giờ bắt đầu tối đa 21:00)
+    baseTimes = baseTimes.filter((time) => {
+      const [hour, minute] = time.split(":").map(Number);
+      return hour * 60 + minute <= 21 * 60;
+    });
+  }
+
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const selectedDay = new Date(
@@ -89,7 +116,7 @@ const getAvailableStartTimes = (selectedDate: Date): string[] => {
   );
 
   if (selectedDay.getTime() !== today.getTime()) {
-    return ALL_START_TIMES;
+    return baseTimes;
   }
 
   const currentHour = now.getHours();
@@ -97,7 +124,7 @@ const getAvailableStartTimes = (selectedDate: Date): string[] => {
   const currentTimeInMinutes = currentHour * 60 + currentMinute;
   const minTimeInMinutes = currentTimeInMinutes + 30;
 
-  return ALL_START_TIMES.filter((time) => {
+  return baseTimes.filter((time) => {
     const [hour, minute] = time.split(":").map(Number);
     const timeInMinutes = hour * 60 + minute;
     return timeInMinutes >= minTimeInMinutes;
@@ -362,6 +389,16 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return selectedDate ? getAvailableStartTimes(selectedDate) : [];
   }, [selectedDate]);
 
+  // 30 Tết 16/2: thời lượng tối đa = phải kết thúc trước 21h (9h đóng)
+  const durationOptions = useMemo(() => {
+    if (!selectedDate || !isEveTet2026(selectedDate) || !selectedStartTime)
+      return DURATION_OPTIONS;
+    const [h, m] = selectedStartTime.split(":").map(Number);
+    const startMinutes = h * 60 + m;
+    const maxDurationHours = (EVE_TET_CLOSE_MINUTES - startMinutes) / 60;
+    return DURATION_OPTIONS.filter((o) => o.value <= maxDurationHours);
+  }, [selectedDate, selectedStartTime]);
+
   const endTime = useMemo(() => {
     return calculateEndTime(selectedStartTime, selectedDuration);
   }, [selectedStartTime, selectedDuration]);
@@ -416,8 +453,21 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         setSelectedStartTime("");
         setValue("startTime", "");
       }
+      // 30 Tết 16/2: nếu thời lượng đã chọn vượt quá giờ đóng 21h thì reset xuống tối đa cho phép
+      if (
+        selectedDate &&
+        isEveTet2026(selectedDate) &&
+        selectedStartTime &&
+        durationOptions.length > 0
+      ) {
+        const allowed = durationOptions.some((o) => o.value === selectedDuration);
+        if (!allowed) {
+          const maxOption = durationOptions[durationOptions.length - 1];
+          setSelectedDuration(maxOption?.value ?? 1);
+        }
+      }
     }
-  }, [selectedDate, selectedStartTime, setValue, isClient, availableTimes]);
+  }, [selectedDate, selectedStartTime, setValue, isClient, availableTimes, selectedDuration, durationOptions]);
 
   useEffect(() => {
     if (selectedStartTime && selectedDuration && isClient) {
@@ -443,6 +493,17 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
           variant: "destructive",
         });
         return;
+      }
+      if (isEveTet2026(selectedDate)) {
+        const [endH, endM] = endTime.split(":").map(Number);
+        if (endH * 60 + endM > EVE_TET_CLOSE_MINUTES) {
+          toast({
+            title: "Ngày 30 Tết",
+            description: "9h (21h) quán đóng. Giờ kết thúc tối đa 21h.",
+            variant: "destructive",
+          });
+          return;
+        }
       }
 
       setIsSubmitting(true);
@@ -700,6 +761,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                         Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
                       </p>
                     )}
+                    {isEveTet2026(selectedDate) && (
+                      <p className="mt-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-300 rounded px-3 py-2">
+                        Ngày 30 Tết: 21h (9h tối) Jozo nghỉ để dọn dẹp đón giao thừa. Giờ kết thúc tối đa 21h (nếu đặt 8h thì 9h phải đóng).
+                      </p>
+                    )}
                   </>
                 ) : (
                   <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
@@ -763,7 +829,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                     }}
                     className="w-full border rounded px-3 py-2 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
                   >
-                    {DURATION_OPTIONS.map((option) => (
+                    {durationOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
@@ -854,6 +920,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
             </div>
 
             <div className="mt-4 text-sm border-t pt-3 text-gray-600">
+              {isEveTet2026(selectedDate) && (
+                <p className="mb-2 text-amber-700 font-medium">
+                  21h (9h tối) Jozo nghỉ để dọn dẹp đón giao thừa. Giờ kết thúc tối đa 21h.
+                </p>
+              )}
               <p className="mb-1">
                 <span className="font-medium">Lưu ý về thanh toán:</span> Quý
                 khách sẽ thanh toán sau khi sử dụng dịch vụ. Jozo không nhận
