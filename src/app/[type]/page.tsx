@@ -58,13 +58,28 @@ export async function generateMetadata({
   };
 }
 
+/** Fallback khi API không khả dụng (ví dụ lúc build Docker). */
+const FALLBACK_PRICES: Price[] = [];
+
 async function getPrices(): Promise<Price[]> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/price`, {
-    // Cache trong 5 phút để tránh gọi API nhiều lần
-    next: { revalidate: 300 },
-  });
-  const data = await response.json();
-  return data.data;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!baseUrl) {
+    return FALLBACK_PRICES;
+  }
+  try {
+    const response = await fetch(`${baseUrl}/api/price`, {
+      next: { revalidate: 300 },
+    });
+    const text = await response.text();
+    // Tránh parse HTML (trang lỗi) thành JSON — build sẽ không crash
+    if (!response.ok || !text.trim().startsWith("{")) {
+      return FALLBACK_PRICES;
+    }
+    const data = JSON.parse(text) as { data?: Price[] };
+    return Array.isArray(data?.data) ? data.data : FALLBACK_PRICES;
+  } catch {
+    return FALLBACK_PRICES;
+  }
 }
 
 export default async function BookingPage({ params }: BookingPageProps) {
