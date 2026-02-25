@@ -1,5 +1,15 @@
 import SearchSongsClient from "@/components/search-songs-client";
 import { getBookingDetails } from "@/lib/data-cache";
+import { Metadata } from "next";
+
+// Ngăn không cho Google index các trang search-songs
+export const metadata: Metadata = {
+  title: "Tìm bài hát - Jozo Music Box",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function Page({
   params,

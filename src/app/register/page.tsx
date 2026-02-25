@@ -82,8 +82,8 @@ export default function RegisterForm() {
         Đăng ký tài khoản
       </h2>
       <p className="text-sm text-center text-gray-300 mb-4">
-        Chưa nghĩ ra chương trình membership. Nhưng khách cứ đăng ký đi, mốt sẽ
-        triển khai sau.
+        Đang phát triển chương trình membership nhaaaaa. cuối tháng 2 sẽ lên
+        được. hehe
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
