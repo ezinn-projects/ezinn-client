@@ -6,6 +6,7 @@ import CancelBookingModal from "@/components/ui/cancel-booking-modal";
 import BookingSuccessModal from "@/components/ui/booking-success-modal";
 import { useTicketActions } from "@/hooks/use-ticket-actions";
 import { toast } from "@/hooks/use-toast";
+import { isUnderMaintenance } from "@/config/closure";
 import { cancelBooking, createApiEndpoint } from "@/lib/api-utils";
 import { BookingFormData, bookingSchema } from "@/schemas/booking.schema";
 import { BookingRequest } from "@/types/booking.d";
@@ -478,6 +479,14 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   // Handler functions với useCallback để tối ưu performance
   const onSubmit = useCallback(
     async (data: BookingFormData) => {
+      if (isUnderMaintenance()) {
+        toast({
+          title: "Jozo tạm đóng cửa sửa chữa",
+          description: "Hiện không nhận đặt phòng. Xin quý khách thông cảm.",
+          variant: "destructive",
+        });
+        return;
+      }
       if (!selectedStartTime || !selectedDuration || !selectedDate) {
         toast({
           title: "Lỗi",
@@ -939,7 +948,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
           </div>
         )}
 
-        {isTetDay1Off(selectedDate) ? (
+        {isUnderMaintenance() ? (
+          <div className="w-full py-3 mt-6 text-center font-medium text-amber-800 bg-amber-100 border border-amber-300 rounded-lg">
+            Từ 28/02/2026 Jozo tạm đóng cửa để sửa chữa, không nhận đặt phòng. Xin quý khách thông cảm.
+          </div>
+        ) : isTetDay1Off(selectedDate) ? (
           <div className="w-full py-3 mt-6 text-center font-medium text-lightpink bg-pink-50 border border-lightpink/30 rounded-lg">
             Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
           </div>
