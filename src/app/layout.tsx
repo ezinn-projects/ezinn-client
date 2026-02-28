@@ -62,6 +62,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Tránh cache layout để thông báo đóng cửa (isUnderMaintenance) luôn đúng theo ngày hiện tại
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ThongBaoDongCuaPage() {
+export default function TemporaryClosurePage() {
   const fromDate = new Date(MAINTENANCE_FROM).toLocaleDateString("vi-VN", {
     day: "2-digit",
     month: "2-digit",
