@@ -1,13 +1,8 @@
 import Typography from "@/components/ui/typography";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  AlertTriangle,
-  CalendarOff,
-  TagOff,
-} from "lucide-react";
+import { CLOSURE_MESSAGE, MAINTENANCE_FROM } from "@/config/closure";
+import { AlertTriangle, ArrowLeft, CalendarOff } from "lucide-react";
 import type { Metadata } from "next";
-import { MAINTENANCE_FROM, CLOSURE_MESSAGE } from "@/config/closure";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Thông báo đóng cửa tạm thời | Jozo",
@@ -44,12 +39,23 @@ export default function ThongBaoDongCuaPage() {
           {/* Header */}
           <div className="bg-amber-500 text-amber-950 px-6 py-8 md:px-10 md:py-10">
             <div className="flex items-start gap-4">
-              <AlertTriangle className="w-12 h-12 flex-shrink-0 mt-1" aria-hidden />
+              <AlertTriangle
+                className="w-12 h-12 flex-shrink-0 mt-1"
+                aria-hidden
+              />
               <div>
-                <Typography as="h1" variant="bold" className="text-2xl md:text-3xl mb-2">
+                <Typography
+                  as="h1"
+                  variant="bold"
+                  className="text-2xl md:text-3xl mb-2"
+                >
                   Thông báo đóng cửa tạm thời
                 </Typography>
-                <Typography as="p" variant="default" className="text-amber-900/90 text-lg">
+                <Typography
+                  as="p"
+                  variant="default"
+                  className="text-amber-900/90 text-lg"
+                >
                   Jozo tạm ngưng hoạt động để sửa chữa, nâng cấp
                 </Typography>
               </div>
@@ -59,7 +65,11 @@ export default function ThongBaoDongCuaPage() {
           {/* Content */}
           <div className="p-6 md:p-10 space-y-6">
             <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded">
-              <Typography as="p" variant="semibold" className="text-amber-900 text-lg">
+              <Typography
+                as="p"
+                variant="semibold"
+                className="text-amber-900 text-lg"
+              >
                 {CLOSURE_MESSAGE}
               </Typography>
             </div>
@@ -67,22 +77,36 @@ export default function ThongBaoDongCuaPage() {
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-center gap-3">
                 <CalendarOff className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                <span><strong>Không nhận đặt phòng</strong> — Mọi đặt box tạm thời bị tạm ngưng từ ngày {fromDate}.</span>
+                <span>
+                  <strong>Không nhận đặt phòng</strong> — Mọi đặt box tạm thời
+                  bị tạm ngưng từ ngày {fromDate}.
+                </span>
               </li>
               <li className="flex items-center gap-3">
-                <TagOff className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                <span><strong>Không áp dụng khuyến mãi</strong> — Các chương trình ưu đãi sẽ tạm ngừng trong thời gian này.</span>
+                <span>
+                  <strong>Không áp dụng khuyến mãi</strong> — Các chương trình
+                  ưu đãi sẽ tạm ngừng trong thời gian này.
+                </span>
               </li>
             </ul>
 
             <Typography as="p" variant="default" className="text-gray-600">
-              Jozo xin lỗi quý khách vì sự bất tiện này. Khi mở cửa trở lại, thông tin sẽ được cập nhật trên website và fanpage. Cảm ơn quý khách đã ủng hộ!
+              Jozo xin lỗi quý khách vì sự bất tiện này. Khi mở cửa trở lại,
+              thông tin sẽ được cập nhật trên website và fanpage. Cảm ơn quý
+              khách đã ủng hộ!
             </Typography>
 
             <div className="pt-4 border-t border-gray-200">
-              <Typography as="p" variant="default" className="text-gray-500 text-sm">
+              <Typography
+                as="p"
+                variant="default"
+                className="text-gray-500 text-sm"
+              >
                 Có thắc mắc vui lòng liên hệ:{" "}
-                <a href="tel:0359660934" className="text-lightpink font-medium hover:underline">
+                <a
+                  href="tel:0359660934"
+                  className="text-lightpink font-medium hover:underline"
+                >
                   035 966 0934
                 </a>
               </Typography>
