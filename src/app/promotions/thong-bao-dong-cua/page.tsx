@@ -1,6 +1,11 @@
 import Typography from "@/components/ui/typography";
 import Link from "next/link";
-import { ArrowLeft, AlertTriangle, CalendarOff, TagOff } from "lucide-react";
+import {
+  ArrowLeft,
+  AlertTriangle,
+  CalendarOff,
+  TagOff,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { MAINTENANCE_FROM, CLOSURE_MESSAGE } from "@/config/closure";
 
