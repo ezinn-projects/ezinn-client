@@ -1,4 +1,5 @@
 import BackgroundCross from "@/components/background-cross";
+import ClosureAnnouncementBanner from "@/components/closure-announcement-banner";
 import Nav from "@/components/nav";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -62,6 +63,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Tránh cache layout để thông báo đóng cửa (isUnderMaintenance) luôn đúng theo ngày hiện tại
+export const dynamic = "force-dynamic";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -88,6 +92,11 @@ export default async function RootLayout({
         <header>
           <Nav currentUser={currentUser} />
         </header>
+
+        {/* Thông báo đóng cửa tạm thời (từ 28/02/2026) - hiển thị dưới header */}
+        <div className="pt-24">
+          <ClosureAnnouncementBanner />
+        </div>
 
         {/* Main */}
         <main className="flex-grow mt-32 mb-8 container mx-auto">
