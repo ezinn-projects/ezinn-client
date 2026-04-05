@@ -2,12 +2,6 @@
 User-agent: *
 Allow: /
 
-# Disallow dynamic routes that shouldn't be indexed
-Disallow: /search-songs/
-Disallow: /api/
-Disallow: /_next/
-Disallow: /booking-search?*
-
 # Host
 Host: https://jozo.com.vn
 
