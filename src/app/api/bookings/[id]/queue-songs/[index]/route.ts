@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string; index: string }> }
+  { params }: { params: Promise<{ id: string; index: string }> },
 ) {
   try {
     const { id, index } = await params;
@@ -18,14 +18,14 @@ export async function DELETE(
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const result = await response.json();
 
     if (response.ok) {
       // Revalidate cache bằng tags để đảm bảo dữ liệu mới được fetch
-      revalidateTag("booking-details");
+      revalidateTag("booking-details", "max");
 
       return NextResponse.json(result);
     } else {
@@ -34,7 +34,7 @@ export async function DELETE(
   } catch {
     return NextResponse.json(
       { success: false, message: "Lỗi server" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
