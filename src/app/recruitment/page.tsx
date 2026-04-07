@@ -113,10 +113,10 @@ export default function RecruitmentPage() {
           <p>
             Liên hệ:{" "}
             <Link
-              href="tel:0359660934"
+              href="tel:0336051204"
               className="font-medium text-slate-900 underline-offset-2 hover:underline"
             >
-              035 966 0934
+              033 605 1204
             </Link>
             {" · "}
             <Link

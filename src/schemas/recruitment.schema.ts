@@ -49,6 +49,10 @@ export const recruitmentSchema = z
     workShifts: z
       .array(z.string())
       .min(1, "Vui lòng chọn ít nhất một ca làm việc."),
+    note: z
+      .string()
+      .max(2000, "Ghi chú tối đa 2000 ký tự.")
+      .optional(),
   })
   .refine(
     (data) => {

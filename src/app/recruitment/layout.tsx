@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Tuyển dụng Part-time - Jozo Music Box",
-    description: "Lương 24.000đ/giờ · Đào tạo tại chỗ · Biên Hòa",
+    description: "Lương 24.000đ/giờ, tìm đồng đội part time",
     type: "website",
   },
   robots: {

@@ -222,6 +222,7 @@ export const exportToCSV = (applications: RecruitmentApplication[]): string => {
     "Ngày làm việc",
     "Ca làm việc",
     "Vị trí",
+    "Ghi chú",
     "Ngày nộp đơn",
     "Trạng thái",
   ];
@@ -239,6 +240,7 @@ export const exportToCSV = (applications: RecruitmentApplication[]): string => {
     formatWorkDays(app.workDays || []),
     formatWorkShifts(app.workShifts || []),
     formatPositions(app.position || []),
+    app.note?.trim() || "",
     formatDate(app.submittedAt),
     APPLICATION_STATUSES[app.status],
   ]);

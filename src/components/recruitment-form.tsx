@@ -81,6 +81,7 @@ export function RecruitmentForm() {
       otherStatus: "",
       position: [],
       workShifts: [],
+      note: "",
     },
   });
 
@@ -121,6 +122,7 @@ export function RecruitmentForm() {
       const payload = {
         ...data,
         email: data.email?.trim() || null,
+        note: data.note?.trim() || null,
       };
 
       const response = await fetch("/api/recruitment", {
@@ -156,6 +158,7 @@ export function RecruitmentForm() {
       setValue("otherStatus", "");
       setValue("position", []);
       setValue("workShifts", []);
+      setValue("note", "");
     } catch (e) {
       toast({
         title: "Gửi đơn không thành công",
@@ -413,6 +416,29 @@ export function RecruitmentForm() {
               <p className="mt-1 text-sm text-red-600">
                 {errors.workShifts.message}
               </p>
+            ) : null}
+          </div>
+
+          <div className="md:col-span-2">
+            <Label
+              htmlFor="recruitment-note"
+              className="mb-2 block text-slate-900"
+            >
+              Ghi chú thêm{" "}
+              <span className="font-normal text-slate-500">
+                (không bắt buộc)
+              </span>
+            </Label>
+            <textarea
+              id="recruitment-note"
+              rows={4}
+              placeholder=""
+              className="w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+              {...register("note")}
+              aria-invalid={errors.note ? true : undefined}
+            />
+            {errors.note?.message ? (
+              <p className="mt-1 text-sm text-red-600">{errors.note.message}</p>
             ) : null}
           </div>
         </div>
