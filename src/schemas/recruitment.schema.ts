@@ -5,36 +5,35 @@ const MAX_AGE = 25;
 
 export const recruitmentSchema = z
   .object({
-    fullName: z.string().min(2, "Bạn ơi, tên bạn là gì vậy?"),
+    fullName: z
+      .string()
+      .min(2, "Vui lòng nhập họ và tên đầy đủ (tối thiểu 2 ký tự)."),
     birthDate: z
       .string()
-      .regex(
-        /^\d{2}\/\d{2}\/\d{4}$/,
-        "Ngày sinh phải theo định dạng dd/mm/yyyy"
-      )
+      .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Ngày sinh theo định dạng dd/mm/yyyy.")
       .refine((dateStr) => {
         const [day, month, year] = dateStr.split("/").map(Number);
         const birthDate = new Date(year, month - 1, day);
         const age = new Date().getFullYear() - birthDate.getFullYear();
         return age >= MIN_AGE;
-      }, `Bạn phải đủ ${MIN_AGE} tuổi để ứng tuyển`)
+      }, `Ứng viên cần đủ ${MIN_AGE} tuổi trở lên.`)
       .refine((dateStr) => {
         const [day, month, year] = dateStr.split("/").map(Number);
         const birthDate = new Date(year, month - 1, day);
         const age = new Date().getFullYear() - birthDate.getFullYear();
         return age <= MAX_AGE;
-      }, `Chúng tôi chỉ nhận ứng viên từ ${MIN_AGE}-${MAX_AGE} tuổi`),
-    gender: z.string().min(1, "Bạn quên chọn giới tính nè"),
+      }, `Vị trí này chỉ xét ứng viên trong độ tuổi ${MIN_AGE}–${MAX_AGE}.`),
+    gender: z.string().min(1, "Vui lòng chọn giới tính."),
     phone: z
       .string()
       .regex(
         /^(0)[0-9]{9}$/,
-        "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)"
+        "Số điện thoại 10 chữ số, bắt đầu bằng 0 (ví dụ: 0912345678).",
       ),
     email: z
       .union([
-        z.string().email("Email không hợp lệ"),
-        z.string().length(0), // Cho phép chuỗi rỗng
+        z.string().email("Email không hợp lệ."),
+        z.string().length(0),
         z.null(),
       ])
       .optional(),
@@ -42,14 +41,14 @@ export const recruitmentSchema = z
       .string()
       .min(
         1,
-        "Hãy để lại link Facebook hoặc Zalo của bạn nè, Linkedin cũng được nhé"
+        "Vui lòng cung cấp liên kết hoặc thông tin liên hệ qua mạng xã hội (Facebook, Zalo...).",
       ),
-    currentStatus: z.string().min(1, "Bạn đang làm gì nè?"),
+    currentStatus: z.string().min(1, "Vui lòng cho biết tình trạng hiện tại."),
     otherStatus: z.string().optional(),
-    position: z.array(z.string()).min(1, "Bạn hãy chọn ít nhất một vị trí nhé"),
+    position: z.array(z.string()).min(1, "Vui lòng chọn ít nhất một vị trí."),
     workShifts: z
       .array(z.string())
-      .min(1, "Bạn hãy chọn ít nhất một ca làm việc nhé"),
+      .min(1, "Vui lòng chọn ít nhất một ca làm việc."),
   })
   .refine(
     (data) => {
@@ -62,9 +61,9 @@ export const recruitmentSchema = z
       return true;
     },
     {
-      message: "Vui lòng điền thông tin khác",
+      message: "Vui lòng mô tả ngắn gọn tình trạng của bạn.",
       path: ["otherStatus"],
-    }
+    },
   );
 
 export type RecruitmentFormData = z.infer<typeof recruitmentSchema>;

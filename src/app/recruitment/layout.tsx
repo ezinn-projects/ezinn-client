@@ -2,7 +2,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Tuyển dụng Part-time - Jozo Music Box Biên Hòa",
-  description: "Jozo đang tìm nhân viên part-time: Lễ tân, phục vụ, giữ xe. Lương 22k/giờ, môi trường trẻ trung, năng động tại Biên Hòa.",
+  description:
+    "Jozo Music Box Biên Hòa tuyển nhân viên bán thời gian: lễ tân, phục vụ, giữ xe. Lương 24.000đ/giờ.",
   keywords: [
     "tuyển dụng part-time Biên Hòa",
     "tuyển nhân viên karaoke",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Tuyển dụng Part-time - Jozo Music Box",
-    description: "Lương 22k/giờ - Môi trường trẻ trung - Không yêu cầu kinh nghiệm",
+    description: "Lương 24.000đ/giờ · Đào tạo tại chỗ · Biên Hòa",
     type: "website",
   },
   robots: {
