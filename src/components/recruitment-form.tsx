@@ -119,10 +119,11 @@ export function RecruitmentForm() {
     submitLockedRef.current = true;
     setIsSubmitting(true);
     try {
+      const { email, note, ...rest } = data;
       const payload = {
-        ...data,
-        email: data.email?.trim() || null,
-        note: data.note?.trim() || null,
+        ...rest,
+        email: email?.trim() || null,
+        note: (note ?? "").trim(),
       };
 
       const response = await fetch("/api/recruitment", {

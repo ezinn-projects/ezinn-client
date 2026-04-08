@@ -10,8 +10,8 @@ export interface RecruitmentFormData {
   otherStatus?: string;
   position: Position[];
   workShifts: WorkShift[];
-  /** Ghi chú từ ứng viên (optional) */
-  note?: string | null;
+  /** Ghi chú từ ứng viên (optional; để trống là "") */
+  note?: string;
 }
 
 export interface RecruitmentApplication extends RecruitmentFormData {
