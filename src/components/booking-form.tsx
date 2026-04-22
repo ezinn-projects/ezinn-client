@@ -173,6 +173,7 @@ type EstimatedPrice = {
 
 const PROMOTION_DISCOUNT_RATE = 0.2;
 const MINUTES_PER_DAY = 24 * 60;
+const PRICE_CALC_EPSILON_HOURS = 0.0001;
 const toMinutes = (time: string): number => {
   const [hour, minute] = time.split(":").map(Number);
   return hour * 60 + minute;
@@ -206,109 +207,88 @@ const calculateEstimatedPrice = (
     dayType = "weekend";
   }
 
-  // Chuyển đổi room type từ format mới sang cũ
-  const roomTypeMapping: Record<RoomType, string> = {
-    Small: "small",
-    Medium: "medium",
-    Large: "large",
-    Dorm: "dorm",
+  // Ưu tiên mapping chính, đồng thời fallback small/medium để tương thích dữ liệu giá cũ/mới
+  const roomTypeCandidates: Record<RoomType, string[]> = {
+    Small: ["small", "medium"],
+    Medium: ["medium", "small"],
+    Large: ["large"],
+    Dorm: ["dorm"],
   };
-  const roomTypeStr = roomTypeMapping[roomType];
+  const roomTypeCandidateList = roomTypeCandidates[roomType];
 
   // Tìm price rule phù hợp
   const priceRule = prices.find((p) => p.day_type === dayType);
   if (!priceRule) return { originalPrice: 0, finalPrice: 0 };
 
-  // Tính tổng giá cho thời lượng đã chọn
+  // Tính giá theo phần giao nhau giữa interval đặt và từng time slot
+  // Cách này xử lý chính xác các case giao khung, ví dụ 12:30-13:30
+  const bookingStartMinutes = toMinutes(selectedStartTime);
+  const bookingDurationMinutes = selectedDuration * 60;
+  const bookingEndMinutes = bookingStartMinutes + bookingDurationMinutes;
+
   let totalPrice = 0;
-  let currentTime = selectedStartTime;
-  let remainingDuration = selectedDuration;
-  let safetyCounter = 0;
-  const MAX_PRICE_CALC_STEPS = 48; // 24 giờ theo bước 30 phút
+  let totalCoveredMinutes = 0;
+  const overlappedSlotKeys = new Set<string>();
 
-  while (remainingDuration > 0 && safetyCounter < MAX_PRICE_CALC_STEPS) {
-    safetyCounter += 1;
-    // Tìm time slot chứa currentTime hoặc slot tiếp theo
-    let timeSlot = priceRule.time_slots.find((slot) => {
-      const startMinutes = toMinutes(slot.start);
-      let endMinutes = toMinutes(slot.end);
-      let currentMinutes = toMinutes(currentTime);
-
-      // Slot qua ngày, ví dụ 18:00 -> 00:00
-      if (endMinutes <= startMinutes) {
-        endMinutes += MINUTES_PER_DAY;
-        if (currentMinutes < startMinutes) {
-          currentMinutes += MINUTES_PER_DAY;
-        }
-      }
-
-      return currentMinutes >= startMinutes && currentMinutes < endMinutes;
-    });
-
-    // Nếu không tìm thấy slot (có thể do gap), tìm slot tiếp theo
-    if (!timeSlot) {
-      timeSlot = priceRule.time_slots.find((slot) => {
-        let startMinutes = toMinutes(slot.start);
-        const currentMinutes = toMinutes(currentTime);
-        if (startMinutes <= currentMinutes) {
-          startMinutes += MINUTES_PER_DAY;
-        }
-
-        return startMinutes > currentMinutes;
-      });
-    }
-
-    if (!timeSlot) {
-      break;
-    }
-
-    // Tìm giá cho loại box
-    const roomPrice = timeSlot.prices.find((p) => p.room_type === roomTypeStr);
+  for (const slot of priceRule.time_slots) {
+    const roomPrice = slot.prices.find((p) =>
+      roomTypeCandidateList.includes(p.room_type),
+    );
     if (!roomPrice) {
-      break;
+      continue;
     }
 
-    // Tính thời gian có thể sử dụng trong slot này
-    let slotStartMinutes = toMinutes(timeSlot.start);
-    let slotEndMinutes = toMinutes(timeSlot.end);
-    let currentMinutes = toMinutes(currentTime);
+    const baseStart = toMinutes(slot.start);
+    let baseEnd = toMinutes(slot.end);
+    if (baseEnd <= baseStart) {
+      baseEnd += MINUTES_PER_DAY; // Slot qua ngày, ví dụ 19:00 -> 01:00
+    }
 
-    if (slotEndMinutes <= slotStartMinutes) {
-      slotEndMinutes += MINUTES_PER_DAY;
-      if (currentMinutes < slotStartMinutes) {
-        currentMinutes += MINUTES_PER_DAY;
+    // Thử 3 mốc ngày để bắt đúng giao nhau, kể cả khi booking qua ngày
+    for (const dayShift of [-MINUTES_PER_DAY, 0, MINUTES_PER_DAY]) {
+      const slotStart = baseStart + dayShift;
+      const slotEnd = baseEnd + dayShift;
+
+      const overlapStart = Math.max(bookingStartMinutes, slotStart);
+      const overlapEnd = Math.min(bookingEndMinutes, slotEnd);
+      const overlapMinutes = overlapEnd - overlapStart;
+
+      if (overlapMinutes > 0) {
+        totalCoveredMinutes += overlapMinutes;
+        totalPrice += (overlapMinutes / 60) * roomPrice.price;
+        overlappedSlotKeys.add(`${slot.start}-${slot.end}-${dayShift}`);
       }
     }
-
-    // Nếu currentTime nằm trước slot (do gap), bắt đầu từ đầu slot
-    const actualStartMinutes = Math.max(currentMinutes, slotStartMinutes);
-    const availableMinutesInSlot = slotEndMinutes - actualStartMinutes;
-    const neededMinutes = remainingDuration * 60;
-    const usedMinutes = Math.min(availableMinutesInSlot, neededMinutes);
-    if (usedMinutes <= 0) {
-      break;
-    }
-
-    // Tính giá theo số phút thực tế sử dụng
-    const usedHours = usedMinutes / 60;
-    const priceForThisSlot = usedHours * roomPrice.price;
-    totalPrice += priceForThisSlot;
-    remainingDuration -= usedMinutes / 60;
-
-    // Cập nhật currentTime cho slot tiếp theo
-    const newMinutes = (actualStartMinutes + usedMinutes) % MINUTES_PER_DAY;
-    const newHour = Math.floor(newMinutes / 60);
-    const newMinute = newMinutes % 60;
-    currentTime = `${newHour.toString().padStart(2, "0")}:${newMinute
-      .toString()
-      .padStart(2, "0")}`;
   }
 
-  const originalPrice = Math.floor(totalPrice / 1000) * 1000;
+  // Nếu hoàn toàn không match slot nào thì trả 0
+  if (totalPrice <= 0) {
+    return { originalPrice: 0, finalPrice: 0 };
+  }
+
+  // Không cộng quá thời lượng đặt trong trường hợp dữ liệu slot bị overlap nhau
+  if (
+    totalCoveredMinutes - bookingDurationMinutes >
+    PRICE_CALC_EPSILON_HOURS * 60
+  ) {
+    const normalizeRatio = bookingDurationMinutes / totalCoveredMinutes;
+    totalPrice *= normalizeRatio;
+  }
+
+  const isCrossSlotBooking = overlappedSlotKeys.size > 1;
+  const roundToThousand = (value: number): number => {
+    if (isCrossSlotBooking) {
+      return Math.ceil(value / 1000) * 1000;
+    }
+
+    return Math.floor(value / 1000) * 1000;
+  };
+
+  const originalPrice = roundToThousand(totalPrice);
   const discountedPrice = totalPrice * (1 - PROMOTION_DISCOUNT_RATE);
 
-  // Làm tròn xuống đến hàng nghìn (VD: 50333 -> 50000)
-  const finalPrice = Math.floor(discountedPrice / 1000) * 1000;
+  // Case giao nhau nhiều slot sẽ làm tròn lên +1.000 nếu có phần lẻ
+  const finalPrice = roundToThousand(discountedPrice);
 
   return { originalPrice, finalPrice };
 };
