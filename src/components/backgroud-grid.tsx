@@ -9,7 +9,7 @@ interface BackgroundGridProps {
 }
 
 const BackgroundGrid = ({
-  color = "#fb3a5d",
+  color = "#c40a0a",
   cellSize = "25px",
   strokeWidth = "3px",
   className,

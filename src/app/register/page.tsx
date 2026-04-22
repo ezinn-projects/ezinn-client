@@ -74,11 +74,11 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-black rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-lightpink">
+    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md border border-red-100">
+      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
         Đăng ký tài khoản
       </h2>
-      <p className="text-sm text-center text-gray-300 mb-4">
+      <p className="text-sm text-center text-primary/70 mb-4">
         Đang phát triển chương trình membership nhaaaaa. cuối tháng 2 sẽ lên
         được. hehe
       </p>
@@ -168,7 +168,7 @@ export default function RegisterForm() {
                   error={errors.date_of_birth?.message}
                 />
               ) : (
-                <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
+                <div className="w-full border rounded px-3 py-2 text-primary/50 bg-primary/8">
                   Đang tải...
                 </div>
               )
@@ -178,7 +178,7 @@ export default function RegisterForm() {
 
         <Button
           type="submit"
-          className="w-full animate-buttonheartbeat bg-lightpink text-white"
+          className="w-full animate-buttonheartbeat bg-primary text-primary-foreground"
           onClick={handleSubmit(onSubmit)}
         >
           Đăng ký

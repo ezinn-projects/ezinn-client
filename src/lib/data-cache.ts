@@ -124,6 +124,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 50000 },
                     { room_type: "medium", price: 70000 },
                     { room_type: "large", price: 90000 },
+                    { room_type: "dorm", price: 10000 },
                   ],
                 },
                 {
@@ -133,6 +134,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 60000 },
                     { room_type: "medium", price: 80000 },
                     { room_type: "large", price: 100000 },
+                    { room_type: "dorm", price: 15000 },
                   ],
                 },
                 {
@@ -142,6 +144,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 70000 },
                     { room_type: "medium", price: 90000 },
                     { room_type: "large", price: 110000 },
+                    { room_type: "dorm", price: 20000 },
                   ],
                 },
               ],
@@ -157,6 +160,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 60000 },
                     { room_type: "medium", price: 80000 },
                     { room_type: "large", price: 100000 },
+                    { room_type: "dorm", price: 10000 },
                   ],
                 },
                 {
@@ -166,6 +170,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 70000 },
                     { room_type: "medium", price: 90000 },
                     { room_type: "large", price: 110000 },
+                    { room_type: "dorm", price: 15000 },
                   ],
                 },
                 {
@@ -175,6 +180,7 @@ export const getRoomDataByType = unstable_cache(
                     { room_type: "small", price: 80000 },
                     { room_type: "medium", price: 100000 },
                     { room_type: "large", price: 120000 },
+                    { room_type: "dorm", price: 20000 },
                   ],
                 },
               ],
@@ -210,6 +216,7 @@ export const getRoomDataByType = unstable_cache(
                   { room_type: "small", price: 50000 },
                   { room_type: "medium", price: 70000 },
                   { room_type: "large", price: 90000 },
+                  { room_type: "dorm", price: 10000 },
                 ],
               },
             ],

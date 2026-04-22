@@ -12,7 +12,7 @@ type TypographyProps = {
 const Typography: React.FC<TypographyProps> = ({
   as = "p",
   children,
-  className = "text-black dark:text-white",
+  className = "text-foreground dark:text-red-100",
   href,
   variant = "default",
 }) => {
@@ -29,13 +29,13 @@ const Typography: React.FC<TypographyProps> = ({
       h6: "text-xs sm:text-sm md:text-base font-medium",
       p: "text-sm sm:text-base leading-relaxed",
       span: "text-xs sm:text-sm",
-      a: "text-blue-500 hover:underline",
+      a: "text-primary hover:underline",
     }[as],
     // Màu chủ đạo
     variant === "bold" && "font-bold",
     variant === "semibold" && "font-semibold",
     variant === "italic" && "italic",
-    className // Cho phép custom thêm class bên ngoài
+    className, // Cho phép custom thêm class bên ngoài
   );
 
   // Xử lý đặc biệt cho thẻ <a>

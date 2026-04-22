@@ -22,7 +22,7 @@ export default function PromotionCard({
 
   return (
     <Link href={`/promotions/${promotion.slug}`} className="block h-full">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group border border-pink-50 h-full flex flex-col">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group border border-red-100 h-full flex flex-col">
         {/* Image Section */}
         <div className="relative h-48 w-full overflow-hidden">
           <Image
@@ -31,9 +31,15 @@ export default function PromotionCard({
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-300"
           />
-          {/* Badge khuyến mãi (giữ tối giản, không icon) */}
-          <div className="absolute top-4 right-4 bg-white/90 text-lightpink px-3 py-1 rounded-full text-xs font-semibold shadow">
-            Khuyến mãi
+          {/* Badge: chương comeback làm nổi bật Hot */}
+          <div
+            className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold shadow ${
+              promotion.slug === "jozo-comeback-tang-2-gio"
+                ? "bg-primary text-primary-foreground"
+                : "bg-white/90 text-primary"
+            }`}
+          >
+            {promotion.slug === "jozo-comeback-tang-2-gio" ? "Hot" : "Khuyến mãi"}
           </div>
         </div>
 
@@ -42,7 +48,7 @@ export default function PromotionCard({
           <Typography
             as="h3"
             variant="semibold"
-            className="mb-2 text-lightpink line-clamp-2 group-hover:text-pink-600 transition-colors"
+            className="mb-2 text-primary line-clamp-2 group-hover:text-brand-hover transition-colors"
           >
             {promotion.title}
           </Typography>
@@ -50,13 +56,13 @@ export default function PromotionCard({
           <Typography
             as="p"
             variant="default"
-            className="text-gray-600 mb-4 line-clamp-2 text-sm"
+            className="text-primary/70 mb-4 line-clamp-2 text-sm"
           >
             {promotion.shortDescription}
           </Typography>
 
           {/* Ngày đăng (không dùng icon) */}
-          <div className="text-sm text-gray-500 mt-auto">Ngày đăng: {formatDate(promotion.postedAt)}</div>
+          <div className="text-sm text-primary/55 mt-auto">Ngày đăng: {formatDate(promotion.postedAt)}</div>
         </div>
       </div>
     </Link>

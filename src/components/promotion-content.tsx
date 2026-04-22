@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Typography from "./ui/typography";
-import tetScheduleImage from "@/assets/images/Tet.jpg";
 
 type PromotionContentProps = {
   promotionId: string;
@@ -10,257 +9,175 @@ export default function PromotionContent({
   promotionId,
 }: PromotionContentProps) {
   // Render content dựa vào promotion ID
-  if (promotionId === "1") {
+  if (promotionId === "6") {
     return (
       <div className="space-y-6">
         <Typography
           as="h1"
           variant="bold"
-          className="text-3xl text-lightpink mb-4"
+          className="text-3xl text-primary mb-4"
         >
-          🎤 Chương trình khuyến mãi đặc biệt
+          🔥 Giảm ngay 20% giờ hát/Nintendo từ 20/4 – 24/4
         </Typography>
 
-        <Typography
-          as="h2"
-          variant="bold"
-          className="text-2xl text-lightpink mt-8 mb-4"
-        >
-          Hát đủ 2 giờ - Miễn phí 1 giờ!
-        </Typography>
-
-        <Typography
-          as="p"
-          variant="default"
-          className="text-gray-700 mb-4 leading-relaxed"
-        >
-          Bạn là fan cuồng karaoke? Đây là cơ hội vàng để hát thả ga mà không lo
-          hết tiền!
-        </Typography>
-
-        <div className="mt-8">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            📋 Điều kiện áp dụng:
-          </Typography>
-          <ul className="list-disc list-inside mb-4 space-y-2">
-            <li className="text-gray-700">
-              ✅ Sử dụng box từ <strong>2 giờ trở lên</strong>
-            </li>
-            <li className="text-gray-700">
-              ✅ Order snack hoặc nước uống từ <strong>35.000đ trở lên</strong>
-            </li>
-            <li className="text-gray-700">
-              ✅ Thời gian áp dụng: <strong>10:00 - 19:00</strong>
-            </li>
-            <li className="text-gray-700">
-              ✅ Áp dụng <strong>Thứ 2 - Thứ 6</strong> (không áp dụng cuối
-              tuần)
-            </li>
-            <li className="text-gray-700">
-              ✅ <strong>Miễn phí 1 giờ</strong> hát
-            </li>
-          </ul>
-        </div>
-
-        <div className="mt-8">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            🎁 Ưu đãi:
-          </Typography>
-          <ul className="list-disc list-inside mb-4 space-y-2">
-            <li className="text-gray-700">Thời gian hát tăng gấp 1.5 lần</li>
-            <li className="text-gray-700">Áp dụng cho tất cả các loại box</li>
-            <li className="text-gray-700">
-              Không giới hạn số lần sử dụng trong thời gian khuyến mãi
-            </li>
-          </ul>
-        </div>
-
-        <div className="mt-8">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            📞 Liên hệ:
-          </Typography>
-          <Typography
-            as="p"
-            variant="default"
-            className="text-gray-700 mb-4 leading-relaxed"
-          >
-            <strong>Hotline:</strong> 035 966 0934
-            <br />
-            <strong>Địa chỉ:</strong> 78 Phan Trung, Tam Hiệp, Đồng Nai
-          </Typography>
-        </div>
-
-        <div className="mt-8">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            ⚠️ Lưu ý:
-          </Typography>
-          <ul className="list-disc list-inside mb-4 space-y-2">
-            <li className="text-gray-700">
-              Không áp dụng đồng thời với các chương trình khuyến mãi khác
-            </li>
-            <li className="text-gray-700">
-              Giờ tặng không được quy đổi thành tiền mặt
-            </li>
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-  if (promotionId === "3") {
-    return (
-      <div className="space-y-6">
-        <Typography
-          as="h1"
-          variant="bold"
-          className="text-3xl text-lightpink mb-4"
-        >
-          🛎️ Book box trước: Giảm 10% (T2–T6) & 5% (T7, CN)
-        </Typography>
-
-        <Typography
-          as="p"
-          variant="default"
-          className="text-gray-700 leading-relaxed"
-        >
-          Chỉ cần đặt box trước trên <strong>mọi nền tảng của Jozo</strong>{" "}
-          (web, app, hotline hoặc trực tiếp), bạn sẽ được giảm{" "}
-          <strong>10%</strong> từ <strong>thứ 2 đến thứ 6</strong> cho tất cả
-          khung giờ. Riêng <strong>thứ 7 và Chủ nhật</strong>, ưu đãi giảm{" "}
-          <strong>5%</strong> áp dụng toàn bộ thời gian trong ngày.
-        </Typography>
-
-        <div className="mt-6">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            ✅ Điều kiện & cách áp dụng
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Book box trước tối thiểu 1 tiếng</li>
-            <li>Đặt trước qua web/app Jozo, hotline, Facebook hoặc TikTok.</li>
-            <li>Áp dụng mọi loại box, mọi khung giờ trong tuần.</li>
-            <li>Thứ 2–6: giảm 10%; Thứ 7, CN: giảm 5%.</li>
-            <li>Không cần mã; lễ tân trừ trực tiếp trên hóa đơn.</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            📅 Lưu ý
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Ưu đãi giảm 10%/5% bắt đầu áp dụng từ ngày 02/01/2026.</li>
-            <li>Không áp dụng đồng thời với các chương trình tặng giờ khác.</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            📞 Hỗ trợ đặt box
-          </Typography>
-          <Typography
-            as="p"
-            variant="default"
-            className="text-gray-700 leading-relaxed"
-          >
-            Hotline: <strong>035 966 0934</strong>
-            <br />
-            Địa chỉ: <strong>78 Phan Trung, Tam Hiệp, Đồng Nai</strong>
-          </Typography>
-        </div>
-      </div>
-    );
-  }
-
-  if (promotionId === "4") {
-    return (
-      <div className="space-y-6">
-        <Typography
-          as="h1"
-          variant="bold"
-          className="text-3xl text-lightpink mb-4"
-        >
-          🧧 Thông báo Lịch hoạt động Tết 2026
-        </Typography>
-
-        <div className="relative w-full rounded-xl overflow-hidden border-2 border-amber-200 shadow-lg my-8">
+        <div className="relative w-full rounded-xl overflow-hidden border-2 border-red-200 shadow-lg my-6">
           <Image
-            src={tetScheduleImage}
-            alt="Lịch hoạt động Tết Jozo 2026"
-            className="object-contain w-full"
+            src="/images/disscount-20.jpg"
+            alt="Jozo giảm 20% giờ hát và chơi Nintendo từ 20/4 đến 24/4"
+            width={1200}
+            height={1600}
+            className="object-contain w-full h-auto"
             priority
           />
         </div>
 
-        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg my-6">
+        <div className="bg-accent/60 border-l-4 border-primary p-4 rounded-r-lg">
           <Typography
             as="p"
             variant="semibold"
-            className="text-amber-900 text-lg"
+            className="text-primary text-lg leading-relaxed"
           >
-            ⚠️ Quan trọng: <strong>Mùng 1 Tết (17/02/2026)</strong> Jozo không hoạt động. Quý khách vui lòng sắp xếp đặt phòng trước hoặc sau ngày này.
+            Nhân dịp Jozo quay trở lại với phiên bản{" "}
+            <strong>“tiện nghi hơn”</strong> – phòng nhiều, rộng rãi, thêm nhiều
+            dịch vụ để khách iu xả stress mà không lo về túi tiền 😎
+          </Typography>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+          <Typography
+            as="p"
+            variant="semibold"
+            className="text-red-700 text-lg"
+          >
+            💥 Jozo gửi tặng khách iu: <strong>GIẢM NGAY 20%</strong> giờ hát
+            &amp; chơi Nintendo.
+            <br />
+            ⏰ Áp dụng từ: <strong>20/4 – 24/4</strong> – tất cả khung giờ,
+            không cần điều kiện.
+          </Typography>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            ✨ Có gì tại Jozo?
+          </Typography>
+          <ul className="space-y-3 text-primary/80">
+            <li>
+              <strong>🎤 Phòng rộng rãi – hát cực đã:</strong> không gian thoải
+              mái, đi nhóm vẫn dư chỗ quẩy.
+            </li>
+            <li>
+              <strong>🎮 Nintendo chơi “đắm đuối”:</strong> ngồi một cái là
+              quên thời gian luôn 😆
+            </li>
+            <li>
+              <strong>🎙 4 MIC cho phòng lớn:</strong> đi đông không lo giành
+              mic – ai cũng có phần.
+            </li>
+            <li>
+              <strong>🍟 Menu snack &amp; nước uống đầy đủ:</strong> chơi là
+              phải có đồ ăn kèm mới đúng bài.
+            </li>
+            <li>
+              <strong>🎁 Gắp thú – thử vận may:</strong> biết đâu hôm đó bạn
+              “trúng lớn” 🧸
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            📌 Lưu ý
+          </Typography>
+          <ul className="list-disc list-inside space-y-2 text-primary/80">
+            <li>Áp dụng cho tất cả khung giờ từ 20/4 – 24/4.</li>
+            <li>Không cần điều kiện – cứ tới là được giảm.</li>
+            <li>
+              Ưu đãi áp dụng cho giờ hát và giờ chơi Nintendo, không quy đổi
+              thành tiền mặt.
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            📞 Liên hệ đặt phòng
+          </Typography>
+          <Typography
+            as="p"
+            variant="default"
+            className="text-primary/80 leading-relaxed"
+          >
+            <strong>Hotline:</strong> 0359 660 934
+            <br />
+            <strong>Địa chỉ:</strong> 30 Phan Trung, P. Tam Hiệp, Đồng Nai
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+
+  if (promotionId === "5") {
+    return (
+      <div className="space-y-6">
+        <Typography
+          as="h1"
+          variant="bold"
+          className="text-3xl text-primary mb-4"
+        >
+          Nhân dịp Jozo comeback: Khách iu được tặng 2 giờ hát miễn phí
+        </Typography>
+
+        <div className="bg-accent/55 border-l-4 border-primary p-4 rounded-r-lg">
+          <Typography
+            as="p"
+            variant="semibold"
+            className="text-primary text-lg leading-relaxed"
+          >
+            Nhân dịp Jozo comeback, khách iu sẽ được tặng{" "}
+            <strong>2 giờ hát miễn phí</strong> — lời cảm ơn chân thành từ Jozo
+            tới cả nhà mình đã đồng hành và chờ đợi.
           </Typography>
         </div>
 
         <Typography
           as="p"
           variant="default"
-          className="text-gray-700 leading-relaxed"
+          className="text-primary/80 leading-relaxed"
         >
-          Jozo Music Box kính chúc quý khách một mùa Tết an lành, hạnh phúc. Trong dịp Tết Nguyên Đán 2026, Jozo <strong>không phụ thu, không tăng giá</strong> và dành tặng <strong>giảm 5% khi đặt phòng trước</strong>. Dưới đây là lịch hoạt động chi tiết:
+          Hãy đặt chỗ sớm qua website hoặc hotline để giữ slot; Jozo sẽ hỗ trợ
+          khách iu xác nhận ưu đãi comeback khi tới quán.
         </Typography>
 
         <div className="mt-6">
           <Typography
             as="h3"
             variant="semibold"
-            className="text-xl text-gray-800 mb-3"
+            className="text-xl text-foreground mb-3"
           >
-            📅 Lịch hoạt động Tết
+            Ghi nhận nhanh
           </Typography>
-          <ul className="space-y-3 text-gray-700">
-            <li className="flex flex-wrap gap-2">
-              <span className="font-semibold">9/2 – 15/2/2026 (22–28 Âm lịch):</span>
-              <span>Hoạt động 10:00 – 0:30</span>
+          <ul className="list-disc list-inside space-y-2 text-primary/80">
+            <li>
+              Ưu đãi áp dụng theo quy định tại quầy và trong thời gian chương
+              trình.
             </li>
-            <li className="flex flex-wrap gap-2">
-              <span className="font-semibold">16/2/2026 (29/12 Âm lịch):</span>
-              <span>Hoạt động 10:00 – 21:00</span>
-            </li>
-            <li className="flex flex-wrap gap-2">
-              <span className="font-semibold text-red-600">17/2/2026 (Mùng 1 Tết):</span>
-              <span className="font-semibold text-red-600">NGHỈ – Jozo không hoạt động</span>
-            </li>
-            <li className="flex flex-wrap gap-2">
-              <span className="font-semibold">18/2 – 22/2/2026 (Từ Mùng 2 Tết):</span>
-              <span>Hoạt động 10:00 – 0:30</span>
+            <li>Giờ hát tặng không quy đổi thành tiền mặt.</li>
+            <li>
+              Chi tiết điều kiện cụ thể vui lòng liên hệ hotline hoặc nhân viên
+              lễ tân khi đến cửa hàng.
             </li>
           </ul>
         </div>
@@ -269,36 +186,18 @@ export default function PromotionContent({
           <Typography
             as="h3"
             variant="semibold"
-            className="text-xl text-gray-800 mb-3"
+            className="text-xl text-foreground mb-3"
           >
-            🎁 Ưu đãi Tết
-          </Typography>
-          <ul className="list-disc list-inside space-y-2 text-gray-700">
-            <li>Không phụ thu / không tăng giá dịp Tết</li>
-            <li>Giảm 5% khi đặt phòng trước</li>
-          </ul>
-        </div>
-
-        <div className="mt-6">
-          <Typography
-            as="h3"
-            variant="semibold"
-            className="text-xl text-gray-800 mb-3"
-          >
-            📞 Liên hệ
+            Liên hệ đặt
           </Typography>
           <Typography
             as="p"
             variant="default"
-            className="text-gray-700 leading-relaxed"
+            className="text-primary/80 leading-relaxed"
           >
-            <strong>Hotline:</strong> 0359 660 934
+            <strong>Hotline:</strong> 035 966 0934
             <br />
-            <strong>Tiktok:</strong> Jozo Music Box
-            <br />
-            <strong>Website:</strong> jozo.com.vn
-            <br />
-            <strong>Địa chỉ:</strong> 78 Phan Trung, Tam Hiệp, Đồng Nai
+            <strong>Địa chỉ:</strong> 30 Phan Trung, Tam Hiệp, Đồng Nai
           </Typography>
         </div>
       </div>
@@ -307,7 +206,7 @@ export default function PromotionContent({
 
   // Default fallback cho promotion khác
   return (
-    <Typography as="p" variant="default" className="text-gray-700">
+    <Typography as="p" variant="default" className="text-primary/80">
       Nội dung khuyến mãi đang được cập nhật...
     </Typography>
   );

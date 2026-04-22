@@ -9,8 +9,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-b border-slate-100 py-6 last:border-0 last:pb-0">
-      <h3 className="mb-3 text-base font-semibold text-slate-900">{title}</h3>
+    <section className="border-b border-primary/10 py-6 last:border-0 last:pb-0">
+      <h3 className="mb-3 text-base font-semibold text-foreground">{title}</h3>
       {children}
     </section>
   );
@@ -18,7 +18,7 @@ function Section({
 
 function BulletList({ items }: { items: string[] }) {
   return (
-    <ul className="list-inside list-disc space-y-2 text-slate-700">
+    <ul className="list-inside list-disc space-y-2 text-primary/80">
       {items.map((item) => (
         <li key={item}>{item}</li>
       ))}
@@ -28,19 +28,19 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function RecruitmentPage() {
   return (
-    <div className="min-h-screen bg-slate-50 py-10">
+    <div className="min-h-screen bg-background py-10">
       <div className="container mx-auto max-w-3xl px-4">
         <header className="mb-8 text-center md:mb-10">
-          <h1 className="mt-2 text-2xl font-semibold text-slate-900 md:text-3xl">
+          <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
             Jozo tìm đồng đội
           </h1>
         </header>
 
-        <div className="mb-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <h2 className="mb-1 text-lg font-semibold text-slate-900">
+        <div className="mb-8 rounded-xl border border-primary/15 bg-white p-6 shadow-sm md:p-8">
+          <h2 className="mb-1 text-lg font-semibold text-foreground">
             Mô tả công việc
           </h2>
-          <p className="mb-6 text-sm text-slate-600">
+          <p className="mb-6 text-sm text-primary/65">
             Hình thức: Part-time. Không yêu cầu kinh nghiệm — sẽ được đào tạo
             nội quy và nghiệp vụ tại chỗ.
           </p>
@@ -98,9 +98,9 @@ export default function RecruitmentPage() {
           </Section>
 
           <Section title="Chính sách lương">
-            <ul className="space-y-2 text-slate-700">
+            <ul className="space-y-2 text-primary/80">
               <li>
-                <span className="font-medium text-slate-900">Lương:</span>{" "}
+                <span className="font-medium text-foreground">Lương:</span>{" "}
                 24.000 VNĐ/giờ
               </li>
             </ul>
@@ -109,19 +109,19 @@ export default function RecruitmentPage() {
 
         <RecruitmentForm />
 
-        <footer className="mt-10 border-t border-slate-200 pt-8 text-center text-sm text-slate-600">
+        <footer className="mt-10 border-t border-primary/15 pt-8 text-center text-sm text-primary/65">
           <p>
             Liên hệ:{" "}
             <Link
               href="tel:0336051204"
-              className="font-medium text-slate-900 underline-offset-2 hover:underline"
+              className="font-medium text-foreground underline-offset-2 hover:underline"
             >
               033 605 1204
             </Link>
             {" · "}
             <Link
               href="mailto:jozostudiollc@gmail.com"
-              className="font-medium text-slate-900 underline-offset-2 hover:underline"
+              className="font-medium text-foreground underline-offset-2 hover:underline"
             >
               jozostudiollc@gmail.com
             </Link>
@@ -132,12 +132,12 @@ export default function RecruitmentPage() {
               href="https://www.google.com/maps/place/Jozo+Music+Box/@10.9615421,106.8471298,1234m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3174dd6fa7fe3c73:0xac4d7af01bc4f800!8m2!3d10.9615421!4d106.8520007!16s%2Fg%2F11m64vjf12?entry=ttu"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-slate-900 underline-offset-2 hover:underline"
+              className="font-medium text-foreground underline-offset-2 hover:underline"
             >
               30 Phan Trung, Tân Mai, Đồng Nai
             </Link>
           </p>
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-4 text-xs text-primary/55">
             Dữ liệu ứng tuyển chỉ phục vụ tuyển dụng và được bảo mật theo nội
             quy xử lý thông tin cá nhân của đơn vị.
           </p>

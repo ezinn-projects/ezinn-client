@@ -27,18 +27,18 @@ export default function JozoLoader({
   return (
     <div className={`relative ${sizeClasses[size]} ${className}`}>
       {/* Outer rotating ring */}
-      <div className="absolute inset-0 rounded-full border-3 border-transparent border-t-pink-500 border-r-pink-400 animate-spin"></div>
+      <div className="absolute inset-0 rounded-full border-3 border-transparent border-t-red-600 border-r-red-400 animate-spin"></div>
 
       {/* Inner rotating ring */}
       <div
-        className="absolute inset-2 rounded-full border-2 border-transparent border-b-lightpink border-l-pink-300 animate-spin"
+        className="absolute inset-2 rounded-full border-2 border-transparent border-b-primary border-l-red-300 animate-spin"
         style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
       ></div>
 
       {/* Jozo Logo */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <Image
-          src="/images/logo.png"
+          src="/images/jozo-logo.png"
           alt="Jozo Logo"
           width={40}
           height={40}
@@ -60,7 +60,7 @@ export function JozoLoaderWithText({
       className={`flex flex-col items-center justify-center gap-3 ${className}`}
     >
       <JozoLoader size={size} />
-      <p className="text-sm text-gray-600 font-medium animate-pulse">{text}</p>
+      <p className="text-sm text-primary/70 font-medium animate-pulse">{text}</p>
     </div>
   );
 }

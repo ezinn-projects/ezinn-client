@@ -6,10 +6,10 @@ export const metadata: Metadata = {
     "Jozo Music Box Biên Hòa tuyển nhân viên bán thời gian: lễ tân, phục vụ, giữ xe. Lương 24.000đ/giờ.",
   keywords: [
     "tuyển dụng part-time Biên Hòa",
-    "tuyển nhân viên karaoke",
+    "tuyển nhân viên music box",
     "việc làm part-time sinh viên",
     "tuyển lễ tân part-time",
-    "tuyển phục vụ karaoke",
+    "tuyển phục vụ music box",
     "jozo tuyển dụng",
   ],
   openGraph: {

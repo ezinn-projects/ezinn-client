@@ -14,7 +14,7 @@ export const bookingSchema = z.object({
       z.string().length(0), // Cho phép chuỗi rỗng
     ])
     .optional(),
-  roomType: z.enum(["Small", "Medium", "Large"], {
+  roomType: z.enum(["Small", "Medium", "Large", "Dorm"], {
     errorMap: () => ({ message: "Vui lòng chọn loại phòng hợp lệ" }),
   }),
   startTime: z.string().min(1, "Vui lòng chọn thời gian bắt đầu"),

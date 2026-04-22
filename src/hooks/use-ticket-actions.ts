@@ -41,27 +41,27 @@ export const useTicketActions = () => {
   const createTicketCanvas = async (bookingDetails: BookingDetails) => {
     const ticketElement = document.createElement("div");
     ticketElement.innerHTML = `
-      <div style="width: 400px; height: 600px; background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%); position: relative; overflow: hidden;">
+      <div style="width: 400px; height: 600px; background: #ffffff; border-top: 3px solid #f4edda; position: relative; overflow: hidden;">
         <!-- Background Pattern -->
         <div style="position: absolute; inset: 0; opacity: 0.1;">
-          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #f9a8d4 0%, #c084fc 100%);"></div>
-          <div style="position: absolute; top: 40px; left: 40px; width: 80px; height: 80px; border-radius: 50%; background: #f9a8d4; opacity: 0.2;"></div>
-          <div style="position: absolute; top: 128px; right: 64px; width: 64px; height: 64px; border-radius: 50%; background: #c084fc; opacity: 0.2;"></div>
-          <div style="position: absolute; bottom: 80px; left: 80px; width: 96px; height: 96px; border-radius: 50%; background: #f9a8d4; opacity: 0.2;"></div>
-          <div style="position: absolute; bottom: 128px; right: 40px; width: 72px; height: 72px; border-radius: 50%; background: #c084fc; opacity: 0.2;"></div>
+          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #fecaca 0%, #d4d4d4 100%);"></div>
+          <div style="position: absolute; top: 40px; left: 40px; width: 80px; height: 80px; border-radius: 50%; background: #fca5a5; opacity: 0.2;"></div>
+          <div style="position: absolute; top: 128px; right: 64px; width: 64px; height: 64px; border-radius: 50%; background: #a3a3a3; opacity: 0.2;"></div>
+          <div style="position: absolute; bottom: 80px; left: 80px; width: 96px; height: 96px; border-radius: 50%; background: #fca5a5; opacity: 0.2;"></div>
+          <div style="position: absolute; bottom: 128px; right: 40px; width: 72px; height: 72px; border-radius: 50%; background: #a3a3a3; opacity: 0.2;"></div>
         </div>
 
         <!-- Header -->
         <div style="position: relative; z-index: 10; padding: 24px;">
           <div style="text-align: center; margin-bottom: 24px;">
-            <h1 style="font-size: 30px; font-weight: bold; color: #db2777; margin-bottom: 8px; margin: 0;">JOZO</h1>
+            <h1 style="font-size: 30px; font-weight: bold; color: #c40a0a; margin-bottom: 8px; margin: 0;">JOZO</h1>
           </div>
 
           <!-- Booking Code -->
-          <div style="background: white; border-radius: 8px; padding: 16px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px dashed #f9a8d4;">
+          <div style="background: white; border-radius: 8px; padding: 16px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px dashed #f4edda;">
             <div style="text-align: center;">
               <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px; margin: 0;">Mã đặt box</p>
-              <p style="font-size: 24px; font-weight: bold; color: #db2777; letter-spacing: 0.1em; font-family: monospace; margin: 0;">
+              <p style="font-size: 24px; font-weight: bold; color: #c40a0a; letter-spacing: 0.1em; font-family: monospace; margin: 0;">
                 ${bookingDetails.bookingCode}
               </p>
             </div>
@@ -122,8 +122,8 @@ export const useTicketActions = () => {
           </div>
 
           <!-- Decorative Elements -->
-          <div style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; background: #f9a8d4; border-radius: 50%; opacity: 0.3;"></div>
-          <div style="position: absolute; bottom: 16px; left: 16px; width: 24px; height: 24px; background: #c084fc; border-radius: 50%; opacity: 0.3;"></div>
+          <div style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; background: #fca5a5; border-radius: 50%; opacity: 0.3;"></div>
+          <div style="position: absolute; bottom: 16px; left: 16px; width: 24px; height: 24px; background: #d4d4d4; border-radius: 50%; opacity: 0.3;"></div>
         </div>
       </div>
     `;
@@ -275,7 +275,7 @@ export const useTicketActions = () => {
                     margin-top: 16px;
                     width: 100%;
                     padding: 12px;
-                    background: #db2777;
+                    background: #c40a0a;
                     color: white;
                     border: none;
                     border-radius: 8px;

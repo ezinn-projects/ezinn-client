@@ -123,19 +123,19 @@ export const removeSongFromQueue = async (
     if (response.ok) {
       return {
         success: true,
-        message: result.message || "Đã xóa bài hát khỏi danh sách phát",
+        message: result.message || "Đã xóa bài khỏi danh sách phát",
       };
     } else {
       return {
         success: false,
-        message: result.message || "Có lỗi xảy ra khi xóa bài hát",
+        message: result.message || "Có lỗi xảy ra khi xóa bài",
       };
     }
   } catch (error) {
     console.error("Error removing song from queue:", error);
     return {
       success: false,
-      message: "Có lỗi xảy ra khi xóa bài hát. Vui lòng thử lại sau.",
+      message: "Có lỗi xảy ra khi xóa bài. Vui lòng thử lại sau.",
     };
   }
 };

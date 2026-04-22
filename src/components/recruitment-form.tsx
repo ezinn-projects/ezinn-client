@@ -181,14 +181,14 @@ export function RecruitmentForm() {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+        className="rounded-xl border border-primary/15 bg-white p-6 shadow-sm md:p-8"
         noValidate
         aria-busy={isSubmitting}
       >
-        <h3 className="mb-6 text-lg font-semibold text-slate-900 md:text-xl">
+        <h3 className="mb-6 text-lg font-semibold text-foreground md:text-xl">
           Đơn ứng tuyển
         </h3>
-        <p className="mb-6 text-sm text-slate-600">
+        <p className="mb-6 text-sm text-primary/65">
           Vui lòng điền đầy đủ thông tin. Dữ liệu chỉ dùng cho mục đích tuyển
           dụng và được bảo mật theo chính sách của Jozo.
         </p>
@@ -221,7 +221,7 @@ export function RecruitmentForm() {
                     required
                   />
                 ) : (
-                  <div className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-400">
+                  <div className="w-full rounded-lg border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
                     Đang tải...
                   </div>
                 )
@@ -238,7 +238,7 @@ export function RecruitmentForm() {
           />
 
           <div className="md:col-span-2">
-            <Label className="mb-2 block text-slate-900">
+            <Label className="mb-2 block text-foreground">
               Giới tính <span className="text-red-600">*</span>
             </Label>
             <RadioGroup
@@ -253,7 +253,7 @@ export function RecruitmentForm() {
                   <RadioGroupItem value={key} id={`gender-${key}`} />
                   <Label
                     htmlFor={`gender-${key}`}
-                    className="cursor-pointer font-normal text-slate-700"
+                    className="cursor-pointer font-normal text-primary/80"
                   >
                     {GENDERS[key]}
                   </Label>
@@ -285,7 +285,7 @@ export function RecruitmentForm() {
           </div>
 
           <div className="md:col-span-2">
-            <Label className="mb-2 block text-slate-900">
+            <Label className="mb-2 block text-foreground">
               Tình trạng hiện tại <span className="text-red-600">*</span>
             </Label>
             <RadioGroup
@@ -305,7 +305,7 @@ export function RecruitmentForm() {
                   />
                   <Label
                     htmlFor={`status-${opt.value}`}
-                    className="cursor-pointer font-normal text-slate-700"
+                    className="cursor-pointer font-normal text-primary/80"
                   >
                     {opt.label}
                   </Label>
@@ -331,7 +331,7 @@ export function RecruitmentForm() {
           ) : null}
 
           <div className="md:col-span-2">
-            <Label className="mb-2 block text-slate-900">
+            <Label className="mb-2 block text-foreground">
               Vị trí mong muốn <span className="text-red-600">*</span> (có thể
               chọn nhiều vị trí)
             </Label>
@@ -347,7 +347,7 @@ export function RecruitmentForm() {
                   />
                   <Label
                     htmlFor={`pos-${key}`}
-                    className="cursor-pointer font-normal text-slate-700"
+                    className="cursor-pointer font-normal text-primary/80"
                   >
                     {POSITIONS[key]}
                   </Label>
@@ -362,7 +362,7 @@ export function RecruitmentForm() {
           </div>
 
           <div className="md:col-span-2">
-            <Label className="mb-2 block text-slate-900">
+            <Label className="mb-2 block text-foreground">
               Ca làm có thể nhận <span className="text-red-600">*</span>
             </Label>
             <div className="space-y-2">
@@ -377,7 +377,7 @@ export function RecruitmentForm() {
                   />
                   <Label
                     htmlFor={`shift-${key}`}
-                    className="cursor-pointer font-normal text-slate-700"
+                    className="cursor-pointer font-normal text-primary/80"
                   >
                     {WORK_SHIFTS[key]}
                   </Label>
@@ -407,7 +407,7 @@ export function RecruitmentForm() {
                 />
                 <Label
                   htmlFor="shift-all-three"
-                  className="cursor-pointer font-normal text-slate-700"
+                  className="cursor-pointer font-normal text-primary/80"
                 >
                   Cả 3 ca
                 </Label>
@@ -423,10 +423,10 @@ export function RecruitmentForm() {
           <div className="md:col-span-2">
             <Label
               htmlFor="recruitment-note"
-              className="mb-2 block text-slate-900"
+              className="mb-2 block text-foreground"
             >
               Ghi chú thêm{" "}
-              <span className="font-normal text-slate-500">
+              <span className="font-normal text-primary/55">
                 (không bắt buộc)
               </span>
             </Label>
@@ -434,7 +434,7 @@ export function RecruitmentForm() {
               id="recruitment-note"
               rows={4}
               placeholder=""
-              className="w-full resize-y rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none transition-colors placeholder:text-slate-400 focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+              className="w-full resize-y rounded-lg border border-primary/15 bg-white px-3 py-2 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-primary/50 focus:border-primary/25 focus:ring-2 focus:ring-primary/15"
               {...register("note")}
               aria-invalid={errors.note ? true : undefined}
             />
@@ -444,7 +444,7 @@ export function RecruitmentForm() {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-end border-t border-slate-100 pt-6">
+        <div className="mt-8 flex justify-end border-t border-primary/10 pt-6">
           <Button
             type="submit"
             disabled={isSubmitting}

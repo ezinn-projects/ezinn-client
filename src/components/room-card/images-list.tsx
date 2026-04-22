@@ -8,12 +8,15 @@ interface RoomImageCarouselProps {
   images: string[];
   roomName: string;
   roomType: string;
+  /** Slug API (vd: small, dorm) — dùng cho ảnh mặc định /images/room-{slug}.jpg */
+  fallbackImageKey?: string;
 }
 
 export default function RoomImageCarousel({
   images,
   roomName,
   roomType,
+  fallbackImageKey,
 }: RoomImageCarouselProps) {
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -21,8 +24,9 @@ export default function RoomImageCarousel({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Nếu không có hình ảnh, sử dụng hình mặc định
+  const imageSlug = fallbackImageKey ?? roomType;
   const displayImages =
-    images && images.length > 0 ? images : [`/images/room-${roomType}.jpg`];
+    images && images.length > 0 ? images : [`/images/room-${imageSlug}.jpg`];
 
   const nextImage = () => {
     setCurrentImage((prev) => (prev + 1) % displayImages.length);
@@ -107,7 +111,7 @@ export default function RoomImageCarousel({
       }}
     >
       {/* Room Type Badge */}
-      <div className="absolute top-0 right-0 bg-lightpink text-white px-3 py-1 z-20 rounded-bl-lg font-bold">
+      <div className="absolute top-0 right-0 bg-primary text-primary-foreground px-3 py-1 z-20 rounded-bl-lg font-bold">
         {roomType}
       </div>
 
@@ -125,14 +129,14 @@ export default function RoomImageCarousel({
         <>
           <button
             onClick={prevImage}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
             aria-label="Hình trước"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={nextImage}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
             aria-label="Hình tiếp theo"
           >
             <ChevronRight className="w-4 h-4" />
@@ -160,7 +164,7 @@ export default function RoomImageCarousel({
 
       {/* Image Counter */}
       {displayImages.length > 1 && (
-        <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded z-10">
+        <div className="absolute top-2 left-2 bg-primary/55 text-primary-foreground text-xs px-2 py-1 rounded z-10">
           {currentImage + 1}/{displayImages.length}
         </div>
       )}

@@ -6,7 +6,6 @@ import CancelBookingModal from "@/components/ui/cancel-booking-modal";
 import BookingSuccessModal from "@/components/ui/booking-success-modal";
 import { useTicketActions } from "@/hooks/use-ticket-actions";
 import { toast } from "@/hooks/use-toast";
-import { isUnderMaintenance } from "@/config/closure";
 import { cancelBooking, createApiEndpoint } from "@/lib/api-utils";
 import { BookingFormData, bookingSchema } from "@/schemas/booking.schema";
 import { BookingRequest } from "@/types/booking.d";
@@ -19,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
-type RoomType = "Small" | "Medium" | "Large";
+type RoomType = "Small" | "Medium" | "Large" | "Dorm";
 
 type HolidayItem = {
   date: string;
@@ -51,8 +50,9 @@ const isExtendedHoursDate = (date: Date | null): boolean =>
 // Constants và utility functions
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
-  Medium: "M-Box (4-5 người)",
+  Medium: "M-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
+  Dorm: "Dorm",
 };
 
 // Generate time slots function
@@ -147,30 +147,6 @@ const calculateEndTime = (startTime: string, duration: number): string => {
     .padStart(2, "0")}`;
 };
 
-// Kiểm tra điều kiện đặt trước ít nhất 1 giờ để áp dụng ưu đãi
-const isEligibleForEarlyBooking = (
-  selectedDate: Date | null,
-  selectedStartTime: string,
-): boolean => {
-  if (!selectedDate || !selectedStartTime) return false;
-
-  const [startHour, startMinute] = selectedStartTime.split(":").map(Number);
-  const bookingDateTime = new Date(
-    selectedDate.getFullYear(),
-    selectedDate.getMonth(),
-    selectedDate.getDate(),
-    startHour,
-    startMinute,
-    0,
-    0,
-  );
-
-  const now = new Date();
-  const diffMs = bookingDateTime.getTime() - now.getTime();
-
-  return diffMs >= 60 * 60 * 1000; // Ít nhất 1 giờ trước giờ bắt đầu
-};
-
 const createISOString = (date: Date, time: string): string => {
   const [hours, minutes] = time.split(":").map(Number);
   const dateTime = new Date(date);
@@ -187,10 +163,10 @@ const createISOString = (date: Date, time: string): string => {
 
 // Price calculation function
 type EstimatedPrice = {
-  basePrice: number;
-  discountRate: number;
   finalPrice: number;
 };
+
+const PROMOTION_DISCOUNT_RATE = 0.2;
 
 const calculateEstimatedPrice = (
   selectedDate: Date | null,
@@ -206,7 +182,7 @@ const calculateEstimatedPrice = (
     !selectedDate ||
     prices.length === 0
   ) {
-    return { basePrice: 0, discountRate: 0, finalPrice: 0 };
+    return { finalPrice: 0 };
   }
 
   // Xác định loại ngày: weekend (T7/CN) hoặc holiday → dùng giá weekend
@@ -225,12 +201,13 @@ const calculateEstimatedPrice = (
     Small: "small",
     Medium: "medium",
     Large: "large",
+    Dorm: "dorm",
   };
   const roomTypeStr = roomTypeMapping[roomType];
 
   // Tìm price rule phù hợp
   const priceRule = prices.find((p) => p.day_type === dayType);
-  if (!priceRule) return { basePrice: 0, discountRate: 0, finalPrice: 0 };
+  if (!priceRule) return { finalPrice: 0 };
 
   // Tính tổng giá cho thời lượng đã chọn
   let totalPrice = 0;
@@ -306,31 +283,12 @@ const calculateEstimatedPrice = (
       .padStart(2, "0")}`;
   }
 
+  const discountedPrice = totalPrice * (1 - PROMOTION_DISCOUNT_RATE);
+
   // Làm tròn xuống đến hàng nghìn (VD: 50333 -> 50000)
-  const basePrice = Math.floor(totalPrice / 1000) * 1000;
+  const finalPrice = Math.floor(discountedPrice / 1000) * 1000;
 
-  // Ưu đãi đặt trước: T2-T6 giảm 10%, T7-CN giảm 5%
-  let discountRate = 0;
-  const eligibleForDiscount = isEligibleForEarlyBooking(
-    selectedDate,
-    selectedStartTime,
-  );
-  if (eligibleForDiscount) {
-    if (dayType === "weekday") {
-      discountRate = 0.1;
-    } else if (dayType === "weekend") {
-      discountRate = 0.05;
-    }
-  }
-
-  const finalPrice =
-    Math.floor((totalPrice * (1 - discountRate)) / 1000) * 1000;
-
-  return {
-    basePrice,
-    discountRate,
-    finalPrice,
-  };
+  return { finalPrice };
 };
 
 interface BookingFormProps {
@@ -404,7 +362,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return calculateEndTime(selectedStartTime, selectedDuration);
   }, [selectedStartTime, selectedDuration]);
 
-  const { basePrice, discountRate, finalPrice } = useMemo(() => {
+  const { finalPrice } = useMemo(() => {
     return calculateEstimatedPrice(
       selectedDate,
       selectedStartTime,
@@ -461,14 +419,24 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         selectedStartTime &&
         durationOptions.length > 0
       ) {
-        const allowed = durationOptions.some((o) => o.value === selectedDuration);
+        const allowed = durationOptions.some(
+          (o) => o.value === selectedDuration,
+        );
         if (!allowed) {
           const maxOption = durationOptions[durationOptions.length - 1];
           setSelectedDuration(maxOption?.value ?? 1);
         }
       }
     }
-  }, [selectedDate, selectedStartTime, setValue, isClient, availableTimes, selectedDuration, durationOptions]);
+  }, [
+    selectedDate,
+    selectedStartTime,
+    setValue,
+    isClient,
+    availableTimes,
+    selectedDuration,
+    durationOptions,
+  ]);
 
   useEffect(() => {
     if (selectedStartTime && selectedDuration && isClient) {
@@ -479,14 +447,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   // Handler functions với useCallback để tối ưu performance
   const onSubmit = useCallback(
     async (data: BookingFormData) => {
-      if (isUnderMaintenance()) {
-        toast({
-          title: "Jozo tạm đóng cửa sửa chữa",
-          description: "Hiện không nhận đặt phòng. Xin quý khách thông cảm.",
-          variant: "destructive",
-        });
-        return;
-      }
       if (!selectedStartTime || !selectedDuration || !selectedDate) {
         toast({
           title: "Lỗi",
@@ -681,13 +641,13 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => router.push("/")}
-          className="flex items-center gap-2 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          className="flex items-center gap-2 py-2 text-primary/70 hover:bg-primary/8 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-medium">Quay về</span>
         </button>
 
-        <h1 className="md:text-3xl text-xl font-bold text-lightpink text-center">
+        <h1 className="md:text-3xl text-xl font-bold text-primary text-center">
           {ROOM_TYPE_LABELS[roomType]}
         </h1>
 
@@ -697,7 +657,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Customer Information */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-lightpink mb-4">
+          <h2 className="text-xl font-semibold text-primary mb-4">
             Thông tin khách hàng
           </h2>
 
@@ -744,7 +704,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
 
         {/* Booking Information */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-lightpink mb-4">
+          <h2 className="text-xl font-semibold text-primary mb-4">
             Thông tin đặt box
           </h2>
 
@@ -761,23 +721,25 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                       required
                     />
                     {selectedHoliday && (
-                      <p className="mt-1.5 text-sm font-medium text-lightpink">
+                      <p className="mt-1.5 text-sm font-medium text-primary">
                         Ngày lễ: {selectedHoliday.name}
                       </p>
                     )}
                     {isTetDay1Off(selectedDate) && (
-                      <p className="mt-1.5 text-sm font-medium text-lightpink bg-pink-50 border border-lightpink/30 rounded px-3 py-2">
+                      <p className="mt-1.5 text-sm font-medium text-primary bg-accent/50 border border-primary/30 rounded px-3 py-2">
                         Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
                       </p>
                     )}
                     {isEveTet2026(selectedDate) && (
                       <p className="mt-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-300 rounded px-3 py-2">
-                        Ngày 30 Tết: 21h (9h tối) Jozo nghỉ để dọn dẹp đón giao thừa. Giờ kết thúc tối đa 21h (nếu đặt 8h thì 9h phải đóng).
+                        Ngày 30 Tết: 21h (9h tối) Jozo nghỉ để dọn dẹp đón giao
+                        thừa. Giờ kết thúc tối đa 21h (nếu đặt 8h thì 9h phải
+                        đóng).
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
+                  <div className="w-full border rounded px-3 py-2 text-primary/50 bg-primary/8">
                     Đang tải...
                   </div>
                 )}
@@ -786,7 +748,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
 
             {/* Start Time Selection */}
             <div>
-              <label className="block text-lightpink mb-1">
+              <label className="block text-primary mb-1">
                 Giờ bắt đầu
                 <span className="text-red-500 ml-1">*</span>
               </label>
@@ -797,7 +759,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                     setSelectedStartTime(e.target.value);
                     setValue("startTime", e.target.value);
                   }}
-                  className="w-full border rounded px-3 py-2 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                  className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   disabled={!isClient || !selectedDate}
                 >
                   <option value="">Chọn giờ bắt đầu</option>
@@ -825,7 +787,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
             {/* Duration Selection */}
             {selectedStartTime && (
               <div>
-                <label className="block text-lightpink mb-1">
+                <label className="block text-primary mb-1">
                   Thời lượng
                   <span className="text-red-500 ml-1">*</span>
                 </label>
@@ -836,7 +798,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                       const duration = parseFloat(e.target.value);
                       setSelectedDuration(duration);
                     }}
-                    className="w-full border rounded px-3 py-2 text-black outline-none focus:ring-2 focus:ring-lightpink focus:border-lightpink"
+                    className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   >
                     {durationOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -845,7 +807,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                     ))}
                   </select>
                 </div>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-primary/55">
                   Bạn có thể chọn số giờ sử dụng phù hợp với nhu cầu của mình
                 </p>
                 {errors.endTime && (
@@ -864,96 +826,78 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
           selectedDuration &&
           selectedDate &&
           !isTetDay1Off(selectedDate) && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-md">
-            <h2 className="text-lg font-semibold text-lightpink mb-2">
-              Thông tin đặt box
-            </h2>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-lightpink">Loại box:</span>
-                <span className="font-medium text-lightpink">
-                  {ROOM_TYPE_LABELS[roomType]}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lightpink">Ngày:</span>
-                <span className="font-medium text-lightpink">
-                  {selectedDate
-                    ? format(selectedDate, "dd/MM/yyyy", { locale: vi })
-                    : "Đang tải..."}
-                  {selectedHoliday && (
-                    <span className="ml-1 text-lightpink/90 font-normal">
-                      ({selectedHoliday.name})
+            <div className="mb-6 p-4 bg-primary/6 rounded-md">
+              <h2 className="text-lg font-semibold text-primary mb-2">
+                Thông tin đặt box
+              </h2>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-primary">Loại box:</span>
+                  <span className="font-medium text-primary">
+                    {ROOM_TYPE_LABELS[roomType]}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-primary">Ngày:</span>
+                  <span className="font-medium text-primary">
+                    {selectedDate
+                      ? format(selectedDate, "dd/MM/yyyy", { locale: vi })
+                      : "Đang tải..."}
+                    {selectedHoliday && (
+                      <span className="ml-1 text-primary/90 font-normal">
+                        ({selectedHoliday.name})
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-primary">Thời gian:</span>
+                  <span className="font-medium text-primary">
+                    {selectedStartTime} - {endTime}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-primary">Số giờ:</span>
+                  <span className="font-medium text-primary">
+                    {getSelectedHours()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-primary">Giá dự kiến:</span>
+                  <div className="text-right">
+                    <span className="font-bold text-green-600 text-lg block">
+                      {!isClient || prices.length === 0
+                        ? "Đang tải..."
+                        : `${finalPrice.toLocaleString("vi-VN")}đ`}
                     </span>
-                  )}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lightpink">Thời gian:</span>
-                <span className="font-medium text-lightpink">
-                  {selectedStartTime} - {endTime}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lightpink">Số giờ:</span>
-                <span className="font-medium text-lightpink">
-                  {getSelectedHours()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-lightpink">Giá dự kiến (đã giảm):</span>
-                <span className="font-bold text-green-600 text-lg">
-                  {!isClient || prices.length === 0
-                    ? "Đang tải..."
-                    : `${finalPrice.toLocaleString("vi-VN")}đ`}
-                </span>
-              </div>
-              {discountRate > 0 && (
-                <>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Giá gốc:</span>
-                    <span className="line-through">
-                      {basePrice.toLocaleString("vi-VN")}đ
-                    </span>
+                    <span className="text-xs text-primary/70">KM 20%</span>
                   </div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Ưu đãi áp dụng:</span>
-                    <span className="font-semibold text-lightpink">
-                      {discountRate === 0.1
-                        ? "Giảm 10% (Thứ 2 - Thứ 6)"
-                        : "Giảm 5% (Thứ 7 - Chủ Nhật/Lễ)"}
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
 
-            <div className="mt-4 text-sm border-t pt-3 text-gray-600">
-              {isEveTet2026(selectedDate) && (
-                <p className="mb-2 text-amber-700 font-medium">
-                  21h (9h tối) Jozo nghỉ để dọn dẹp đón giao thừa. Giờ kết thúc tối đa 21h.
+              <div className="mt-4 text-sm border-t pt-3 text-primary/70">
+                {isEveTet2026(selectedDate) && (
+                  <p className="mb-2 text-amber-700 font-medium">
+                    21h (9h tối) Jozo nghỉ để dọn dẹp đón giao thừa. Giờ kết
+                    thúc tối đa 21h.
+                  </p>
+                )}
+                <p className="mb-1">
+                  <span className="font-medium">Lưu ý về thanh toán:</span> Quý
+                  khách sẽ thanh toán sau khi sử dụng dịch vụ. Jozo không nhận
+                  cọc/thanh toán trước.
                 </p>
-              )}
-              <p className="mb-1">
-                <span className="font-medium">Lưu ý về thanh toán:</span> Quý
-                khách sẽ thanh toán sau khi sử dụng dịch vụ. Jozo không nhận
-                cọc/thanh toán trước.
-              </p>
 
-              <p className="text-red-500">
-                Nếu đến trễ quá 15 phút so với giờ đặt, box sẽ được hủy và có
-                thể được sắp xếp cho khách khác.
-              </p>
+                <p className="text-red-500">
+                  Nếu đến trễ quá 15 phút so với giờ đặt, box sẽ được hủy và có
+                  thể được sắp xếp cho khách khác.
+                </p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {isUnderMaintenance() ? (
-          <div className="w-full py-3 mt-6 text-center font-medium text-amber-800 bg-amber-100 border border-amber-300 rounded-lg">
-            Từ 28/02/2026 Jozo tạm đóng cửa để sửa chữa, không nhận đặt phòng. Xin quý khách thông cảm.
-          </div>
-        ) : isTetDay1Off(selectedDate) ? (
-          <div className="w-full py-3 mt-6 text-center font-medium text-lightpink bg-pink-50 border border-lightpink/30 rounded-lg">
+        {isTetDay1Off(selectedDate) ? (
+          <div className="w-full py-3 mt-6 text-center font-medium text-primary bg-accent/45 border border-primary/30 rounded-lg">
             Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
           </div>
         ) : (
@@ -967,7 +911,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
               !selectedDuration ||
               (isClient && selectedDate && availableTimes.length === 0)
             }
-            className="w-full py-3 mt-6 font-medium tracking-wide text-white bg-lightpink rounded-lg hover:bg-pink-600 transition duration-2000 animate-buttonheartbeat disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 mt-6 font-medium tracking-wide text-primary-foreground bg-primary rounded-lg hover:bg-brand-hover transition duration-2000 animate-buttonheartbeat disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Đang xử lý..." : "Đặt ngay"}
           </button>

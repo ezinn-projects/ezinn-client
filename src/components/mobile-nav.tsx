@@ -10,7 +10,7 @@ export default function MobileMenu() {
     <div className="flex sm:hidden">
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="text-white"
+        className="text-primary"
         aria-label="Toggle Menu"
       >
         {menuOpen ? (
@@ -46,7 +46,7 @@ export default function MobileMenu() {
         )}
       </button>
       <div
-        className={`fixed top-[80px] right-0 z-40 h-full w-64 bg-black text-white transform ${
+        className={`fixed top-[80px] right-0 z-40 h-full w-64 bg-white border-l border-red-100 text-primary shadow-lg transform ${
           menuOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >

@@ -22,7 +22,7 @@ const TIKTOK_URL =
   "https://www.tiktok.com/@jozomusicbox?is_from_webapp=1&sender_device=pc";
 
 const buttonBaseClass =
-  "flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500";
+  "flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-lg backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 const FloatingContactButtons = () => {
   const [open, setOpen] = useState(false);
@@ -60,8 +60,8 @@ const FloatingContactButtons = () => {
               rel="noreferrer"
               className={buttonBaseClass}
             >
-              <Icon className="h-5 w-5 text-rose-500" />
-              <span className="text-slate-900">{label}</span>
+              <Icon className="h-5 w-5 text-primary" />
+              <span className="text-foreground">{label}</span>
             </a>
           ) : (
             <button
@@ -70,8 +70,8 @@ const FloatingContactButtons = () => {
               onClick={onClick}
               className={buttonBaseClass}
             >
-              <Icon className="h-5 w-5 text-rose-500" />
-              <span className="text-slate-900">{label}</span>
+              <Icon className="h-5 w-5 text-primary" />
+              <span className="text-foreground">{label}</span>
             </button>
           )
         )}
@@ -80,7 +80,7 @@ const FloatingContactButtons = () => {
       <button
         type="button"
         onClick={toggleOpen}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         aria-label={open ? "Đóng liên hệ" : "Mở liên hệ"}
       >
         {open ? <X className="h-6 w-6" /> : <MessageCircleMore className="h-6 w-6" />}

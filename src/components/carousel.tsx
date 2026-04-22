@@ -3,25 +3,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import freeTwoHours from "@/assets/images/free-two-hours.png";
 
 const banners = [
   {
-    image: freeTwoHours.src,
-    alt: "Hát 2 giờ tặng thêm 1 giờ",
-  },
-  {
-    image: "/images/banner-1.jpg",
-    alt: "Banner khuyến mãi hát 2 giờ tặng 1 giờ",
-  },
-  {
-    image: "/images/reserve.png",
-    alt: "Banner đặt box trước",
+    image: "/images/price-list.png",
+    alt: "Bảng giá Jozo — Music Box / Nintendo và Board Game",
   },
 ];
 
 const imageWrapperClass =
-  "relative w-full aspect-video overflow-hidden rounded-lg bg-neutral-900";
+  "relative w-full aspect-video overflow-hidden rounded-lg bg-primary";
 
 const BannerCarousel = () => {
   const [currentBanner, setCurrentBanner] = useState(0);

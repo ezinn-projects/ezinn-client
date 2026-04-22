@@ -5,14 +5,15 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Price } from "@/types/price";
 
-type RoomType = "Small" | "Medium" | "Large";
+type RoomType = "Small" | "Medium" | "Large" | "Dorm";
 
-// Thêm generateStaticParams để chỉ generate 3 loại box hợp lệ
+// Thêm generateStaticParams để chỉ generate các route loại phòng hợp lệ
 export async function generateStaticParams() {
   return [
     { type: "small" },
     { type: "medium" },
     { type: "large" },
+    { type: "dorm" },
   ];
 }
 
@@ -24,13 +25,15 @@ const ROOM_TYPE_MAPPING: Record<string, RoomType> = {
   small: "Small",
   medium: "Medium",
   large: "Large",
+  dorm: "Dorm",
 };
 
 // Room type labels for SEO
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
-  Medium: "M-Box (4-5 người)",
+  Medium: "M-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
+  Dorm: "Dorm",
 };
 
 interface BookingPageProps {
@@ -107,6 +110,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
       ? roomData.rooms[0].images
       : [];
   const isLargeRoom = roomType === "Large";
+  const isDorm = roomType === "Dorm";
 
   return (
     <div className="container mx-auto max-w-2xl">
@@ -117,8 +121,15 @@ export default async function BookingPage({ params }: BookingPageProps) {
       />
 
       {isLargeRoom && (
-        <div className="mb-4 rounded-lg border border-lightpink/30 bg-pink-50 px-4 py-3 text-sm font-semibold text-lightpink shadow-sm">
-          L-Box được trang bị sẵn 4 mic — thoải mái song ca và hát cùng nhóm đông.
+        <div className="mb-4 rounded-lg border border-primary/30 bg-accent/50 px-4 py-3 text-sm font-semibold text-primary shadow-sm">
+          L-Box được trang bị sẵn 4 mic — thoải mái song ca cùng nhóm đông.
+        </div>
+      )}
+
+      {isDorm && (
+        <div className="mb-4 rounded-lg border border-primary/30 bg-accent/50 px-4 py-3 text-sm font-semibold text-primary shadow-sm">
+          Dorm là khu chơi game Nintendo Switch chung — không phải phòng box
+          riêng. Giá theo khung giờ như bảng giá bên dưới.
         </div>
       )}
 

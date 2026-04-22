@@ -8,7 +8,6 @@ import MobileMenu from "./mobile-nav";
 
 export default function Nav() {
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
-  const [scrollY, setScrollY] = useState(0); // Theo dõi vị trí cuộn
   const [isClient, setIsClient] = useState(false); // Kiểm tra client-side
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // Tham chiếu timeout để kiểm tra dừng cuộn
 
@@ -21,7 +20,6 @@ export default function Nav() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
 
       // Luôn hiện header khi ở đỉnh
       if (currentScrollY === 0) {
@@ -54,12 +52,8 @@ export default function Nav() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       <nav
-        className={`mx-auto px-4 transition-all duration-500 ease-in-out ${
+        className={`mx-auto px-4 bg-white border-b border-red-100/80 text-primary shadow-sm transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
-        } ${
-          isClient && scrollY > 0
-            ? "bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm"
-            : "bg-black"
         }`}
       >
         <div className="container h-24 mx-auto flex justify-between items-center max-w-7xl px-4">
@@ -67,7 +61,7 @@ export default function Nav() {
             <Link href="/" className="inline-block">
               {/* Desktop Logo */}
               <Image
-                src="/images/logo.png"
+                src="/images/jozo-logo.png"
                 alt="JOZO Music Box"
                 width={120}
                 height={30}
@@ -75,7 +69,7 @@ export default function Nav() {
               />
               {/* Mobile Logo */}
               <Image
-                src="/images/logo.png"
+                src="/images/jozo-logo.png"
                 alt="JOZO Music Box"
                 width={80}
                 height={20}

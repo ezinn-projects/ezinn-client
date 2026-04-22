@@ -10,15 +10,15 @@ const menuItems = [
 
 export default function MenuItems({ onClick }: { onClick?: () => void }) {
   return (
-    <ul className="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-6 bg-black md:bg-transparent">
+    <ul className="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-6 bg-white md:bg-transparent text-primary">
       {menuItems.map((item) => (
         <li
           key={item.href}
-          className="border-b border-white md:border-none py-4 md:py-0"
+          className="border-b border-primary/15 md:border-none py-4 md:py-0"
         >
           <Link
             href={item.href}
-            className="hover:underline whitespace-nowrap px-4 py-2 md:px-0"
+            className="text-primary hover:text-brand-hover hover:underline whitespace-nowrap px-4 py-2 md:px-0"
             onClick={onClick}
           >
             {item.label}

@@ -125,7 +125,7 @@ export function DateSelect({
 
   return (
     <div className="relative">
-      <label className="block font-medium text-lightpink mb-1">
+      <label className="block font-medium text-primary mb-1">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
@@ -133,7 +133,7 @@ export function DateSelect({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full px-4 py-2 text-left bg-white rounded-md border text-black border-black/20",
+          "w-full px-4 py-2 text-left bg-white rounded-md border text-foreground border-primary/20",
           "focus:outline-none focus:ring-2 focus:ring-black/20",
           "flex items-center justify-between",
           error && "border-red-500"
@@ -158,11 +158,11 @@ export function DateSelect({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg border border-black/20"
+            className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg border border-primary/20"
           >
             <div className="grid grid-cols-3 p-2 gap-2">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">
+                <label className="text-xs font-medium text-foreground/60">
                   Ngày
                 </label>
                 <div
@@ -178,10 +178,10 @@ export function DateSelect({
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSelect("day", day)}
                       className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
+                        "w-full px-2 py-1 text-sm rounded-md text-foreground",
                         isClient && selectedDate.getDate() === day
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-primary/5"
                       )}
                     >
                       {day}
@@ -191,7 +191,7 @@ export function DateSelect({
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">
+                <label className="text-xs font-medium text-foreground/60">
                   Tháng
                 </label>
                 <div
@@ -207,10 +207,10 @@ export function DateSelect({
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSelect("month", month)}
                       className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
+                        "w-full px-2 py-1 text-sm rounded-md text-foreground",
                         isClient && selectedDate.getMonth() + 1 === month
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-primary/5"
                       )}
                     >
                       {month}
@@ -220,7 +220,7 @@ export function DateSelect({
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">Năm</label>
+                <label className="text-xs font-medium text-foreground/60">Năm</label>
                 <div
                   ref={yearRef}
                   className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
@@ -234,10 +234,10 @@ export function DateSelect({
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleSelect("year", year)}
                       className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
+                        "w-full px-2 py-1 text-sm rounded-md text-foreground",
                         isClient && selectedDate.getFullYear() === year
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-primary/5"
                       )}
                     >
                       {year}
@@ -248,11 +248,11 @@ export function DateSelect({
             </div>
 
             {/* OK Button */}
-            <div className="p-2 border-t border-black/10">
+            <div className="p-2 border-t border-primary/10">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="w-full py-2 px-4 bg-lightpink text-white rounded-md hover:bg-lightpink/80 animate-buttonheartbeat transition-colors"
+                className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:bg-brand-hover animate-buttonheartbeat transition-colors"
               >
                 OK
               </button>

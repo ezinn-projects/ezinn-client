@@ -19,6 +19,6 @@ export type TimeSlot = {
 };
 
 export type RoomPrice = {
-  room_type: "small" | "medium" | "large";
+  room_type: "small" | "medium" | "large" | "dorm";
   price: number;
 };

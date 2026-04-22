@@ -30,12 +30,12 @@ export function RecruitmentSuccessModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-primary/40 p-4"
       role="presentation"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-lg md:p-8"
+        className="relative w-full max-w-md rounded-xl border border-primary/15 bg-white p-6 shadow-lg md:p-8"
         role="dialog"
         aria-modal="true"
         aria-labelledby="recruitment-success-title"
@@ -46,13 +46,13 @@ export function RecruitmentSuccessModal({
         </div>
         <h2
           id="recruitment-success-title"
-          className="mb-3 text-center text-lg font-semibold text-slate-900 md:text-xl"
+          className="mb-3 text-center text-lg font-semibold text-foreground md:text-xl"
         >
           Gửi đơn ứng tuyển thành công
         </h2>
-        <p className="text-center text-sm leading-relaxed text-slate-600 md:text-base">
+        <p className="text-center text-sm leading-relaxed text-primary/65 md:text-base">
           Jozo sẽ chủ động liên hệ cho bạn{" "}
-          <span className="font-medium text-slate-900">{displayName}</span> trong
+          <span className="font-medium text-foreground">{displayName}</span> trong
           thời gian sớm nhất. Cảm ơn bạn nhé!
         </p>
         <div className="mt-6 flex justify-center">

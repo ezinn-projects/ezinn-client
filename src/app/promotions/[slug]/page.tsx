@@ -24,7 +24,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: PromotionPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PromotionPageProps): Promise<Metadata> {
   const { slug } = await params;
   const promotion = promotions.find((p) => p.slug === slug);
 
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: PromotionPageProps): Promise<
   }
 
   return {
-    title: `${promotion.title} | Jozo Karaoke`,
+    title: `${promotion.title} | Jozo Music Box`,
     description: promotion.shortDescription,
     alternates: {
       canonical: `/promotions/${promotion.slug}`,
@@ -56,7 +58,9 @@ export async function generateMetadata({ params }: PromotionPageProps): Promise<
   };
 }
 
-export default async function PromotionDetailPage({ params }: PromotionPageProps) {
+export default async function PromotionDetailPage({
+  params,
+}: PromotionPageProps) {
   const { slug } = await params;
   const promotion = promotions.find((p) => p.slug === slug);
 
@@ -75,12 +79,12 @@ export default async function PromotionDetailPage({ params }: PromotionPageProps
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Back button */}
         <Link
           href="/"
-          className="inline-flex items-center text-lightpink hover:text-pink-600 mb-6 transition-colors"
+          className="inline-flex items-center text-primary hover:text-brand-hover mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Quay lại trang chủ
@@ -99,14 +103,16 @@ export default async function PromotionDetailPage({ params }: PromotionPageProps
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-              <Typography as="h1" variant="bold" className="text-3xl md:text-4xl mb-2">
+              <Typography
+                as="h1"
+                variant="bold"
+                className="text-3xl md:text-4xl mb-2"
+              >
                 {promotion.title}
               </Typography>
               <div className="flex items-center text-sm md:text-base">
                 <Calendar className="w-5 h-5 mr-2" />
-                <span>
-                  {formatDate(promotion.postedAt)}
-                </span>
+                <span>{formatDate(promotion.postedAt)}</span>
               </div>
             </div>
           </div>
@@ -114,8 +120,12 @@ export default async function PromotionDetailPage({ params }: PromotionPageProps
           {/* Content */}
           <div className="p-6 md:p-10">
             {/* Short description */}
-            <div className="bg-pink-50 border-l-4 border-lightpink p-4 mb-8 rounded">
-              <Typography as="p" variant="semibold" className="text-lightpink text-lg">
+            <div className="bg-accent/60 border-l-4 border-primary p-4 mb-8 rounded">
+              <Typography
+                as="p"
+                variant="semibold"
+                className="text-primary text-lg"
+              >
                 {promotion.shortDescription}
               </Typography>
             </div>
@@ -129,25 +139,25 @@ export default async function PromotionDetailPage({ params }: PromotionPageProps
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
               <Link
                 href="/small"
-                className="bg-lightpink hover:bg-pink-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
                 Đặt box Small (1-3 người)
               </Link>
               <Link
                 href="/medium"
-                className="bg-lightpink hover:bg-pink-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
-                Đặt box Medium (4-5 người)
+                Đặt box Medium (1-5 người)
               </Link>
               <Link
                 href="/large"
-                className="bg-lightpink hover:bg-pink-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
                 Đặt box Large (6-8 người)
               </Link>
               <a
                 href="tel:0359660934"
-                className="bg-white border-2 border-lightpink text-lightpink hover:bg-pink-50 font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
                 Liên hệ: 035 966 0934
               </a>
@@ -158,4 +168,3 @@ export default async function PromotionDetailPage({ params }: PromotionPageProps
     </div>
   );
 }
-

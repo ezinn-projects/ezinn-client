@@ -1,5 +1,4 @@
 import BackgroundCross from "@/components/background-cross";
-import ClosureAnnouncementBanner from "@/components/closure-announcement-banner";
 import Nav from "@/components/nav";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -22,19 +21,19 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://jozo.com.vn"),
   title: "JOZO Music Box - Music Box Biên Hòa",
   icons: {
-    icon: "/images/logo.png",
-    apple: "/images/logo.png",
-    shortcut: "/images/logo.png",
+    icon: "/images/jozo-logo.png",
+    apple: "/images/jozo-logo.png",
+    shortcut: "/images/jozo-logo.png",
   },
   keywords: [
     "JOZO Music Box",
-    "Karaoke Biên Hòa",
+    "Music Box Biên Hòa",
     "Norebang Hàn Quốc",
-    "box karaoke giá rẻ",
-    "Karaoke sinh viên",
-    "box hát đẹp",
-    "Studio karaoke",
-    "Hát hò Biên Hòa",
+    "box giải trí giá rẻ",
+    "music box sinh viên",
+    "box riêng đẹp",
+    "studio âm thanh",
+    "giải trí Biên Hòa",
     "Giá sinh viên",
     "Phụ kiện chụp hình",
     "Âm thanh chất lượng",
@@ -62,9 +61,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Tránh cache layout để thông báo đóng cửa (isUnderMaintenance) luôn đúng theo ngày hiện tại
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,25 +68,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <link rel="icon" href="/images/logo.png" />
+      <link rel="icon" href="/images/jozo-logo.png" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-lightpink text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-background text-foreground`}
       >
-        <BackgroundCross
-          className="fixed -z-10"
-          crossColor="#fb3a5d"
-          fade={true}
-          crossSize={40}
-        />
         {/* Header */}
         <header>
           <Nav />
         </header>
-
-        {/* Thông báo đóng cửa tạm thời (từ 28/02/2026) - hiển thị dưới header */}
-        <div className="pt-24">
-          <ClosureAnnouncementBanner />
-        </div>
 
         {/* Main */}
         <main className="flex-grow mt-32 mb-8 container mx-auto">
