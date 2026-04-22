@@ -9,7 +9,7 @@ import RoomImageCarousel from "./images-list";
 /** Nhãn loại hiển thị nổi bật (badge + overlay ảnh) */
 const TYPE_BADGE: Record<string, string> = {
   small: "S-Box",
-  medium: "M-Box",
+  medium: "S-Box",
   large: "L-Box",
   dorm: "Dorm",
 };

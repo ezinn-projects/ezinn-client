@@ -41,6 +41,7 @@ const EVE_TET_2026 = new Date(2026, 1, 16); // 16/2/2026
 const isEveTet2026 = (date: Date | null): boolean =>
   !!date && sameDay(date, EVE_TET_2026);
 const EVE_TET_CLOSE_MINUTES = 21 * 60; // 21:00 = 9h tối
+const DEFAULT_CLOSE_MINUTES = 24 * 60; // 24:00 = 0h hôm sau
 
 // Từ 18/2/2026 trở đi: cho phép đặt đến 23h
 const EXTENDED_HOURS_FROM = new Date(2026, 1, 18);
@@ -50,7 +51,7 @@ const isExtendedHoursDate = (date: Date | null): boolean =>
 // Constants và utility functions
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
-  Medium: "M-Box (1-5 người)",
+  Medium: "S-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
   Dorm: "Dorm",
 };
@@ -77,8 +78,11 @@ const generateTimeSlots = (
   return times;
 };
 
-// Generate all time slots from 10:00 to 22:00 (giờ kết thúc tối đa 23:00 khi đặt 1h từ 22:00)
-const ALL_START_TIMES = generateTimeSlots(10, 22, 30);
+// Generate all time slots from 09:00 đến 23:00 (slot cuối cùng là 23:00)
+const ALL_START_TIMES = generateTimeSlots(9, 23, 30).filter((time) => {
+  const [hour, minute] = time.split(":").map(Number);
+  return hour < 23 || (hour === 23 && minute === 0);
+});
 
 const DURATION_OPTIONS = [
   { value: 1, label: "1 giờ" },
@@ -163,10 +167,16 @@ const createISOString = (date: Date, time: string): string => {
 
 // Price calculation function
 type EstimatedPrice = {
+  originalPrice: number;
   finalPrice: number;
 };
 
 const PROMOTION_DISCOUNT_RATE = 0.2;
+const MINUTES_PER_DAY = 24 * 60;
+const toMinutes = (time: string): number => {
+  const [hour, minute] = time.split(":").map(Number);
+  return hour * 60 + minute;
+};
 
 const calculateEstimatedPrice = (
   selectedDate: Date | null,
@@ -182,7 +192,7 @@ const calculateEstimatedPrice = (
     !selectedDate ||
     prices.length === 0
   ) {
-    return { finalPrice: 0 };
+    return { originalPrice: 0, finalPrice: 0 };
   }
 
   // Xác định loại ngày: weekend (T7/CN) hoặc holiday → dùng giá weekend
@@ -207,23 +217,30 @@ const calculateEstimatedPrice = (
 
   // Tìm price rule phù hợp
   const priceRule = prices.find((p) => p.day_type === dayType);
-  if (!priceRule) return { finalPrice: 0 };
+  if (!priceRule) return { originalPrice: 0, finalPrice: 0 };
 
   // Tính tổng giá cho thời lượng đã chọn
   let totalPrice = 0;
   let currentTime = selectedStartTime;
   let remainingDuration = selectedDuration;
+  let safetyCounter = 0;
+  const MAX_PRICE_CALC_STEPS = 48; // 24 giờ theo bước 30 phút
 
-  while (remainingDuration > 0) {
+  while (remainingDuration > 0 && safetyCounter < MAX_PRICE_CALC_STEPS) {
+    safetyCounter += 1;
     // Tìm time slot chứa currentTime hoặc slot tiếp theo
     let timeSlot = priceRule.time_slots.find((slot) => {
-      const [startHour, startMinute] = slot.start.split(":").map(Number);
-      const [endHour, endMinute] = slot.end.split(":").map(Number);
-      const [currentHour, currentMinute] = currentTime.split(":").map(Number);
+      const startMinutes = toMinutes(slot.start);
+      let endMinutes = toMinutes(slot.end);
+      let currentMinutes = toMinutes(currentTime);
 
-      const startMinutes = startHour * 60 + startMinute;
-      const endMinutes = endHour * 60 + endMinute;
-      const currentMinutes = currentHour * 60 + currentMinute;
+      // Slot qua ngày, ví dụ 18:00 -> 00:00
+      if (endMinutes <= startMinutes) {
+        endMinutes += MINUTES_PER_DAY;
+        if (currentMinutes < startMinutes) {
+          currentMinutes += MINUTES_PER_DAY;
+        }
+      }
 
       return currentMinutes >= startMinutes && currentMinutes < endMinutes;
     });
@@ -231,11 +248,11 @@ const calculateEstimatedPrice = (
     // Nếu không tìm thấy slot (có thể do gap), tìm slot tiếp theo
     if (!timeSlot) {
       timeSlot = priceRule.time_slots.find((slot) => {
-        const [startHour, startMinute] = slot.start.split(":").map(Number);
-        const [currentHour, currentMinute] = currentTime.split(":").map(Number);
-
-        const startMinutes = startHour * 60 + startMinute;
-        const currentMinutes = currentHour * 60 + currentMinute;
+        let startMinutes = toMinutes(slot.start);
+        const currentMinutes = toMinutes(currentTime);
+        if (startMinutes <= currentMinutes) {
+          startMinutes += MINUTES_PER_DAY;
+        }
 
         return startMinutes > currentMinutes;
       });
@@ -252,21 +269,25 @@ const calculateEstimatedPrice = (
     }
 
     // Tính thời gian có thể sử dụng trong slot này
-    const [slotStartHour, slotStartMinute] = timeSlot.start
-      .split(":")
-      .map(Number);
-    const [slotEndHour, slotEndMinute] = timeSlot.end.split(":").map(Number);
-    const [currentHour, currentMinute] = currentTime.split(":").map(Number);
+    let slotStartMinutes = toMinutes(timeSlot.start);
+    let slotEndMinutes = toMinutes(timeSlot.end);
+    let currentMinutes = toMinutes(currentTime);
 
-    const slotStartMinutes = slotStartHour * 60 + slotStartMinute;
-    const slotEndMinutes = slotEndHour * 60 + slotEndMinute;
-    const currentMinutes = currentHour * 60 + currentMinute;
+    if (slotEndMinutes <= slotStartMinutes) {
+      slotEndMinutes += MINUTES_PER_DAY;
+      if (currentMinutes < slotStartMinutes) {
+        currentMinutes += MINUTES_PER_DAY;
+      }
+    }
 
     // Nếu currentTime nằm trước slot (do gap), bắt đầu từ đầu slot
     const actualStartMinutes = Math.max(currentMinutes, slotStartMinutes);
     const availableMinutesInSlot = slotEndMinutes - actualStartMinutes;
     const neededMinutes = remainingDuration * 60;
     const usedMinutes = Math.min(availableMinutesInSlot, neededMinutes);
+    if (usedMinutes <= 0) {
+      break;
+    }
 
     // Tính giá theo số phút thực tế sử dụng
     const usedHours = usedMinutes / 60;
@@ -275,7 +296,7 @@ const calculateEstimatedPrice = (
     remainingDuration -= usedMinutes / 60;
 
     // Cập nhật currentTime cho slot tiếp theo
-    const newMinutes = actualStartMinutes + usedMinutes;
+    const newMinutes = (actualStartMinutes + usedMinutes) % MINUTES_PER_DAY;
     const newHour = Math.floor(newMinutes / 60);
     const newMinute = newMinutes % 60;
     currentTime = `${newHour.toString().padStart(2, "0")}:${newMinute
@@ -283,12 +304,13 @@ const calculateEstimatedPrice = (
       .padStart(2, "0")}`;
   }
 
+  const originalPrice = Math.floor(totalPrice / 1000) * 1000;
   const discountedPrice = totalPrice * (1 - PROMOTION_DISCOUNT_RATE);
 
   // Làm tròn xuống đến hàng nghìn (VD: 50333 -> 50000)
   const finalPrice = Math.floor(discountedPrice / 1000) * 1000;
 
-  return { finalPrice };
+  return { originalPrice, finalPrice };
 };
 
 interface BookingFormProps {
@@ -348,13 +370,20 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return selectedDate ? getAvailableStartTimes(selectedDate) : [];
   }, [selectedDate]);
 
-  // 30 Tết 16/2: thời lượng tối đa = phải kết thúc trước 21h (9h đóng)
+  // Thời lượng tối đa theo giờ đóng cửa từng ngày
   const durationOptions = useMemo(() => {
-    if (!selectedDate || !isEveTet2026(selectedDate) || !selectedStartTime)
+    if (!selectedDate || !selectedStartTime) {
       return DURATION_OPTIONS;
+    }
+
     const [h, m] = selectedStartTime.split(":").map(Number);
     const startMinutes = h * 60 + m;
-    const maxDurationHours = (EVE_TET_CLOSE_MINUTES - startMinutes) / 60;
+
+    const closeMinutes = isEveTet2026(selectedDate)
+      ? EVE_TET_CLOSE_MINUTES
+      : DEFAULT_CLOSE_MINUTES;
+    const maxDurationHours = (closeMinutes - startMinutes) / 60;
+
     return DURATION_OPTIONS.filter((o) => o.value <= maxDurationHours);
   }, [selectedDate, selectedStartTime]);
 
@@ -362,7 +391,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return calculateEndTime(selectedStartTime, selectedDuration);
   }, [selectedStartTime, selectedDuration]);
 
-  const { finalPrice } = useMemo(() => {
+  const { originalPrice, finalPrice } = useMemo(() => {
     return calculateEstimatedPrice(
       selectedDate,
       selectedStartTime,
@@ -407,40 +436,32 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   }, [roomType, setValue]);
 
   useEffect(() => {
-    if (selectedDate && isClient) {
-      if (selectedStartTime && !availableTimes.includes(selectedStartTime)) {
-        setSelectedStartTime("");
-        setValue("startTime", "");
-      }
-      // 30 Tết 16/2: nếu thời lượng đã chọn vượt quá giờ đóng 21h thì reset xuống tối đa cho phép
-      if (
-        selectedDate &&
-        isEveTet2026(selectedDate) &&
-        selectedStartTime &&
-        durationOptions.length > 0
-      ) {
-        const allowed = durationOptions.some(
-          (o) => o.value === selectedDuration,
-        );
-        if (!allowed) {
-          const maxOption = durationOptions[durationOptions.length - 1];
-          setSelectedDuration(maxOption?.value ?? 1);
-        }
+    if (!selectedDate || !isClient || !selectedStartTime) return;
+    if (!availableTimes.includes(selectedStartTime)) {
+      setSelectedStartTime("");
+      setValue("startTime", "", { shouldDirty: true, shouldTouch: true });
+    }
+  }, [selectedDate, selectedStartTime, setValue, isClient, availableTimes]);
+
+  useEffect(() => {
+    if (!selectedStartTime) return;
+    if (durationOptions.length === 0) {
+      setSelectedStartTime("");
+      setValue("startTime", "", { shouldDirty: true, shouldTouch: true });
+      return;
+    }
+    const allowed = durationOptions.some((o) => o.value === selectedDuration);
+    if (!allowed) {
+      const fallbackDuration = durationOptions[durationOptions.length - 1]?.value;
+      if (fallbackDuration && fallbackDuration !== selectedDuration) {
+        setSelectedDuration(fallbackDuration);
       }
     }
-  }, [
-    selectedDate,
-    selectedStartTime,
-    setValue,
-    isClient,
-    availableTimes,
-    selectedDuration,
-    durationOptions,
-  ]);
+  }, [selectedStartTime, selectedDuration, durationOptions, setValue]);
 
   useEffect(() => {
     if (selectedStartTime && selectedDuration && isClient) {
-      setValue("endTime", endTime);
+      setValue("endTime", endTime, { shouldDirty: true });
     }
   }, [selectedStartTime, selectedDuration, setValue, isClient, endTime]);
 
@@ -756,8 +777,13 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                 <select
                   value={selectedStartTime}
                   onChange={(e) => {
-                    setSelectedStartTime(e.target.value);
-                    setValue("startTime", e.target.value);
+                    const nextStartTime = e.target.value;
+                    if (nextStartTime === selectedStartTime) return;
+                    setSelectedStartTime(nextStartTime);
+                    setValue("startTime", nextStartTime, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    });
                   }}
                   className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   disabled={!isClient || !selectedDate}
@@ -865,6 +891,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                 <div className="flex justify-between">
                   <span className="text-primary">Giá dự kiến:</span>
                   <div className="text-right">
+                    <span className="text-sm text-primary/70 line-through block">
+                      {!isClient || prices.length === 0
+                        ? "Đang tải..."
+                        : `${originalPrice.toLocaleString("vi-VN")}đ`}
+                    </span>
                     <span className="font-bold text-green-600 text-lg block">
                       {!isClient || prices.length === 0
                         ? "Đang tải..."

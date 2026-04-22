@@ -27,8 +27,8 @@ export default function NotFound() {
             Oops! Trang không tồn tại
           </h2>
           <p className="text-lg text-primary/70 mb-6">
-            Trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa. 
-            Có thể bạn đã nhập sai địa chỉ hoặc link đã hết hạn.
+            Trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa. Có thể bạn đã
+            nhập sai địa chỉ hoặc link đã hết hạn.
           </p>
 
           {/* Quick Links */}
@@ -51,7 +51,7 @@ export default function NotFound() {
                 href="/medium"
                 className="bg-white border-2 border-primary text-primary font-semibold py-3 px-6 rounded-xl hover:bg-accent transition-all duration-300"
               >
-                Đặt M-Box
+                Đặt S-Box
               </Link>
               <Link
                 href="/large"

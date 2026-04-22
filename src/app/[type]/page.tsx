@@ -31,7 +31,7 @@ const ROOM_TYPE_MAPPING: Record<string, RoomType> = {
 // Room type labels for SEO
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-3 người)",
-  Medium: "M-Box (1-5 người)",
+  Medium: "S-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
   Dorm: "Dorm",
 };

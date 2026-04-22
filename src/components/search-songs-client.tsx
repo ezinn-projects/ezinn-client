@@ -33,13 +33,13 @@ interface SearchSongsClientProps {
 
 async function searchYouTube(
   query: string,
-  roomScheduleId?: string
+  roomScheduleId?: string,
 ): Promise<VideoData> {
   const searchQuery = query.trim();
 
   const url = roomScheduleId
     ? `/api/search-videos?query=${encodeURIComponent(
-        searchQuery
+        searchQuery,
       )}&booking=${encodeURIComponent(roomScheduleId)}`
     : `/api/search-videos?query=${encodeURIComponent(searchQuery)}`;
 
@@ -63,12 +63,12 @@ export default function SearchSongsClient({
   const [error, setError] = useState<string | null>(null);
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [bookingDetails, setBookingDetails] = useState<Booking | null>(
-    initialBookingDetails || null
+    initialBookingDetails || null,
   );
   const [loadingBooking, setLoadingBooking] = useState(false);
   const [addingToQueue, setAddingToQueue] = useState<string | null>(null);
   const [queueSongs, setQueueSongs] = useState<QueueSong[]>(
-    initialBookingDetails?.queueSongs || []
+    initialBookingDetails?.queueSongs || [],
   );
   const [showQueueModal, setShowQueueModal] = useState(false);
 
@@ -124,7 +124,7 @@ export default function SearchSongsClient({
         setLoading(false);
       }
     },
-    [roomScheduleId]
+    [roomScheduleId],
   );
 
   // Effect để thực hiện tìm kiếm khi debouncedQuery thay đổi
@@ -355,7 +355,7 @@ export default function SearchSongsClient({
                           Đang thêm...
                         </>
                       ) : (
-                        <>
+                        <span className="flex items-center justify-center gap-1 whitespace-nowrap">
                           <svg
                             className="w-4 h-4 mr-2"
                             fill="currentColor"
@@ -364,7 +364,7 @@ export default function SearchSongsClient({
                             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                           </svg>
                           Thêm video
-                        </>
+                        </span>
                       )}
                     </button>
                     <a
@@ -553,7 +553,7 @@ export default function SearchSongsClient({
 
                             const result = await removeSongFromQueue(
                               roomScheduleId,
-                              index
+                              index,
                             );
 
                             if (result.success) {
