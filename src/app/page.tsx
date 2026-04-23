@@ -85,12 +85,13 @@ export default async function Home() {
   const rooms = await getRooms();
   const prices = await getPrices();
 
-  const displayRooms = [...rooms].sort((a, b) => {
+  const displayRooms = rooms
+    .filter((room) => room.type !== "small")
+    .sort((a, b) => {
     const typeOrder: Record<string, number> = {
-      small: 1,
-      medium: 2,
-      large: 3,
-      dorm: 4,
+      medium: 1,
+      large: 2,
+      dorm: 3,
     };
     const orderA = typeOrder[a.type] ?? 99;
     const orderB = typeOrder[b.type] ?? 99;

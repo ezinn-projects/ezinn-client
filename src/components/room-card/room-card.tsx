@@ -26,7 +26,7 @@ const BADGE_CLASS: Record<string, string> = {
 
 // Mapping số người / mô tả khu (dòng phụ dưới badge)
 const CAPACITY_MAPPING: Record<string, string> = {
-  small: "1-3 người · box",
+  small: "1-5 người · box",
   medium: "1-5 người · box",
   large: "6-8 người · box",
   dorm: "Nintendo Switch · dorm (Khu chung)",

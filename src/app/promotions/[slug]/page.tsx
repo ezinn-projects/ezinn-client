@@ -140,16 +140,10 @@ export default async function PromotionDetailPage({
             {/* CTA button */}
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
               <Link
-                href="/small"
-                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
-              >
-                Đặt box Small (1-3 người)
-              </Link>
-              <Link
                 href="/medium"
                 className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
-                Đặt box Medium (1-5 người)
+                Đặt S-Box (1-5 người)
               </Link>
               <Link
                 href="/large"

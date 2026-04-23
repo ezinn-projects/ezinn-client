@@ -50,7 +50,7 @@ const isExtendedHoursDate = (date: Date | null): boolean =>
 
 // Constants và utility functions
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
-  Small: "S-Box (1-3 người)",
+  Small: "S-Box (1-5 người)",
   Medium: "S-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
   Dorm: "Dorm",
@@ -209,7 +209,7 @@ const calculateEstimatedPrice = (
 
   // Ưu tiên mapping chính, đồng thời fallback small/medium để tương thích dữ liệu giá cũ/mới
   const roomTypeCandidates: Record<RoomType, string[]> = {
-    Small: ["small", "medium"],
+    Small: ["medium", "small"],
     Medium: ["medium", "small"],
     Large: ["large"],
     Dorm: ["dorm"],

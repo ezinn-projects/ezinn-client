@@ -211,7 +211,7 @@ export default function RoomImageGallery({
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute top-4 right-4 text-white hover:text-white/80 transition-colors z-10"
+              className="absolute right-4 top-28 text-white transition-colors hover:text-white/80 z-10"
               onClick={() => setSelectedImage(null)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

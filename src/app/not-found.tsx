@@ -40,18 +40,12 @@ export default function NotFound() {
               🏠 Về trang chủ
             </Link>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-              <Link
-                href="/small"
-                className="bg-white border-2 border-primary text-primary font-semibold py-3 px-6 rounded-xl hover:bg-accent transition-all duration-300"
-              >
-                Đặt S-Box
-              </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <Link
                 href="/medium"
                 className="bg-white border-2 border-primary text-primary font-semibold py-3 px-6 rounded-xl hover:bg-accent transition-all duration-300"
               >
-                Đặt S-Box
+                Đặt S-Box (1-5 người)
               </Link>
               <Link
                 href="/large"

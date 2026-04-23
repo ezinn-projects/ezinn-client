@@ -1,7 +1,7 @@
 import { getRoomDataByType } from "@/lib/data-cache";
 import BookingForm from "@/components/booking-form";
 import RoomImageGallery from "@/components/room-image-gallery";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 import { Price } from "@/types/price";
 
@@ -22,7 +22,7 @@ export const dynamicParams = false;
 
 // Room type mapping from URL params
 const ROOM_TYPE_MAPPING: Record<string, RoomType> = {
-  small: "Small",
+  small: "Medium",
   medium: "Medium",
   large: "Large",
   dorm: "Dorm",
@@ -30,7 +30,7 @@ const ROOM_TYPE_MAPPING: Record<string, RoomType> = {
 
 // Room type labels for SEO
 const ROOM_TYPE_LABELS: Record<RoomType, string> = {
-  Small: "S-Box (1-3 người)",
+  Small: "S-Box (1-5 người)",
   Medium: "S-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
   Dorm: "Dorm",
@@ -87,6 +87,10 @@ async function getPrices(): Promise<Price[]> {
 
 export default async function BookingPage({ params }: BookingPageProps) {
   const { type } = await params;
+
+  if (type === "small") {
+    redirect("/medium");
+  }
 
   const prices = await getPrices();
 
