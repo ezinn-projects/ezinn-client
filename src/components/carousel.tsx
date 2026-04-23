@@ -57,7 +57,7 @@ const BannerCarousel = () => {
                   src={banners[0].image}
                   alt=""
                   fill
-                  sizes="100vw"
+                  sizes="(min-width: 1280px) 1152px, (min-width: 768px) calc(100vw - 4rem), 100vw"
                   className="object-cover blur-2xl scale-110 opacity-60"
                   aria-hidden
                   priority
@@ -104,7 +104,7 @@ const BannerCarousel = () => {
                   src={image}
                   alt=""
                   fill
-                  sizes="100vw"
+                  sizes="(min-width: 1280px) 1152px, (min-width: 768px) calc(100vw - 4rem), 100vw"
                   className="object-cover blur-2xl scale-110 opacity-60"
                   aria-hidden
                   priority

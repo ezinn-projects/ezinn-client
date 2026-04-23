@@ -1,5 +1,5 @@
-import BackgroundCross from "@/components/background-cross";
 import Nav from "@/components/nav";
+import BoardGameNeonBackground from "@/components/ui/board-game-neon-background";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
@@ -70,20 +70,29 @@ export default function RootLayout({
     <html lang="vi">
       <link rel="icon" href="/images/jozo-logo.png" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground antialiased`}
       >
+        <BoardGameNeonBackground
+          className="fixed inset-0 z-0"
+          tileSize={320}
+          patternOpacity={0.18}
+          animated
+        />
+
         {/* Header */}
-        <header>
+        <header className="relative z-[9999]">
           <Nav />
         </header>
 
         {/* Main */}
-        <main className="flex-grow mt-32 mb-8 container mx-auto">
+        <main className="relative z-10 container mx-auto mt-32 mb-8 flex-grow">
           {children}
         </main>
 
         {/* Footer */}
-        <TwoColumnFooter />
+        <div className="relative z-10">
+          <TwoColumnFooter />
+        </div>
         <Toaster />
       </body>
     </html>

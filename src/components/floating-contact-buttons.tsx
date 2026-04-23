@@ -4,6 +4,7 @@ import {
   Facebook,
   Music2,
   Calendar,
+  Phone,
   MessageCircleMore,
   X,
 } from "lucide-react";
@@ -20,6 +21,8 @@ const FACEBOOK_URL =
   "https://www.facebook.com/profile.php?id=61575350724412&locale=vi_VN";
 const TIKTOK_URL =
   "https://www.tiktok.com/@jozomusicbox?is_from_webapp=1&sender_device=pc";
+const PHONE_LABEL = "Gọi";
+const PHONE_HREF = "tel:0359660934";
 
 const buttonBaseClass =
   "flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-lg backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -42,6 +45,7 @@ const FloatingContactButtons = () => {
     { label: "Facebook", href: FACEBOOK_URL, icon: Facebook },
     { label: "TikTok", href: TIKTOK_URL, icon: Music2 },
     { label: "Đặt box", icon: Calendar, onClick: handleBookingClick },
+    { label: PHONE_LABEL, href: PHONE_HREF, icon: Phone },
   ];
 
   return (
@@ -56,8 +60,8 @@ const FloatingContactButtons = () => {
             <a
               key={label}
               href={href}
-              target="_blank"
-              rel="noreferrer"
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel={href.startsWith("http") ? "noreferrer" : undefined}
               className={buttonBaseClass}
             >
               <Icon className="h-5 w-5 text-primary" />

@@ -432,7 +432,8 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     }
     const allowed = durationOptions.some((o) => o.value === selectedDuration);
     if (!allowed) {
-      const fallbackDuration = durationOptions[durationOptions.length - 1]?.value;
+      const fallbackDuration =
+        durationOptions[durationOptions.length - 1]?.value;
       if (fallbackDuration && fallbackDuration !== selectedDuration) {
         setSelectedDuration(fallbackDuration);
       }
@@ -876,12 +877,14 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                         ? "Đang tải..."
                         : `${originalPrice.toLocaleString("vi-VN")}đ`}
                     </span>
-                    <span className="font-bold text-green-600 text-lg block">
-                      {!isClient || prices.length === 0
-                        ? "Đang tải..."
-                        : `${finalPrice.toLocaleString("vi-VN")}đ`}
-                    </span>
-                    <span className="text-xs text-primary/70">KM 20%</span>
+                    <div className="flex items-center gap-1">
+                      <span className="font-bold text-green-600 text-lg block">
+                        {!isClient || prices.length === 0
+                          ? "Đang tải..."
+                          : `${finalPrice.toLocaleString("vi-VN")}đ`}
+                      </span>
+                      <span className="text-xs text-primary/70">(KM 20%)</span>
+                    </div>
                   </div>
                 </div>
               </div>

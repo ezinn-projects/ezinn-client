@@ -98,6 +98,8 @@ export default async function PromotionDetailPage({
               src={promotion.image}
               alt={promotion.title}
               fill
+              sizes="(min-width: 1280px) 1216px, (min-width: 768px) calc(100vw - 2rem), 100vw"
+              loading="eager"
               className="object-cover"
               priority
             />
