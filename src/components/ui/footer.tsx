@@ -31,18 +31,31 @@ const TwoColumnFooter = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between lg:flex-row">
           <div className="space-y-8">
-            <div className="flex items-center space-x-1 text-sm text-primary/75">
-              <span>Được phát triển với ❤️ bởi </span>
-              <Image
-                priority={true}
-                unoptimized={true}
-                width={100}
-                height={40}
-                src="/images/jozo-logo.png"
-                alt="logo"
-                className="h-7 w-auto"
-                style={{ width: "auto" }}
-              />
+            <div className="space-y-2 text-sm text-primary/75">
+              <div className="flex items-center space-x-1">
+                <span>Được phát triển với ❤️ bởi </span>
+                <Image
+                  priority={true}
+                  unoptimized={true}
+                  width={100}
+                  height={40}
+                  src="/images/jozo-logo.png"
+                  alt="logo"
+                  className="h-7 w-auto"
+                  style={{ width: "auto" }}
+                />
+              </div>
+              <p>
+                Địa chỉ:{" "}
+                <a
+                  href="https://maps.app.goo.gl/EY3WPsWzYbkaFQkZA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  30 Phan Trung
+                </a>
+              </p>
             </div>
           </div>
           {/* Navigations */}

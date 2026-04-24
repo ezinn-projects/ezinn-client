@@ -166,12 +166,6 @@ const createISOString = (date: Date, time: string): string => {
 };
 
 // Price calculation function
-type EstimatedPrice = {
-  originalPrice: number;
-  finalPrice: number;
-};
-
-const PROMOTION_DISCOUNT_RATE = 0.2;
 const MINUTES_PER_DAY = 24 * 60;
 const PRICE_CALC_EPSILON_HOURS = 0.0001;
 const toMinutes = (time: string): number => {
@@ -186,14 +180,14 @@ const calculateEstimatedPrice = (
   roomType: RoomType,
   prices: Price[],
   holidays: HolidayItem[] = [],
-): EstimatedPrice => {
+): number => {
   if (
     !selectedStartTime ||
     !selectedDuration ||
     !selectedDate ||
     prices.length === 0
   ) {
-    return { originalPrice: 0, finalPrice: 0 };
+    return 0;
   }
 
   // Xác định loại ngày: weekend (T7/CN) hoặc holiday → dùng giá weekend
@@ -218,7 +212,7 @@ const calculateEstimatedPrice = (
 
   // Tìm price rule phù hợp
   const priceRule = prices.find((p) => p.day_type === dayType);
-  if (!priceRule) return { originalPrice: 0, finalPrice: 0 };
+  if (!priceRule) return 0;
 
   // Tính giá theo phần giao nhau giữa interval đặt và từng time slot
   // Cách này xử lý chính xác các case giao khung, ví dụ 12:30-13:30
@@ -263,7 +257,7 @@ const calculateEstimatedPrice = (
 
   // Nếu hoàn toàn không match slot nào thì trả 0
   if (totalPrice <= 0) {
-    return { originalPrice: 0, finalPrice: 0 };
+    return 0;
   }
 
   // Không cộng quá thời lượng đặt trong trường hợp dữ liệu slot bị overlap nhau
@@ -284,13 +278,8 @@ const calculateEstimatedPrice = (
     return Math.floor(value / 1000) * 1000;
   };
 
-  const originalPrice = roundToThousand(totalPrice);
-  const discountedPrice = totalPrice * (1 - PROMOTION_DISCOUNT_RATE);
-
   // Case giao nhau nhiều slot sẽ làm tròn lên +1.000 nếu có phần lẻ
-  const finalPrice = roundToThousand(discountedPrice);
-
-  return { originalPrice, finalPrice };
+  return roundToThousand(totalPrice);
 };
 
 interface BookingFormProps {
@@ -371,7 +360,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     return calculateEndTime(selectedStartTime, selectedDuration);
   }, [selectedStartTime, selectedDuration]);
 
-  const { originalPrice, finalPrice } = useMemo(() => {
+  const estimatedPrice = useMemo(() => {
     return calculateEstimatedPrice(
       selectedDate,
       selectedStartTime,
@@ -872,19 +861,11 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
                 <div className="flex justify-between">
                   <span className="text-primary">Giá dự kiến:</span>
                   <div className="text-right">
-                    <span className="text-sm text-primary/70 line-through block">
+                    <span className="font-bold text-green-600 text-lg block">
                       {!isClient || prices.length === 0
                         ? "Đang tải..."
-                        : `${originalPrice.toLocaleString("vi-VN")}đ`}
+                        : `${estimatedPrice.toLocaleString("vi-VN")}đ`}
                     </span>
-                    <div className="flex items-center gap-1">
-                      <span className="font-bold text-green-600 text-lg block">
-                        {!isClient || prices.length === 0
-                          ? "Đang tải..."
-                          : `${finalPrice.toLocaleString("vi-VN")}đ`}
-                      </span>
-                      <span className="text-xs text-primary/70">(KM 20%)</span>
-                    </div>
                   </div>
                 </div>
               </div>
