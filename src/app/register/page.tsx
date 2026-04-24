@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -79,8 +78,8 @@ export default function RegisterForm() {
         Đăng ký tài khoản
       </h2>
       <p className="text-sm text-center text-primary/70 mb-4">
-        Đang phát triển chương trình membership nhaaaaa. cuối tháng 2 sẽ lên
-        được. hehe
+        Đang phát triển chương trình membership nhaaaaa. chưa biết khi nào done
+        nửa :((
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>

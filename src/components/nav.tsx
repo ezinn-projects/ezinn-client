@@ -44,7 +44,7 @@ export default function Nav() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999]">
+    <div className="fixed top-0 left-0 right-0 z-40">
       <nav
         className={`relative mx-auto overflow-hidden border-b border-primary/20 bg-background/45 px-4 text-primary shadow-[0_10px_35px_hsl(var(--primary)/0.12)] backdrop-blur-xl transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
