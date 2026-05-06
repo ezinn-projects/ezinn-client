@@ -7,13 +7,13 @@ import BookingSuccessModal from "@/components/ui/booking-success-modal";
 import { useTicketActions } from "@/hooks/use-ticket-actions";
 import { toast } from "@/hooks/use-toast";
 import { cancelBooking, createApiEndpoint } from "@/lib/api-utils";
-import { BookingFormData, bookingSchema } from "@/schemas/booking.schema";
+import { BookingFormData, BookingFormValues, bookingSchema } from "@/schemas/booking.schema";
 import { BookingRequest } from "@/types/booking.d";
 import { Price } from "@/types/price";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Mail, Phone, User, ArrowLeft } from "lucide-react";
+import { Phone, User, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -83,6 +83,30 @@ const ALL_START_TIMES = generateTimeSlots(9, 23, 30).filter((time) => {
   const [hour, minute] = time.split(":").map(Number);
   return hour < 23 || (hour === 23 && minute === 0);
 });
+
+type BookingActivityType = "nintendo-switch" | "music-box";
+
+const ACTIVITY_OPTIONS: { value: BookingActivityType; label: string }[] = [
+  { value: "nintendo-switch", label: "Chơi game Nintendo Switch" },
+  { value: "music-box", label: "Music Box" },
+];
+
+const ACTIVITY_NOTE_PREFIX: Record<BookingActivityType, string> = {
+  "nintendo-switch": "Nintendo Switch",
+  "music-box": "Music Box",
+};
+
+function buildBookingNote(
+  activityType: BookingActivityType,
+  userNote: string | undefined,
+): string | undefined {
+  const trimmed = (userNote ?? "").trim();
+  const tag = ACTIVITY_NOTE_PREFIX[activityType];
+  if (!trimmed) {
+    return `[${tag}]`;
+  }
+  return `[${tag}] ${trimmed}`;
+}
 
 const DURATION_OPTIONS = [
   { value: 1, label: "1 giờ" },
@@ -261,12 +285,25 @@ const calculateEstimatedPrice = (
   }
 
   // Không cộng quá thời lượng đặt trong trường hợp dữ liệu slot bị overlap nhau
-  if (
+  const overcovered =
     totalCoveredMinutes - bookingDurationMinutes >
-    PRICE_CALC_EPSILON_HOURS * 60
-  ) {
+    PRICE_CALC_EPSILON_HOURS * 60;
+  if (overcovered) {
     const normalizeRatio = bookingDurationMinutes / totalCoveredMinutes;
     totalPrice *= normalizeRatio;
+  }
+
+  // Bảng giá có thể “hở” 1 phút giữa hai slot ranh giới (vd 12:59 vs 13:01) → 13h–14h chỉ được 59 phút, thường thiếu ~1 nghìn so với 1 giờ.
+  if (!overcovered) {
+    const missingMinutes = bookingDurationMinutes - totalCoveredMinutes;
+    if (
+      missingMinutes > PRICE_CALC_EPSILON_HOURS * 60 &&
+      missingMinutes <= 1 + PRICE_CALC_EPSILON_HOURS * 60 &&
+      totalCoveredMinutes > PRICE_CALC_EPSILON_HOURS * 60
+    ) {
+      const avgHourlyRate = (totalPrice / totalCoveredMinutes) * 60;
+      totalPrice += (missingMinutes / 60) * avgHourlyRate;
+    }
   }
 
   const isCrossSlotBooking = overlappedSlotKeys.size > 1;
@@ -275,10 +312,9 @@ const calculateEstimatedPrice = (
       return Math.ceil(value / 1000) * 1000;
     }
 
-    return Math.floor(value / 1000) * 1000;
+    return Math.round(value / 1000) * 1000;
   };
 
-  // Case giao nhau nhiều slot sẽ làm tròn lên +1.000 nếu có phần lẻ
   return roundToThousand(totalPrice);
 };
 
@@ -319,20 +355,23 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     setValue,
-  } = useForm<BookingFormData>({
+  } = useForm<BookingFormValues, unknown, BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
       customerName: "",
       customerPhone: "",
-      customerEmail: "",
       roomType: roomType,
       startTime: "",
       endTime: "",
+      activityType: "",
       note: "",
     },
   });
+
+  const activityType = watch("activityType");
 
   // Memoized calculations
   const availableTimes = useMemo(() => {
@@ -477,11 +516,10 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         const bookingData: BookingRequest = {
           customerName: data.customerName,
           customerPhone: data.customerPhone,
-          customerEmail: data.customerEmail || undefined,
           roomType: data.roomType,
           startTime: startTimeISO,
           endTime: endTimeISO,
-          note: data.note || undefined,
+          note: buildBookingNote(data.activityType, data.note),
         };
 
         // Gọi API mới
@@ -674,20 +712,44 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
               prefix={<Phone className="h-4 w-4" />}
             />
 
-            <Input
-              label="Email"
-              {...register("customerEmail")}
-              placeholder="Nhập email của bạn (không bắt buộc)"
-              error={errors.customerEmail?.message}
-              prefix={<Mail className="h-4 w-4" />}
-              maxLength={50}
-            />
+            <div>
+              <label className="block text-primary mb-1">
+                Dịch vụ
+                <span className="text-red-500 ml-1">*</span>
+              </label>
+              <select
+                {...register("activityType")}
+                className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              >
+                <option value="">Chọn dịch vụ</option>
+                {ACTIVITY_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              {errors.activityType && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.activityType.message}
+                </p>
+              )}
+            </div>
 
             <Input
               label="Ghi chú"
               {...register("note")}
-              placeholder="Nhập ghi chú"
-              helpText="VD: Tổ chức sinh nhật, tổ chức tiệc, ..."
+              placeholder={
+                activityType === "nintendo-switch"
+                  ? "Thêm bạn muốn chơi game gì?"
+                  : activityType === "music-box"
+                    ? "Nhập ghi chú cho Jozo nhé"
+                    : "Nhập ghi chú"
+              }
+              helpText={
+                activityType === ""
+                  ? "VD: Tổ chức sinh nhật, tổ chức tiệc, ..."
+                  : undefined
+              }
               maxLength={100}
             />
           </div>

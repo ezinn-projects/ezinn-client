@@ -8,18 +8,21 @@ export const bookingSchema = z.object({
       /^(0)[0-9]{9}$/,
       "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)"
     ),
-  customerEmail: z
-    .union([
-      z.string().email("Email không hợp lệ").trim(),
-      z.string().length(0), // Cho phép chuỗi rỗng
-    ])
-    .optional(),
   roomType: z.enum(["Small", "Medium", "Large", "Dorm"], {
     errorMap: () => ({ message: "Vui lòng chọn loại phòng hợp lệ" }),
   }),
   startTime: z.string().min(1, "Vui lòng chọn thời gian bắt đầu"),
   endTime: z.string().min(1, "Vui lòng chọn thời gian kết thúc"),
+  activityType: z
+    .string()
+    .min(1, "Vui lòng chọn dịch vụ")
+    .pipe(
+      z.enum(["nintendo-switch", "music-box"], {
+        errorMap: () => ({ message: "Vui lòng chọn dịch vụ" }),
+      }),
+    ),
   note: z.string().optional(),
 });
 
-export type BookingFormData = z.infer<typeof bookingSchema>;
+export type BookingFormValues = z.input<typeof bookingSchema>;
+export type BookingFormData = z.output<typeof bookingSchema>;
