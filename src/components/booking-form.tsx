@@ -326,6 +326,7 @@ interface BookingFormProps {
 export default function BookingForm({ roomType, prices }: BookingFormProps) {
   const router = useRouter();
   const { downloadTicket } = useTicketActions();
+  const isDorm = roomType === "Dorm";
 
   // State management
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -366,7 +367,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       roomType: roomType,
       startTime: "",
       endTime: "",
-      activityType: "",
+      activityType: isDorm ? "nintendo-switch" : "",
       note: "",
     },
   });
@@ -442,6 +443,12 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   useEffect(() => {
     setValue("roomType", roomType);
   }, [roomType, setValue]);
+
+  useEffect(() => {
+    if (isDorm) {
+      setValue("activityType", "nintendo-switch");
+    }
+  }, [isDorm, setValue]);
 
   useEffect(() => {
     if (!selectedDate || !isClient || !selectedStartTime) return;
@@ -712,28 +719,30 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
               prefix={<Phone className="h-4 w-4" />}
             />
 
-            <div>
-              <label className="block text-primary mb-1">
-                Dịch vụ
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <select
-                {...register("activityType")}
-                className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
-              >
-                <option value="">Chọn dịch vụ</option>
-                {ACTIVITY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              {errors.activityType && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.activityType.message}
-                </p>
-              )}
-            </div>
+            {!isDorm && (
+              <div>
+                <label className="block text-primary mb-1">
+                  Dịch vụ
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <select
+                  {...register("activityType")}
+                  className="w-full border rounded px-3 py-2 text-foreground outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                >
+                  <option value="">Chọn dịch vụ</option>
+                  {ACTIVITY_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                {errors.activityType && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.activityType.message}
+                  </p>
+                )}
+              </div>
+            )}
 
             <Input
               label="Ghi chú"
