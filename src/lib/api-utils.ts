@@ -100,6 +100,51 @@ export const addSongToQueue = async (
   return result;
 };
 
+export interface ResetPasswordRequestBody {
+  forgot_password_token: string;
+  password: string;
+  confirm_password: string;
+}
+
+export const resetPassword = async (
+  data: ResetPasswordRequestBody
+): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    const apiUrl = createApiEndpoint("/users/reset-password");
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: result.message || "Đặt lại mật khẩu thành công",
+      };
+    }
+
+    return {
+      success: false,
+      message: result.message || "Có lỗi xảy ra khi đặt lại mật khẩu",
+    };
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return {
+      success: false,
+      message: "Có lỗi xảy ra khi đặt lại mật khẩu. Vui lòng thử lại sau.",
+    };
+  }
+};
+
 export const removeSongFromQueue = async (
   bookingId: string,
   index: number

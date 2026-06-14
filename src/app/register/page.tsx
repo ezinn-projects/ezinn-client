@@ -107,52 +107,21 @@ export default function RegisterForm() {
         />
 
         <Input
-          label="Passcode"
+          label="Mật khẩu"
           type="password"
           required
           {...register("password")}
           error={errors.password?.message}
           showPasswordToggle
-          maxLength={6}
-          onKeyDown={(e) => {
-            // Cho phép các phím đặc biệt
-            if (
-              e.key === "Backspace" ||
-              e.key === "Delete" ||
-              e.key === "ArrowLeft" ||
-              e.key === "ArrowRight" ||
-              e.key === "Tab" ||
-              /[0-9]/.test(e.key)
-            ) {
-              return;
-            }
-            e.preventDefault();
-          }}
-          helpText="Passcode chỉ bao gồm 6 chữ số"
+          helpText="Ít nhất 6 ký tự"
         />
 
         <Input
-          label="Xác nhận Passcode"
+          label="Xác nhận mật khẩu"
           type="password"
           {...register("confirm_password")}
           error={errors.confirm_password?.message}
           showPasswordToggle
-          maxLength={6}
-          onKeyDown={(e) => {
-            // Cho phép các phím đặc biệt
-            if (
-              e.key === "Backspace" ||
-              e.key === "Delete" ||
-              e.key === "ArrowLeft" ||
-              e.key === "ArrowRight" ||
-              e.key === "Tab" ||
-              /[0-9]/.test(e.key)
-            ) {
-              return;
-            }
-            e.preventDefault();
-          }}
-          helpText="Passcode chỉ bao gồm 6 chữ số"
         />
 
         <div className="mb-4">
