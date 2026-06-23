@@ -1,32 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MongoClient } from "mongodb";
 
 let client: MongoClient | null = null;
 let clientPromise: Promise<MongoClient>;
 
-function getMongoUri(): string {
-  if (process.env.NODE_ENV === "development") {
-    return "mongodb://localhost:27017/jozo";
-  }
+const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.VPS_IP}:${process.env.VPS_PORT}/${process.env.DB_NAME}?authSource=${process.env.VPS_AUTH_SOURCE}`;
 
-  const { DB_USER, DB_PASSWORD, VPS_IP, VPS_PORT, DB_NAME, VPS_AUTH_SOURCE } =
-    process.env;
-
-  if (
-    !DB_USER ||
-    !DB_PASSWORD ||
-    !VPS_IP ||
-    !VPS_PORT ||
-    !DB_NAME ||
-    !VPS_AUTH_SOURCE
-  ) {
-    throw new Error("Please add your MongoDB credentials to .env");
-  }
-
-  return `mongodb://${DB_USER}:${DB_PASSWORD}@${VPS_IP}:${VPS_PORT}/${DB_NAME}?authSource=${VPS_AUTH_SOURCE}`;
+if (!uri) {
+  throw new Error("Please add your MongoDB URI to .env.local");
 }
-
-const uri = getMongoUri();
 
 if (process.env.NODE_ENV === "development") {
   // Caching client in development
@@ -67,20 +48,11 @@ export async function ensureIndexes() {
     const db = client.db("jozo");
     const collection = db.collection("users");
 
-    await collection.createIndex(
-      { phone_number: 1 },
-      {
-        unique: true,
-        partialFilterExpression: { phone_number: { $type: "string" } }, // Chỉ index string values
-      }
-    );
+    await collection.createIndex({ phone_number: 1 }, { unique: true });
 
     await collection.createIndex(
       { email: 1 },
-      {
-        unique: true,
-        partialFilterExpression: { email: { $type: "string" } }, // Chỉ index string values
-      }
+      { unique: true, sparse: true }, // sparse: true cho phép null
     );
 
     console.log("Indexes created successfully");
