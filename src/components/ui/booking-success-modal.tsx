@@ -124,12 +124,6 @@ export default function BookingSuccessModal({
           >
             Tra cứu đặt box
           </Link>
-          <Link
-            href="/"
-            className="w-full py-3 bg-white text-center text-primary border-2 border-primary rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
-          >
-            Về trang chủ
-          </Link>
         </div>
       </div>
     </div>

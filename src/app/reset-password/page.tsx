@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
@@ -71,7 +72,7 @@ function ResetPasswordContent() {
 
   if (!token) {
     return (
-      <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md border border-red-100">
+      <FormCard className="max-w-md w-full mx-auto">
         <h2 className="text-2xl font-bold mb-4 text-center text-primary">
           Liên kết không hợp lệ
         </h2>
@@ -82,12 +83,12 @@ function ResetPasswordContent() {
         <Button asChild className="w-full">
           <Link href="/">Về trang chủ</Link>
         </Button>
-      </div>
+      </FormCard>
     );
   }
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md border border-red-100">
+    <FormCard className="max-w-md w-full mx-auto">
       <h2 className="text-2xl font-bold mb-2 text-center text-primary">
         Đặt lại mật khẩu
       </h2>
@@ -123,7 +124,7 @@ function ResetPasswordContent() {
           {isSubmitting ? "Đang xử lý..." : "Đặt lại mật khẩu"}
         </Button>
       </form>
-    </div>
+    </FormCard>
   );
 }
 

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { DateSelect } from "@/components/ui/date-select";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { RegisterFormData, registerSchema } from "@/schemas/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +30,9 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: false,
     defaultValues: {
       date_of_birth: defaultBirthDate || new Date(2006, 0, 1), // Fallback date for SSR
     },
@@ -73,16 +77,12 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md border border-red-100">
+    <FormCard className="max-w-md w-full mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-center text-primary">
-        Đăng ký tài khoản
+        Đăng ký thành viên
       </h2>
-      <p className="text-sm text-center text-primary/70 mb-4">
-        Đang phát triển chương trình membership nhaaaaa. chưa biết khi nào done
-        nửa :((
-      </p>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Họ và tên"
           required
@@ -102,6 +102,8 @@ export default function RegisterForm() {
         <Input
           label="Email"
           type="email"
+          placeholder="user@email.com"
+          required
           {...register("email")}
           error={errors.email?.message}
         />
@@ -152,6 +154,6 @@ export default function RegisterForm() {
           Đăng ký
         </Button>
       </form>
-    </div>
+    </FormCard>
   );
 }

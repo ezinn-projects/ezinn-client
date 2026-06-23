@@ -1,9 +1,9 @@
 import MenuItems from "./menu-items";
 
-export default function DesktopMenu() {
+export default function DesktopMenu({ authed }: { authed?: boolean }) {
   return (
     <div className="hidden md:flex items-center">
-      <MenuItems />
+      <MenuItems authed={authed} />
     </div>
   );
 }

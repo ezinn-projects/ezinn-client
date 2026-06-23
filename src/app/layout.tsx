@@ -2,6 +2,7 @@ import Nav from "@/components/nav";
 import BoardGameNeonBackground from "@/components/ui/board-game-neon-background";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { getCurrentUser } from "@/lib/auth-server";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -61,11 +62,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html lang="vi">
       <link rel="icon" href="/images/jozo-logo.png" />
@@ -81,7 +84,7 @@ export default function RootLayout({
 
         {/* Header */}
         <header className="relative z-[9999]">
-          <Nav />
+          <Nav currentUser={currentUser} />
         </header>
 
         {/* Main */}

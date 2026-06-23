@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
@@ -301,7 +302,7 @@ function BookingSearchContent() {
         </div>
 
         {/* Search Form */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-4 mb-8 hover:shadow-3xl transition-all duration-500">
+        <FormCard className="mb-8">
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1">
               <Input
@@ -372,11 +373,11 @@ function BookingSearchContent() {
               </div>
             </div>
           )}
-        </div>
+        </FormCard>
 
         {/* Tabs */}
         {searched && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+          <FormCard className="overflow-hidden p-0">
             <div className="bg-gradient-to-r from-muted/50 to-background px-4 sm:px-6 lg:px-8 py-2">
               <nav className="flex gap-1 sm:gap-2 lg:gap-1 overflow-x-auto scrollbar-hide">
                 {[
@@ -664,7 +665,7 @@ function BookingSearchContent() {
                 </div>
               )}
             </div>
-          </div>
+          </FormCard>
         )}
       </div>
 

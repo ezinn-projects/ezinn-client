@@ -1,6 +1,7 @@
 "use client";
 
 import { DateSelect } from "@/components/ui/date-select";
+import { formCardClassName } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import CancelBookingModal from "@/components/ui/cancel-booking-modal";
 import BookingSuccessModal from "@/components/ui/booking-success-modal";
@@ -361,6 +362,9 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
     setValue,
   } = useForm<BookingFormValues, unknown, BookingFormData>({
     resolver: zodResolver(bookingSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: false,
     defaultValues: {
       customerName: "",
       customerPhone: "",
@@ -672,7 +676,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   }, [selectedDuration]);
 
   return (
-    <div className="bg-white p-3 rounded-lg shadow-md">
+    <div className={formCardClassName}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <button

@@ -7,18 +7,15 @@ const MIN_AGE = 12;
 export const registerSchema = z
   .object({
     full_name: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự"),
-    email: z
-      .union([
-        z.string().email("Email không hợp lệ").trim(),
-        z.string().length(0), // Cho phép chuỗi rỗng
-        z.null(),
-      ])
-      .optional(),
+    email: z.union([
+      z.string().min(1, "Email không được để trống"),
+      z.string().email("Email không hợp lệ").trim(),
+    ]),
     phone_number: z
       .string()
       .regex(
         /^(0)[0-9]{9}$/,
-        "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)"
+        "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)",
       ),
     password: passwordSchema,
     confirm_password: z.string(),

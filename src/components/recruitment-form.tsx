@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { formCardClassName } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DateSelect } from "@/components/ui/date-select";
@@ -181,7 +182,7 @@ export function RecruitmentForm() {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="rounded-xl border border-primary/15 bg-white p-6 shadow-sm md:p-8"
+        className={formCardClassName}
         noValidate
         aria-busy={isSubmitting}
       >

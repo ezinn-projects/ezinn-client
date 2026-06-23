@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { EyeOpenIcon, EyeNoneIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 
@@ -32,20 +32,23 @@ export interface InputProps
  * Component Input dùng chung, hỗ trợ cả kiểu text và number.
  * - Nếu type là "number", sẽ tự động enforces giới hạn số ký tự (maxLength) trong hàm onChange.
  */
-const Input: React.FC<InputProps> = ({
-  label,
-  required,
-  helpText,
-  type = "text",
-  maxLength,
-  onChange,
-  className,
-  error,
-  prefix,
-  suffix,
-  showPasswordToggle,
-  ...props
-}) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    label,
+    required,
+    helpText,
+    type = "text",
+    maxLength,
+    onChange,
+    className,
+    error,
+    prefix,
+    suffix,
+    showPasswordToggle,
+    ...props
+  },
+  ref
+) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,11 +61,11 @@ const Input: React.FC<InputProps> = ({
     onChange?.(e);
   };
 
-  const inputType = showPasswordToggle
+  const computedType = showPasswordToggle
     ? showPassword
       ? "text"
       : "password"
-    : "text"; // Luôn sử dụng type="text"
+    : type;
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (type === "number") {
@@ -73,11 +76,8 @@ const Input: React.FC<InputProps> = ({
     }
   };
 
-  // Thêm key để force re-render khi có error
-  const animationKey = error ? "error" : "normal";
-
   return (
-    <div className="mb-4" key={animationKey}>
+    <div className="mb-4">
       {label && (
         <label className="block text-primary mb-1">
           {label}
@@ -95,10 +95,13 @@ const Input: React.FC<InputProps> = ({
           </div>
         )}
         <input
-          type={inputType}
+          ref={ref}
+          type={computedType}
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           maxLength={maxLength}
+          inputMode={type === "number" ? "numeric" : props.inputMode}
+          aria-invalid={Boolean(error)}
           className={cn(
             "w-full border rounded px-3 py-2 text-foreground outline-none",
             "transition-all duration-200 ease-in-out",
@@ -140,6 +143,6 @@ const Input: React.FC<InputProps> = ({
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
-};
+});
 
 export default Input;

@@ -106,6 +106,45 @@ export interface ResetPasswordRequestBody {
   confirm_password: string;
 }
 
+export const forgotPassword = async (
+  email: string,
+): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    const apiUrl = createApiEndpoint("/users/forgot-password");
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: result.message || "Đã gửi email đặt lại mật khẩu",
+      };
+    }
+
+    return {
+      success: false,
+      message: result.message || "Có lỗi xảy ra khi gửi email đặt lại mật khẩu",
+    };
+  } catch (error) {
+    console.error("Error requesting forgot password:", error);
+    return {
+      success: false,
+      message: "Có lỗi xảy ra khi gửi email đặt lại mật khẩu. Vui lòng thử lại sau.",
+    };
+  }
+};
+
 export const resetPassword = async (
   data: ResetPasswordRequestBody
 ): Promise<{

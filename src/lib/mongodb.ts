@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MongoClient } from "mongodb";
 
 let client: MongoClient | null = null;
@@ -49,20 +48,11 @@ export async function ensureIndexes() {
     const db = client.db("jozo");
     const collection = db.collection("users");
 
-    await collection.createIndex(
-      { phone_number: 1 },
-      {
-        unique: true,
-        partialFilterExpression: { phone_number: { $type: "string" } }, // Chỉ index string values
-      }
-    );
+    await collection.createIndex({ phone_number: 1 }, { unique: true });
 
     await collection.createIndex(
       { email: 1 },
-      {
-        unique: true,
-        partialFilterExpression: { email: { $type: "string" } }, // Chỉ index string values
-      }
+      { unique: true, sparse: true }, // sparse: true cho phép null
     );
 
     console.log("Indexes created successfully");

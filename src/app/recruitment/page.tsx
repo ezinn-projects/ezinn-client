@@ -36,7 +36,7 @@ export default function RecruitmentPage() {
           </h1>
         </header>
 
-        <div className="mb-8 rounded-xl border border-primary/15 bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-8 rounded-xl border border-red-100 bg-white p-6 shadow-sm md:p-8">
           <h2 className="mb-1 text-lg font-semibold text-foreground">
             Mô tả công việc
           </h2>

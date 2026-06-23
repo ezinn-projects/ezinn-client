@@ -3,21 +3,39 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const menuItems = [
+type MenuItem = {
+  href: string;
+  label: string;
+  hideWhenAuthed?: boolean;
+  showWhenAuthed?: boolean;
+};
+
+const menuItems: MenuItem[] = [
   { href: "/", label: "Trang chủ" },
-  { href: "/register", label: "Đăng ký thành viên" },
+  { href: "/register", label: "Đăng ký thành viên", hideWhenAuthed: true },
+  { href: "/login", label: "Đăng nhập", hideWhenAuthed: true },
+  { href: "/profile", label: "Hộ sơ & điểm", showWhenAuthed: true },
   { href: "/booking-search", label: "Tra cứu đặt box" },
   { href: "/recruitment", label: "Tuyển dụng" },
-  // { href: "/faq", label: "Câu hỏi thường gặp" },
 ];
 
 type MenuItemsProps = {
   onClick?: () => void;
   mobile?: boolean;
+  authed?: boolean;
 };
 
-export default function MenuItems({ onClick, mobile = false }: MenuItemsProps) {
+export default function MenuItems({
+  onClick,
+  mobile = false,
+  authed = false,
+}: MenuItemsProps) {
   const pathname = usePathname();
+  const visibleItems = menuItems.filter((item) => {
+    if (item.hideWhenAuthed && authed) return false;
+    if (item.showWhenAuthed && !authed) return false;
+    return true;
+  });
 
   return (
     <ul
@@ -27,7 +45,7 @@ export default function MenuItems({ onClick, mobile = false }: MenuItemsProps) {
           : "mt-4 flex flex-col bg-white md:mt-0 md:flex-row md:space-x-6 md:bg-transparent"
       }`}
     >
-      {menuItems.map((item) => {
+      {visibleItems.map((item) => {
         const isActive = pathname === item.href;
 
         return (

@@ -5,8 +5,17 @@ import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import MenuItems from "./menu-items";
+import Link from "next/link";
+import type { IMemberProfile } from "@/types/membership";
+import { getDisplayName } from "@/lib/auth-helpers";
 
-export default function MobileMenu() {
+export default function MobileMenu({
+  authed,
+  currentUser,
+}: {
+  authed?: boolean;
+  currentUser?: IMemberProfile | null;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
@@ -43,6 +52,8 @@ export default function MobileMenu() {
       window.removeEventListener("keydown", handleEsc);
     };
   }, []);
+
+  const displayName = getDisplayName(currentUser) || "Thành viên";
 
   return (
     <div className="flex sm:hidden">
@@ -141,7 +152,30 @@ export default function MobileMenu() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-3 py-4">
-                  <MenuItems mobile onClick={() => setMenuOpen(false)} />
+                  {authed && currentUser && (
+                    <Link
+                      href="/profile"
+                      onClick={() => setMenuOpen(false)}
+                      className="mb-4 flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3 transition hover:bg-primary/10"
+                    >
+                      <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+                        {(displayName[0] || "U").toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="truncate text-sm font-semibold">
+                          {displayName}
+                        </div>
+                        <div className="text-xs text-primary/70">
+                          Xem hồ sơ & điểm thưởng
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                  <MenuItems
+                    mobile
+                    authed={authed}
+                    onClick={() => setMenuOpen(false)}
+                  />
                 </div>
 
                 <div className="border-t border-primary/10 px-5 py-4">
@@ -152,7 +186,7 @@ export default function MobileMenu() {
               </div>
             </div>
           </>,
-          document.body
+          document.body,
         )}
     </div>
   );
