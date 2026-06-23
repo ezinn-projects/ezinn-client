@@ -26,7 +26,7 @@ export default function TemporaryClosurePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <div className="py-6 sm:py-8">
         <Link
           href="/"
           className="inline-flex items-center text-primary hover:text-brand-hover mb-6 transition-colors"

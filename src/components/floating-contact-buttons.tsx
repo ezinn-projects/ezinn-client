@@ -28,7 +28,7 @@ const buttonBaseClass =
   "flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-lg backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 const FloatingContactButtons = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleBookingClick = useCallback(() => {
     const el = document.getElementById("booking");
@@ -42,14 +42,14 @@ const FloatingContactButtons = () => {
   const toggleOpen = () => setOpen((v) => !v);
 
   const contacts: ContactAction[] = [
-    { label: "Facebook", href: FACEBOOK_URL, icon: Facebook },
-    { label: "TikTok", href: TIKTOK_URL, icon: Music2 },
     { label: "Đặt box", icon: Calendar, onClick: handleBookingClick },
     { label: PHONE_LABEL, href: PHONE_HREF, icon: Phone },
+    { label: "Facebook", href: FACEBOOK_URL, icon: Facebook },
+    { label: "TikTok", href: TIKTOK_URL, icon: Music2 },
   ];
 
   return (
-    <div className="fixed right-4 bottom-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed right-3 bottom-4 sm:right-4 sm:bottom-6 z-50 flex flex-col items-end gap-2 sm:gap-3">
       <div
         className={`flex flex-col items-end gap-3 transition-all ${
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"

@@ -28,15 +28,15 @@ function BulletList({ items }: { items: string[] }) {
 
 export default function RecruitmentPage() {
   return (
-    <div className="min-h-screen bg-background py-10">
-      <div className="container mx-auto max-w-3xl px-4">
+    <div className="min-h-screen bg-background py-6 sm:py-10">
+      <div className="mx-auto max-w-3xl w-full">
         <header className="mb-8 text-center md:mb-10">
           <h1 className="mt-2 text-2xl font-semibold text-foreground md:text-3xl">
             Jozo tìm đồng đội
           </h1>
         </header>
 
-        <div className="mb-8 rounded-xl border border-red-100 bg-white p-6 shadow-sm md:p-8">
+        <div className="mb-8 rounded-xl border border-red-100 bg-white p-4 shadow-sm sm:p-6 md:p-8">
           <h2 className="mb-1 text-lg font-semibold text-foreground">
             Mô tả công việc
           </h2>

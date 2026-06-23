@@ -290,13 +290,13 @@ function BookingSearchContent() {
         ></div>
       </div>
 
-      <div className="container mx-auto px-4 max-w-6xl relative z-10 py-20">
+      <div className="mx-auto max-w-6xl w-full relative z-10 py-8 sm:py-12 md:py-20">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="font-bold text-primary mb-4 text-2xl">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="font-bold text-primary mb-3 text-xl sm:text-2xl">
             Tra cứu đặt box
           </h1>
-          <p className="text-xl text-primary/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-primary/70 max-w-2xl mx-auto leading-relaxed">
             Nhập số điện thoại để tra cứu thông tin đặt box
           </p>
         </div>

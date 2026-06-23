@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="max-w-2xl w-full text-center">
         {/* 404 Animation */}
         <div className="mb-8">

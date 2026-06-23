@@ -60,7 +60,7 @@ export default function RoomCard({
       />
 
       {/* Content Section */}
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         <Link href={bookingUrl} className="block">
           <div className="mb-2">
             <span

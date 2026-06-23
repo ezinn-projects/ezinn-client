@@ -45,7 +45,7 @@ export default function PromotionCard({
         </div>
 
         {/* Content Section */}
-        <div className="p-5 flex-1 flex flex-col">
+        <div className="p-4 sm:p-5 flex-1 flex flex-col">
           <Typography
             as="h3"
             variant="semibold"

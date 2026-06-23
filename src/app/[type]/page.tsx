@@ -117,7 +117,7 @@ export default async function BookingPage({ params }: BookingPageProps) {
   const isDorm = roomType === "Dorm";
 
   return (
-    <div className="container mx-auto max-w-2xl">
+    <div className="max-w-2xl mx-auto w-full">
       {/* Room Images Gallery */}
       <RoomImageGallery
         images={roomImages}

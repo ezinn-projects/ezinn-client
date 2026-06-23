@@ -88,7 +88,7 @@ export default async function RootLayout({
         </header>
 
         {/* Main */}
-        <main className="relative z-10 container mx-auto mt-32 mb-8 flex-grow">
+        <main className="relative z-10 mx-auto w-full max-w-7xl flex-grow px-3 sm:px-5 md:px-8 lg:px-10 mt-24 sm:mt-28 md:mt-32 mb-6 sm:mb-8">
           {children}
         </main>
 

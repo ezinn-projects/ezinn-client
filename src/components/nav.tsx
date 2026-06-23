@@ -53,7 +53,7 @@ export default function Nav({
   return (
     <div className="fixed top-0 left-0 right-0 z-40">
       <nav
-        className={`relative mx-auto border-b border-primary/20 bg-background/45 px-4 text-primary shadow-[0_10px_35px_hsl(var(--primary)/0.12)] backdrop-blur-xl transition-all duration-500 ease-in-out ${
+        className={`relative mx-auto border-b border-primary/20 bg-background/45 text-primary shadow-[0_10px_35px_hsl(var(--primary)/0.12)] backdrop-blur-xl transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -76,7 +76,7 @@ export default function Nav({
           <span className="nav-red-beam absolute -top-9 left-[-45%] h-20 w-[46%] rounded-full" />
           <span className="nav-red-reflection absolute -bottom-12 left-[-42%] h-24 w-[42%] rounded-full" />
         </div>
-        <div className="container relative z-10 mx-auto flex h-24 max-w-7xl items-center justify-between px-4">
+        <div className="relative z-10 mx-auto flex h-20 sm:h-24 max-w-7xl items-center justify-between px-3 sm:px-5 md:px-8">
           <div className="flex-1">
             <Link href="/" className="inline-block">
               {/* Desktop Logo */}

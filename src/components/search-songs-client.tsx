@@ -155,7 +155,7 @@ export default function SearchSongsClient({
   }, [showQueueModal]);
 
   return (
-    <div className="container mx-auto">
+    <div className="w-full">
       <h1 className="text-3xl font-bold mb-6">Tìm kiếm video</h1>
 
       {roomScheduleId && (

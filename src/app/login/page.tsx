@@ -210,7 +210,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-4 px-4">
+    <div className="max-w-3xl mx-auto w-full space-y-4">
       <FormCard>
         <h1 className="text-2xl font-bold text-primary mb-2">
           Đăng nhập thành viên

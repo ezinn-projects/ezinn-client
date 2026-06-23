@@ -117,7 +117,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="container mx-auto px-4">
+      <div className="w-full">
         {/* Hero Section với Slider */}
         <TestimonialCarousel />
 
@@ -127,7 +127,7 @@ export default async function Home() {
         {/* Room Types Section */}
         <section
           id="booking"
-          className="mb-16 border border-border bg-gradient-to-b from-card to-muted/60 p-8 sm:p-10 rounded-2xl shadow-sm"
+          className="mb-10 sm:mb-16 border border-border bg-gradient-to-b from-card to-muted/60 p-4 sm:p-8 md:p-10 rounded-xl sm:rounded-2xl shadow-sm"
         >
           <div className="max-w-6xl mx-auto">
             {displayRooms.length > 0 && (

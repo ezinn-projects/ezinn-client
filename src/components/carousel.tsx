@@ -12,7 +12,7 @@ const banners = [
 ];
 
 const imageWrapperClass =
-  "relative w-full aspect-video overflow-hidden rounded-lg bg-primary";
+  "relative w-full aspect-video overflow-hidden rounded-none sm:rounded-lg bg-primary";
 
 const BannerCarousel = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -48,7 +48,7 @@ const BannerCarousel = () => {
 
   if (!isClient) {
     return (
-      <section className="pb-8 md:pb-12">
+      <section className="pb-6 sm:pb-8 md:pb-12 -mx-3 sm:mx-0">
         <div className="w-full max-w-6xl mx-auto">
           <div className="flex w-full items-center justify-center">
             <div className={imageWrapperClass}>
@@ -81,7 +81,7 @@ const BannerCarousel = () => {
   }
 
   return (
-    <section className="pb-8 md:pb-12">
+    <section className="pb-6 sm:pb-8 md:pb-12 -mx-3 sm:mx-0">
       <div className="w-full max-w-6xl mx-auto">
         <AnimatePresence mode="popLayout">
           <motion.div

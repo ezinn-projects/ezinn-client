@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
 
   if (submittedEmail) {
     return (
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-3xl mx-auto w-full">
         <FormCard className="max-w-md w-full mx-auto">
           <h2 className="text-2xl font-bold mb-2 text-center text-primary">
             Kiểm tra email của bạn
@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4">
+    <div className="max-w-3xl mx-auto w-full">
       <FormCard className="max-w-md w-full mx-auto">
         <h2 className="text-2xl font-bold mb-2 text-center text-primary">
           Quên mật khẩu

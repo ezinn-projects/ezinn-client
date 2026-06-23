@@ -124,11 +124,11 @@ export default async function ProfilePage() {
   const streakCount = Math.max(0, membershipResult?.streak?.count ?? 0);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 space-y-5 pb-10">
+    <div className="max-w-2xl mx-auto w-full space-y-5 pb-10">
       {/* Quyền lợi & Điểm */}
       {membershipResult && (
         <section className="space-y-4">
-          <div className="relative rounded-2xl border border-red-100/40 bg-gradient-to-br from-[#0f1118] via-[#161822] to-[#0b0c12] p-5 text-white shadow-xl">
+          <div className="relative rounded-2xl border border-red-100/40 bg-gradient-to-br from-[#0f1118] via-[#161822] to-[#0b0c12] p-4 sm:p-5 text-white shadow-xl">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.08),transparent_45%),radial-gradient(circle_at_80%_0%,rgba(255,66,66,0.2),transparent_35%)]" />
             <div className="relative space-y-4">
               <div className="space-y-1">
@@ -175,7 +175,7 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-sm">
             <StreakRewards
               windowDays={streakWindowDays}
               currentCount={streakCount}

@@ -28,7 +28,7 @@ const TwoColumnFooter = () => {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 sm:px-5 md:px-8 lg:px-10">
         <div className="flex flex-col justify-between lg:flex-row">
           <div className="space-y-8">
             <div className="space-y-2 text-sm text-primary/75">

@@ -12,7 +12,7 @@ export default async function ChangePasswordPage() {
   const displayName = getDisplayName(member) || "bạn";
 
   return (
-    <div className="max-w-3xl mx-auto px-4 space-y-5">
+    <div className="max-w-3xl mx-auto w-full space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-primary">Đổi mật khẩu</h1>
