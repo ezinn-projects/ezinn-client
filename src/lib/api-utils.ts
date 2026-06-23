@@ -100,6 +100,90 @@ export const addSongToQueue = async (
   return result;
 };
 
+export interface ResetPasswordRequestBody {
+  forgot_password_token: string;
+  password: string;
+  confirm_password: string;
+}
+
+export const forgotPassword = async (
+  email: string,
+): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    const apiUrl = createApiEndpoint("/users/forgot-password");
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: result.message || "Đã gửi email đặt lại mật khẩu",
+      };
+    }
+
+    return {
+      success: false,
+      message: result.message || "Có lỗi xảy ra khi gửi email đặt lại mật khẩu",
+    };
+  } catch (error) {
+    console.error("Error requesting forgot password:", error);
+    return {
+      success: false,
+      message: "Có lỗi xảy ra khi gửi email đặt lại mật khẩu. Vui lòng thử lại sau.",
+    };
+  }
+};
+
+export const resetPassword = async (
+  data: ResetPasswordRequestBody
+): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    const apiUrl = createApiEndpoint("/users/reset-password");
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        message: result.message || "Đặt lại mật khẩu thành công",
+      };
+    }
+
+    return {
+      success: false,
+      message: result.message || "Có lỗi xảy ra khi đặt lại mật khẩu",
+    };
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return {
+      success: false,
+      message: "Có lỗi xảy ra khi đặt lại mật khẩu. Vui lòng thử lại sau.",
+    };
+  }
+};
+
 export const removeSongFromQueue = async (
   bookingId: string,
   index: number
@@ -123,19 +207,19 @@ export const removeSongFromQueue = async (
     if (response.ok) {
       return {
         success: true,
-        message: result.message || "Đã xóa bài hát khỏi danh sách phát",
+        message: result.message || "Đã xóa bài khỏi danh sách phát",
       };
     } else {
       return {
         success: false,
-        message: result.message || "Có lỗi xảy ra khi xóa bài hát",
+        message: result.message || "Có lỗi xảy ra khi xóa bài",
       };
     }
   } catch (error) {
     console.error("Error removing song from queue:", error);
     return {
       success: false,
-      message: "Có lỗi xảy ra khi xóa bài hát. Vui lòng thử lại sau.",
+      message: "Có lỗi xảy ra khi xóa bài. Vui lòng thử lại sau.",
     };
   }
 };

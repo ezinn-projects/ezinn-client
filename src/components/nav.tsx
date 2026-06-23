@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import GlowLine from "./ui/glow-line";
 import DesktopMenu from "./desktop-nav";
 import MobileMenu from "./mobile-nav";
 import UserMenu from "./user-menu";
@@ -15,20 +16,11 @@ export default function Nav({
 }) {
   const authed = Boolean(currentUser);
   const [showHeader, setShowHeader] = useState(true); // Trạng thái hiển thị header
-  const [scrollY, setScrollY] = useState(0); // Theo dõi vị trí cuộn
-  const [isClient, setIsClient] = useState(false); // Kiểm tra client-side
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null); // Tham chiếu timeout để kiểm tra dừng cuộn
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient) return;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
 
       // Luôn hiện header khi ở đỉnh
       if (currentScrollY === 0) {
@@ -56,25 +48,40 @@ export default function Nav({
         clearTimeout(timeoutIdRef.current);
       }
     };
-  }, [isClient]);
+  }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50">
+    <div className="fixed top-0 left-0 right-0 z-40">
       <nav
-        className={`mx-auto px-4 transition-all duration-500 ease-in-out ${
+        className={`relative mx-auto border-b border-primary/20 bg-background/45 px-4 text-primary shadow-[0_10px_35px_hsl(var(--primary)/0.12)] backdrop-blur-xl transition-all duration-500 ease-in-out ${
           showHeader ? "translate-y-0" : "-translate-y-full"
-        } ${
-          isClient && scrollY > 0
-            ? "bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm"
-            : "bg-black"
         }`}
       >
-        <div className="container h-24 mx-auto flex justify-between items-center max-w-7xl px-4">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <GlowLine
+            orientation="horizontal"
+            position="0"
+            color="red"
+            className="opacity-85"
+          />
+          <GlowLine
+            orientation="horizontal"
+            position="calc(100% - 1px)"
+            color="red"
+            className="opacity-70"
+          />
+          <span className="nav-red-beam absolute -top-9 left-[-45%] h-20 w-[46%] rounded-full" />
+          <span className="nav-red-reflection absolute -bottom-12 left-[-42%] h-24 w-[42%] rounded-full" />
+        </div>
+        <div className="container relative z-10 mx-auto flex h-24 max-w-7xl items-center justify-between px-4">
           <div className="flex-1">
             <Link href="/" className="inline-block">
               {/* Desktop Logo */}
               <Image
-                src="/images/logo.png"
+                src="/images/jozo-logo.png"
                 alt="JOZO Music Box"
                 width={120}
                 height={30}
@@ -82,7 +89,7 @@ export default function Nav({
               />
               {/* Mobile Logo */}
               <Image
-                src="/images/logo.png"
+                src="/images/jozo-logo.png"
                 alt="JOZO Music Box"
                 width={80}
                 height={20}
@@ -97,7 +104,7 @@ export default function Nav({
 
           <div className="flex-1 flex justify-end items-center gap-3">
             <UserMenu currentUser={currentUser} />
-            <MobileMenu authed={authed} />
+            <MobileMenu authed={authed} currentUser={currentUser} />
           </div>
         </div>
       </nav>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { LoginFormData, loginSchema } from "@/schemas/login.schema";
@@ -13,6 +14,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const safeJsonParse = async (response: Response) => {
@@ -35,11 +37,29 @@ const hasAccessTokenCookie = async () => {
   }
 };
 
+type BackendFieldError = { msg?: string };
+
+const applyBackendFieldErrors = (
+  apiErrors: Record<string, BackendFieldError> | undefined,
+  setFieldError: (field: keyof LoginFormData, message: string) => void,
+) => {
+  if (!apiErrors) return;
+
+  for (const field of ["username", "password"] as const) {
+    const msg = apiErrors[field]?.msg;
+    if (msg) {
+      setFieldError(field, msg);
+    }
+  }
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -57,15 +77,15 @@ export default function LoginPage() {
 
   const rawDisplay = useMemo(
     () => JSON.stringify(rawResponse, null, 2) ?? "",
-    [rawResponse]
+    [rawResponse],
   );
   const meDisplay = useMemo(
     () => JSON.stringify(meResponse, null, 2) ?? "",
-    [meResponse]
+    [meResponse],
   );
   const membershipDisplay = useMemo(
     () => JSON.stringify(membershipResponse, null, 2) ?? "",
-    [membershipResponse]
+    [membershipResponse],
   );
   const memberName = useMemo(() => getDisplayName(member), [member]);
 
@@ -97,8 +117,16 @@ export default function LoginPage() {
     };
   }, [router]);
 
+  const onInvalid = () => {
+    toast({
+      title: "Vui lòng kiểm tra lại",
+      description: "Thông tin đăng nhập chưa hợp lệ.",
+    });
+  };
+
   const onSubmit = async (values: LoginFormData) => {
     setLoading(true);
+    clearErrors();
     setRawResponse(null);
     setMeResponse(null);
     setMembershipResponse(null);
@@ -114,17 +142,16 @@ export default function LoginPage() {
       setRawResponse(result);
 
       if (!response.ok || result?.success === false || !result) {
+        applyBackendFieldErrors(
+          (result as { errors?: Record<string, BackendFieldError> })?.errors,
+          (field, message) => setError(field, { type: "server", message }),
+        );
         throw new Error(result?.message || "Đăng nhập thất bại");
       }
 
       try {
         const meRes = await fetch("/api/auth/me", { cache: "no-store" });
         const meData = await safeJsonParse(meRes);
-        console.log("DEBUG /api/auth/me response", {
-          status: meRes.status,
-          ok: meRes.ok,
-          body: meData,
-        });
         setMeResponse(meData);
         const meMember = extractMember(meData);
         const finalMember = meMember ?? extractMember(result);
@@ -139,11 +166,6 @@ export default function LoginPage() {
           cache: "no-store",
         });
         const membershipData = await safeJsonParse(membershipRes);
-        console.log("DEBUG /api/membership/me response", {
-          status: membershipRes.status,
-          ok: membershipRes.ok,
-          body: membershipData,
-        });
         setMembershipResponse(membershipData);
         const membershipMember = extractMember(membershipData);
         if (membershipMember) {
@@ -189,17 +211,20 @@ export default function LoginPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-4 px-4">
-      <section className="bg-black rounded-2xl shadow-lg p-6 border border-white/10">
-        <h1 className="text-2xl font-bold text-lightpink mb-2">
+      <FormCard>
+        <h1 className="text-2xl font-bold text-primary mb-2">
           Đăng nhập thành viên
         </h1>
         {member && (
-          <p className="text-sm text-gray-200 mb-4">
+          <p className="text-sm text-primary/70 mb-4">
             Đã lưu: {memberName || member.username || "Thành viên"}
           </p>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          className="space-y-4"
+        >
           <Input
             label="Số điện thoại / Email / Username"
             required
@@ -209,16 +234,24 @@ export default function LoginPage() {
           />
 
           <Input
-            label="Passcode"
+            label="Mật khẩu"
             required
             type="password"
             showPasswordToggle
-            maxLength={6}
             placeholder="******"
             {...register("password")}
             error={errors.password?.message}
-            helpText="Passcode chỉ bao gồm 6 chữ số"
+            helpText="Ít nhất 6 ký tự"
           />
+
+          <div className="flex justify-end">
+            <Link
+              href="/forgot-password"
+              className="text-sm font-semibold text-pink-600 hover:underline"
+            >
+              Quên mật khẩu?
+            </Link>
+          </div>
 
           <Button
             type="submit"
@@ -227,8 +260,18 @@ export default function LoginPage() {
           >
             {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </Button>
+
+          <p className="text-center text-sm text-primary/70">
+            Chưa có tài khoản?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-pink-600 hover:underline"
+            >
+              Đăng ký
+            </Link>
+          </p>
         </form>
-      </section>
+      </FormCard>
     </div>
   );
 }

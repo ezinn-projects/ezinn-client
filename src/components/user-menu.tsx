@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { IMemberProfile } from "@/types/membership";
+import { getDisplayName, pickAvatarUrl } from "@/lib/auth-helpers";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -14,30 +15,29 @@ const getInitials = (name?: string) => {
   return `${parts[0][0] ?? ""}${parts[1][0] ?? ""}`.toUpperCase();
 };
 
-const pickDisplayName = (member?: IMemberProfile | null) =>
-  member?.full_name ||
-  member?.fullName ||
-  member?.name ||
-  member?.username ||
-  member?.email ||
-  member?.phone ||
-  member?.phone_number;
-
-const pickAvatarUrl = (member?: IMemberProfile | null) => {
-  if (!member) return null;
-  const candidates = [
-    (member as Record<string, unknown>).avatar,
-    (member as Record<string, unknown>).avatarUrl,
-    (member as Record<string, unknown>).avatar_url,
-    (member as Record<string, unknown>).image,
-    (member as Record<string, unknown>).photo,
-    (member as Record<string, unknown>).picture,
-  ];
-  const found = candidates.find(
-    (item) => typeof item === "string" && item.trim()
-  ) as string | undefined;
-  return found || null;
+type MenuLink = {
+  href: string;
+  label: string;
+  description?: string;
 };
+
+const memberLinks: MenuLink[] = [
+  {
+    href: "/profile",
+    label: "Hồ sơ & điểm thưởng",
+    description: "Xem hạng thành viên, điểm và streak",
+  },
+  {
+    href: "/profile/change-password",
+    label: "Đổi mật khẩu",
+    description: "Cập nhật mật khẩu đăng nhập",
+  },
+  {
+    href: "/booking-search",
+    label: "Tra cứu đặt box",
+    description: "Xem lịch sử đặt phòng của bạn",
+  },
+];
 
 export default function UserMenu({
   currentUser,
@@ -45,112 +45,175 @@ export default function UserMenu({
   currentUser?: IMemberProfile | null;
 }) {
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const displayName = useMemo(
-    () => pickDisplayName(currentUser) || "Thành viên",
-    [currentUser]
+    () => getDisplayName(currentUser) || "Thành viên",
+    [currentUser],
   );
 
   const avatarUrl = useMemo(() => pickAvatarUrl(currentUser), [currentUser]);
-
   const isAuthed = Boolean(currentUser);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [open]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      setOpen(false);
+      router.replace("/");
+      setTimeout(() => router.refresh(), 0);
+    }
+  };
 
   if (!isAuthed) return null;
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative z-20 hidden sm:block">
       <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm text-white hover:bg-white/20 transition"
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        className={cn(
+          "flex max-w-[180px] items-center gap-2 rounded-full border border-primary/20",
+          "bg-background/80 px-2.5 py-1.5 text-sm text-primary shadow-sm backdrop-blur",
+          "transition hover:border-primary/40 hover:bg-primary/5",
+          open && "border-primary/45 bg-primary/10",
+        )}
       >
         {avatarUrl ? (
           <Image
             src={avatarUrl}
-            alt="avatar"
+            alt={displayName}
             width={28}
             height={28}
-            className="h-7 w-7 rounded-full object-cover"
+            className="h-7 w-7 shrink-0 rounded-full object-cover"
           />
         ) : (
-          <div className="h-7 w-7 rounded-full bg-lightpink text-black grid place-items-center text-xs font-bold">
+          <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             {getInitials(displayName)}
           </div>
         )}
-        <span className="max-w-[120px] truncate">{displayName || "User"}</span>
+        <span className="truncate font-medium">{displayName}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className={cn(
+            "h-4 w-4 shrink-0 text-primary/70 transition-transform",
+            open && "rotate-180",
+          )}
+          aria-hidden
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
       </button>
 
       {open && (
         <div
+          role="menu"
           className={cn(
-            "absolute right-0 mt-2 w-64 rounded-2xl border border-white/10",
-            "bg-black/90 backdrop-blur shadow-xl p-4 space-y-2 text-sm text-white z-50"
+            "absolute right-0 z-[10002] mt-2 w-72 overflow-hidden rounded-2xl",
+            "border border-primary/15 bg-background/95 text-primary shadow-[0_20px_50px_hsl(var(--foreground)/0.18)] backdrop-blur-xl",
           )}
         >
-          <div className="flex items-center gap-3">
-            {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt="avatar"
-                width={40}
-                height={40}
-                className="h-10 w-10 rounded-full object-cover"
-              />
-            ) : (
-              <div className="h-10 w-10 rounded-full bg-lightpink text-black grid place-items-center text-sm font-bold">
-                {getInitials(displayName)}
+          <div className="border-b border-primary/10 bg-primary/5 px-4 py-4">
+            <div className="flex items-center gap-3">
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt={displayName}
+                  width={44}
+                  height={44}
+                  className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/20"
+                />
+              ) : (
+                <div className="grid h-11 w-11 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground ring-2 ring-primary/20">
+                  {getInitials(displayName)}
+                </div>
+              )}
+              <div className="min-w-0">
+                <div className="truncate font-semibold">{displayName}</div>
+                <div className="truncate text-xs text-primary/70">
+                  {currentUser?.email ||
+                    currentUser?.phone ||
+                    currentUser?.phone_number ||
+                    "Thành viên JOZO"}
+                </div>
               </div>
-            )}
-            <div>
-              <div className="font-semibold">{displayName || "User"}</div>
-              <div className="text-xs text-gray-300">
-                {currentUser?.username || currentUser?.email || "—"}
-              </div>
             </div>
+            <Link
+              href="/profile"
+              onClick={() => setOpen(false)}
+              className="mt-3 block w-full rounded-xl bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            >
+              Xem hồ sơ & điểm
+            </Link>
           </div>
-          <div className="space-y-1 text-xs text-gray-200">
-            <div className="flex justify-between">
-              <span>Email</span>
-              <span className="font-semibold">
-                {currentUser?.email || "—"}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Phone</span>
-              <span className="font-semibold">
-                {currentUser?.phone || currentUser?.phone_number || "—"}
-              </span>
-            </div>
+
+          <div className="py-1">
+            {memberLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="block px-4 py-3 transition hover:bg-primary/5"
+              >
+                <div className="text-sm font-medium">{item.label}</div>
+                {item.description && (
+                  <div className="text-xs text-primary/65">{item.description}</div>
+                )}
+              </Link>
+            ))}
           </div>
-          <Link
-            href="/profile"
-            onClick={() => setOpen(false)}
-            className="block w-full rounded-lg bg-white/10 hover:bg-white/20 text-white py-2 text-sm text-center transition"
-          >
-            Thông tin chi tiết
-          </Link>
-          <button
-            onClick={async () => {
-              try {
-                await fetch("/api/auth/logout", {
-                  method: "POST",
-                  credentials: "include",
-                });
-              } catch (err) {
-                console.error("Logout failed", err);
-              } finally {
-                setOpen(false);
-                router.replace("/");
-                setTimeout(() => router.refresh(), 0);
-              }
-            }}
-            className="w-full rounded-lg bg-white/10 hover:bg-white/20 text-white py-2 text-sm transition"
-          >
-            Đăng xuất
-          </button>
+
+          <div className="border-t border-primary/10 p-2">
+            <button
+              type="button"
+              role="menuitem"
+              onClick={handleLogout}
+              className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-red-600 transition hover:bg-red-50"
+            >
+              Đăng xuất
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
 }
-

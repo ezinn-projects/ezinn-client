@@ -1,16 +1,14 @@
-import next from 'eslint-config-next/core-web-vitals';
+import coreWebVitals from "eslint-config-next/core-web-vitals";
 
-// Apply Next.js flat config with Core Web Vitals rules
-const config = [
-  ...next,
+/** @type {import("eslint").Linter.Config[]} */
+const eslintConfig = [
+  ...coreWebVitals,
   {
     rules: {
-      // Allow simple client-side flags set in effects
-      'react-hooks/set-state-in-effect': 'off',
+      // Cho phép pattern isClient / animation mount phổ biến; nâng lên error khi refactor
+      "react-hooks/set-state-in-effect": "warn",
     },
-    // Keep tools from traversing dependencies in flat config mode
-    ignores: ['**/node_modules/**'],
   },
 ];
 
-export default config;
+export default eslintConfig;

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
@@ -16,6 +17,7 @@ const ROOM_NAME: Record<RoomType, string> = {
   Small: "Mini Squad (S - BOX)",
   Medium: "Party Zone (M - BOX)",
   Large: "Mega Squad (L - BOX)",
+  Dorm: "Dorm",
 };
 
 function BookingSearchContent() {
@@ -62,7 +64,7 @@ function BookingSearchContent() {
   // Hàm filter bookings theo tab
   const filterBookingsByTab = (
     bookings: Booking[],
-    tab: TabType
+    tab: TabType,
   ): Booking[] => {
     switch (tab) {
       case "all":
@@ -93,7 +95,7 @@ function BookingSearchContent() {
     try {
       // Chỉ truyền phone parameter vì backend chỉ yêu cầu phone là required
       const response = await fetch(
-        `/api/bookings/search?phone=${encodeURIComponent(phone)}`
+        `/api/bookings/search?phone=${encodeURIComponent(phone)}`,
       );
       const data = await response.json();
 
@@ -103,7 +105,7 @@ function BookingSearchContent() {
         // Filter theo tab hiện tại
         const filteredBookings = filterBookingsByTab(
           allBookingsData,
-          activeTab
+          activeTab,
         );
         setBookings(filteredBookings);
       } else {
@@ -175,7 +177,7 @@ function BookingSearchContent() {
       case "completed":
         return "text-purple-600";
       default:
-        return "text-gray-600";
+        return "text-primary/70";
     }
   };
 
@@ -231,7 +233,7 @@ function BookingSearchContent() {
         const updatedBookings = allBookings.map((booking) =>
           booking._id === bookingToCancel._id
             ? { ...booking, status: "cancelled" as const }
-            : booking
+            : booking,
         );
 
         setAllBookings(updatedBookings);
@@ -239,7 +241,7 @@ function BookingSearchContent() {
         // Filter lại theo tab hiện tại
         const filteredBookings = filterBookingsByTab(
           updatedBookings,
-          activeTab
+          activeTab,
         );
         setBookings(filteredBookings);
 
@@ -277,7 +279,7 @@ function BookingSearchContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-pink-50 to-rose-100 relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-40">
         <div
@@ -291,16 +293,16 @@ function BookingSearchContent() {
       <div className="container mx-auto px-4 max-w-6xl relative z-10 py-20">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="font-bold text-gray-900 mb-4 text-2xl text-lightpink">
+          <h1 className="font-bold text-primary mb-4 text-2xl">
             Tra cứu đặt box
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-primary/70 max-w-2xl mx-auto leading-relaxed">
             Nhập số điện thoại để tra cứu thông tin đặt box
           </p>
         </div>
 
         {/* Search Form */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-4 mb-8 hover:shadow-3xl transition-all duration-500">
+        <FormCard className="mb-8">
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="flex-1">
               <Input
@@ -315,7 +317,7 @@ function BookingSearchContent() {
                   }
                 }}
                 maxLength={10}
-                className="h-14 text-lg border-2 border-gray-200 rounded-xl focus:border-lightpink focus:ring-4 focus:ring-pink-100 transition-all duration-300 hover:border-gray-300"
+                className="h-14 text-lg border-2 border-primary/12 rounded-xl focus:border-primary focus:ring-4 focus:ring-brand-soft transition-all duration-300 hover:border-primary/18"
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
@@ -323,7 +325,7 @@ function BookingSearchContent() {
               onClick={handleSearch}
               disabled={loading}
               type="button"
-              className="h-14 px-10 bg-lightpink animate-buttonheartbeat text-white font-semibold rounded-xl transition-all duration-1000 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-3"
+              className="h-14 px-10 bg-primary animate-buttonheartbeat text-primary-foreground font-semibold rounded-xl transition-all duration-1000 transform hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-3"
             >
               {loading ? (
                 <>
@@ -371,12 +373,12 @@ function BookingSearchContent() {
               </div>
             </div>
           )}
-        </div>
+        </FormCard>
 
         {/* Tabs */}
         {searched && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-50 to-pink-50/50 px-4 sm:px-6 lg:px-8 py-2">
+          <FormCard className="overflow-hidden p-0">
+            <div className="bg-gradient-to-r from-muted/50 to-background px-4 sm:px-6 lg:px-8 py-2">
               <nav className="flex gap-1 sm:gap-2 lg:gap-1 overflow-x-auto scrollbar-hide">
                 {[
                   { key: "all", label: "Tất cả" },
@@ -390,15 +392,15 @@ function BookingSearchContent() {
                     onClick={() => handleTabChange(tab.key as TabType)}
                     className={`relative flex-shrink-0 py-3 px-2 sm:py-4 sm:px-4 lg:px-6 font-semibold text-xs sm:text-sm rounded-xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap ${
                       activeTab === tab.key
-                        ? "bg-white text-lightpink shadow-lg border border-pink-100"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-white/50"
+                        ? "bg-white text-primary shadow-lg border border-border"
+                        : "text-primary/70 hover:text-foreground hover:bg-white/50"
                     }`}
                   >
                     <span className="flex items-center justify-center gap-1 sm:gap-2">
                       {tab.label}
                     </span>
                     {activeTab === tab.key && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-lightpink/10 to-pink-500/10 rounded-xl"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-red-600/10 rounded-xl"></div>
                     )}
                   </button>
                 ))}
@@ -417,9 +419,9 @@ function BookingSearchContent() {
                 </div>
               ) : bookings.length === 0 ? (
                 <div className="text-center py-16">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/8 rounded-full mb-6">
                     <svg
-                      className="w-10 h-10 text-gray-400"
+                      className="w-10 h-10 text-primary/50"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -432,10 +434,10 @@ function BookingSearchContent() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  <h3 className="text-xl font-semibold text-primary/80 mb-2">
                     Không tìm thấy đặt box
                   </h3>
-                  <p className="text-gray-500 max-w-md mx-auto">
+                  <p className="text-primary/55 max-w-md mx-auto">
                     Không có đặt box nào được tìm thấy với số điện thoại này.
                     Vui lòng kiểm tra lại số điện thoại.
                   </p>
@@ -445,7 +447,7 @@ function BookingSearchContent() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-foreground">
                           Kết quả tìm kiếm
                         </h3>
                       </div>
@@ -457,20 +459,20 @@ function BookingSearchContent() {
                       <div
                         key={booking._id}
                         onClick={() => handleBookingClick(booking)}
-                        className="group bg-gradient-to-r from-white to-gray-50/50 border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-pink-200 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                        className="group bg-gradient-to-r from-white to-primary/5 border border-primary/12 rounded-2xl overflow-hidden hover:shadow-xl hover:border-red-200 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         {/* Header - Status & Action Buttons */}
-                        <div className="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div className="bg-gradient-to-r from-muted/40 to-white px-6 py-4 border-b border-border flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                           <div className="flex items-center gap-3">
                             <p
                               className={`text-lg font-bold ${getStatusColor(
-                                booking.status
+                                booking.status,
                               )}`}
                             >
                               {getStatusText(booking.status)}
                             </p>
-                            <span className="bg-gradient-to-r from-lightpink to-pink-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                            <span className="bg-gradient-to-r from-primary to-red-700 text-primary-foreground px-3 py-1 rounded-lg text-sm font-semibold">
                               #{getBookingCode(booking)}
                             </span>
                           </div>
@@ -481,7 +483,7 @@ function BookingSearchContent() {
                               <Link
                                 href={`/search-songs/${booking._id}`}
                                 onClick={(e) => e.stopPropagation()}
-                                className="bg-gradient-to-r from-lightpink to-pink-500 text-white px-4 py-2 rounded-lg hover:from-pink-500 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-md text-sm font-medium"
+                                className="bg-gradient-to-r from-primary to-red-700 text-primary-foreground px-4 py-2 rounded-lg hover:from-red-800 hover:to-brand-hover transition-all duration-300 transform hover:scale-105 flex items-center gap-2 shadow-md text-sm font-medium"
                               >
                                 <svg
                                   className="w-4 h-4"
@@ -529,9 +531,9 @@ function BookingSearchContent() {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Customer Info */}
                             <div className="space-y-3">
-                              <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+                              <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
                                 <svg
-                                  className="w-5 h-5 text-lightpink"
+                                  className="w-5 h-5 text-primary"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -546,9 +548,9 @@ function BookingSearchContent() {
                                 {booking.customerName}
                               </h3>
                               <div className="space-y-2">
-                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                <p className="text-sm text-primary/70 flex items-center gap-2">
                                   <svg
-                                    className="w-4 h-4 text-lightpink flex-shrink-0"
+                                    className="w-4 h-4 text-primary flex-shrink-0"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -563,9 +565,9 @@ function BookingSearchContent() {
                                   {booking.customerPhone}
                                 </p>
                                 {booking.customerEmail && (
-                                  <p className="text-sm text-gray-600 flex items-center gap-2 break-all">
+                                  <p className="text-sm text-primary/70 flex items-center gap-2 break-all">
                                     <svg
-                                      className="w-4 h-4 text-lightpink flex-shrink-0"
+                                      className="w-4 h-4 text-primary flex-shrink-0"
                                       fill="none"
                                       stroke="currentColor"
                                       viewBox="0 0 24 24"
@@ -585,9 +587,9 @@ function BookingSearchContent() {
 
                             {/* Booking Details */}
                             <div className="space-y-3">
-                              <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+                              <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
                                 <svg
-                                  className="w-5 h-5 text-lightpink"
+                                  className="w-5 h-5 text-primary"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -602,7 +604,7 @@ function BookingSearchContent() {
                                 {ROOM_NAME[booking.actualRoomType]}
                               </h3>
                               <div className="space-y-2">
-                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                <p className="text-sm text-primary/70 flex items-center gap-2">
                                   <svg
                                     className="w-4 h-4 text-blue-500 flex-shrink-0"
                                     fill="none"
@@ -619,7 +621,7 @@ function BookingSearchContent() {
                                   <span className="font-medium">Ngày đặt:</span>
                                   {formatDateTime(booking.createdAt || "")}
                                 </p>
-                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                <p className="text-sm text-primary/70 flex items-center gap-2">
                                   <svg
                                     className="w-4 h-4 text-green-500 flex-shrink-0"
                                     fill="none"
@@ -636,7 +638,7 @@ function BookingSearchContent() {
                                   <span className="font-medium">Bắt đầu:</span>
                                   {formatDateTime(booking.startTime)}
                                 </p>
-                                <p className="text-sm text-gray-600 flex items-center gap-2">
+                                <p className="text-sm text-primary/70 flex items-center gap-2">
                                   <svg
                                     className="w-4 h-4 text-red-500 flex-shrink-0"
                                     fill="none"
@@ -663,20 +665,20 @@ function BookingSearchContent() {
                 </div>
               )}
             </div>
-          </div>
+          </FormCard>
         )}
       </div>
 
       {/* Detail Modal */}
       {showDetailModal && selectedBooking && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-primary/45 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-lightpink to-pink-500 text-white p-6 rounded-t-3xl">
+            <div className="bg-gradient-to-r from-primary to-red-700 text-primary-foreground p-6 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold">Chi tiết đặt box</h2>
-                  <p className="text-pink-100 mt-1">
+                  <p className="text-red-100 mt-1">
                     Mã đặt box: #{getBookingCode(selectedBooking)}
                   </p>
                 </div>
@@ -704,10 +706,10 @@ function BookingSearchContent() {
             {/* Modal Content */}
             <div className="p-6 space-y-6">
               {/* Customer Info */}
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <h3 className="font-semibold text-lg text-gray-900 mb-3 flex items-center gap-2">
+              <div className="bg-primary/6 rounded-2xl p-4">
+                <h3 className="font-semibold text-lg text-foreground mb-3 flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-lightpink"
+                    className="w-5 h-5 text-primary"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -722,16 +724,16 @@ function BookingSearchContent() {
                   Thông tin khách hàng
                 </h3>
                 <div className="space-y-2">
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Tên:</span>{" "}
                     {selectedBooking.customerName}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">SĐT:</span>{" "}
                     {selectedBooking.customerPhone}
                   </p>
                   {selectedBooking.customerEmail && (
-                    <p className="text-gray-700">
+                    <p className="text-primary/80">
                       <span className="font-medium">Email:</span>{" "}
                       {selectedBooking.customerEmail}
                     </p>
@@ -740,8 +742,8 @@ function BookingSearchContent() {
               </div>
 
               {/* Booking Details */}
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <h3 className="font-semibold text-lg text-gray-900 mb-3 flex items-center gap-2">
+              <div className="bg-primary/6 rounded-2xl p-4">
+                <h3 className="font-semibold text-lg text-foreground mb-3 flex items-center gap-2">
                   <svg
                     className="w-5 h-5 text-green-500"
                     fill="none"
@@ -758,27 +760,27 @@ function BookingSearchContent() {
                   Thông tin đặt box
                 </h3>
                 <div className="space-y-2">
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Loại box:</span>{" "}
                     {ROOM_NAME[selectedBooking.actualRoomType]}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Ngày đặt:</span>{" "}
                     {formatDateTime(selectedBooking.createdAt || "")}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Thời gian bắt đầu:</span>{" "}
                     {formatDateTime(selectedBooking.startTime)}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Thời gian kết thúc:</span>{" "}
                     {formatDateTime(selectedBooking.endTime)}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-primary/80">
                     <span className="font-medium">Trạng thái:</span>
                     <span
                       className={`ml-2 font-semibold ${getStatusColor(
-                        selectedBooking.status
+                        selectedBooking.status,
                       )}`}
                     >
                       {getStatusText(selectedBooking.status)}
@@ -789,13 +791,13 @@ function BookingSearchContent() {
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-gray-50 px-6 py-4 rounded-b-3xl">
+            <div className="bg-primary/6 px-6 py-4 rounded-b-3xl">
               <div className="flex gap-3">
                 {selectedBooking.status === "booked" && (
                   <>
                     <Link
                       href={`/search-songs/${selectedBooking._id}`}
-                      className="flex-1 bg-gradient-to-r from-lightpink to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                      className="flex-1 bg-gradient-to-r from-primary to-red-700 hover:from-red-800 hover:to-brand-hover text-primary-foreground font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
                     >
                       <svg
                         className="w-4 h-4"
@@ -844,7 +846,7 @@ function BookingSearchContent() {
 
       {/* Cancel Confirmation Modal */}
       {showCancelModal && bookingToCancel && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-primary/45 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full">
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-t-3xl">
@@ -879,51 +881,51 @@ function BookingSearchContent() {
             {/* Modal Content */}
             <div className="p-6">
               <div className="text-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   Bạn có chắc chắn muốn hủy box này?
                 </h3>
 
-                <p className="text-gray-600 mb-6">
+                <p className="text-primary/70 mb-6">
                   Hành động này không thể hoàn tác. Trạng thái đặt sẽ được hủy
                   và không thể thể khôi phục.
                 </p>
 
                 {/* Booking Info */}
-                <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-                  <h4 className="font-semibold text-gray-900 mb-3">
+                <div className="bg-primary/6 rounded-lg p-4 mb-6 text-left">
+                  <h4 className="font-semibold text-foreground mb-3">
                     Thông tin:
                   </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Tên khách hàng:</span>
-                      <span className="font-medium text-lightpink">
+                      <span className="text-primary/70">Tên khách hàng:</span>
+                      <span className="font-medium text-primary">
                         {bookingToCancel.customerName}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Số điện thoại:</span>
-                      <span className="font-medium text-lightpink">
+                      <span className="text-primary/70">Số điện thoại:</span>
+                      <span className="font-medium text-primary">
                         {bookingToCancel.customerPhone}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Loại box:</span>
-                      <span className="font-medium text-lightpink">
+                      <span className="text-primary/70">Loại box:</span>
+                      <span className="font-medium text-primary">
                         {ROOM_NAME[bookingToCancel.originalRoomType]}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Thời gian:</span>
-                      <span className="font-medium text-lightpink">
+                      <span className="text-primary/70">Thời gian:</span>
+                      <span className="font-medium text-primary">
                         {formatDateTime(bookingToCancel.startTime)} -{" "}
                         {formatDateTime(bookingToCancel.endTime)}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Trạng thái:</span>
+                      <span className="text-primary/70">Trạng thái:</span>
                       <span
                         className={`font-semibold ${getStatusColor(
-                          bookingToCancel.status
+                          bookingToCancel.status,
                         )}`}
                       >
                         {getStatusText(bookingToCancel.status)}
@@ -937,7 +939,7 @@ function BookingSearchContent() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowCancelModal(false)}
-                  className="flex-1 py-3 px-4 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100 transition-colors font-medium"
+                  className="flex-1 py-3 px-4 border border-primary/18 rounded-xl text-primary/80 hover:bg-primary/8 transition-colors font-medium"
                   disabled={isCancelling}
                 >
                   Không hủy
@@ -984,7 +986,7 @@ export default function BookingSearchPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-pink-50 to-rose-100 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <JozoLoaderWithText
             text="Đang tải trang..."
             size="lg"

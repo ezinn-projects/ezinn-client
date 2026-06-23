@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     const applicationData = {
       ...validatedData,
       birthDate, // Store as Date in database
+      note: validatedData.note.trim(),
       submittedAt: new Date(),
       status: "pending", // pending, reviewed, contacted, hired, rejected
     };

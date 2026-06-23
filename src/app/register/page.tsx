@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { DateSelect } from "@/components/ui/date-select";
+import { FormCard } from "@/components/ui/form-card";
 import Input from "@/components/ui/input";
 import { RegisterFormData, registerSchema } from "@/schemas/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -77,14 +77,10 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-6 bg-black rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-lightpink">
-        Đăng ký tài khoản
+    <FormCard className="max-w-md w-full mx-auto">
+      <h2 className="text-2xl font-bold mb-6 text-center text-primary">
+        Đăng ký thành viên
       </h2>
-      <p className="text-sm text-center text-gray-300 mb-4">
-        Đang phát triển chương trình membership nhaaaaa. cuối tháng 2 sẽ lên
-        được. hehe
-      </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
@@ -106,57 +102,28 @@ export default function RegisterForm() {
         <Input
           label="Email"
           type="email"
+          placeholder="user@email.com"
+          required
           {...register("email")}
           error={errors.email?.message}
         />
 
         <Input
-          label="Passcode"
+          label="Mật khẩu"
           type="password"
           required
           {...register("password")}
           error={errors.password?.message}
           showPasswordToggle
-          maxLength={6}
-          onKeyDown={(e) => {
-            // Cho phép các phím đặc biệt
-            if (
-              e.key === "Backspace" ||
-              e.key === "Delete" ||
-              e.key === "ArrowLeft" ||
-              e.key === "ArrowRight" ||
-              e.key === "Tab" ||
-              /[0-9]/.test(e.key)
-            ) {
-              return;
-            }
-            e.preventDefault();
-          }}
-          helpText="Passcode chỉ bao gồm 6 chữ số"
+          helpText="Ít nhất 6 ký tự"
         />
 
         <Input
-          label="Xác nhận Passcode"
+          label="Xác nhận mật khẩu"
           type="password"
           {...register("confirm_password")}
           error={errors.confirm_password?.message}
           showPasswordToggle
-          maxLength={6}
-          onKeyDown={(e) => {
-            // Cho phép các phím đặc biệt
-            if (
-              e.key === "Backspace" ||
-              e.key === "Delete" ||
-              e.key === "ArrowLeft" ||
-              e.key === "ArrowRight" ||
-              e.key === "Tab" ||
-              /[0-9]/.test(e.key)
-            ) {
-              return;
-            }
-            e.preventDefault();
-          }}
-          helpText="Passcode chỉ bao gồm 6 chữ số"
         />
 
         <div className="mb-4">
@@ -171,7 +138,7 @@ export default function RegisterForm() {
                   error={errors.date_of_birth?.message}
                 />
               ) : (
-                <div className="w-full border rounded px-3 py-2 text-gray-400 bg-gray-100">
+                <div className="w-full border rounded px-3 py-2 text-primary/50 bg-primary/8">
                   Đang tải...
                 </div>
               )
@@ -181,11 +148,12 @@ export default function RegisterForm() {
 
         <Button
           type="submit"
-          className="w-full animate-buttonheartbeat bg-lightpink text-white"
+          className="w-full animate-buttonheartbeat bg-primary text-primary-foreground"
+          onClick={handleSubmit(onSubmit)}
         >
           Đăng ký
         </Button>
       </form>
-    </div>
+    </FormCard>
   );
 }

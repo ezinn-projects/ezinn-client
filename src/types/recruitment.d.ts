@@ -10,6 +10,8 @@ export interface RecruitmentFormData {
   otherStatus?: string;
   position: Position[];
   workShifts: WorkShift[];
+  /** Ghi chú từ ứng viên (optional; để trống là "") */
+  note?: string;
 }
 
 export interface RecruitmentApplication extends RecruitmentFormData {
@@ -44,7 +46,7 @@ export type WorkDay =
 export type Gender = "male" | "female" | "other";
 export type Position = "cashier" | "server" | "parking";
 export type CurrentStatus = "student" | "working" | "other";
-export type WorkShift = "morning" | "evening";
+export type WorkShift = "shift_9_14" | "shift_14_19" | "shift_19_1";
 
 // API Response Types
 export interface RecruitmentApiResponse {

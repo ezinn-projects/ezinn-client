@@ -9,16 +9,16 @@ import { promotions } from "@/data/promotions";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "JOZO Music Box Biên Hòa | Box hát riêng tư, giá sinh viên",
+  title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
   description:
-    "Đặt box hát riêng tư tại JOZO Biên Hòa: âm thanh studio, photobooth miễn phí, phụ kiện chụp hình, giá sinh viên. Đặt trước online để giữ chỗ và nhận ưu đãi.",
+    "Đặt box riêng tư tại JOZO Biên Hòa: âm thanh studio, photobooth miễn phí, phụ kiện chụp hình, giá sinh viên. Đặt online để giữ chỗ.",
   keywords: [
     "jozo",
     "music box",
-    "karaoke biên hòa",
-    "box hát hàn quốc",
-    "karaoke giá sinh viên",
-    "đặt phòng karaoke",
+    "music box biên hòa",
+    "box style hàn quốc",
+    "music box giá sinh viên",
+    "đặt phòng music box",
     "box riêng tư",
     "photobooth miễn phí",
   ],
@@ -26,18 +26,18 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "JOZO Music Box Biên Hòa | Box hát riêng tư, giá sinh viên",
+    title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
     description:
-      "Không gian box hát riêng tư, âm thanh studio, phụ kiện chụp hình miễn phí. Đặt trước online để giữ chỗ và nhận ưu đãi tại JOZO Biên Hòa.",
+      "Không gian box riêng tư, âm thanh studio, phụ kiện chụp hình miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
     url: "/",
     images: ["/images/jozo-thumbnail.jpg"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "JOZO Music Box Biên Hòa | Box hát riêng tư, giá sinh viên",
+    title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
     description:
-      "Box hát riêng tư, âm thanh xịn, photobooth miễn phí. Đặt trước online để giữ chỗ và nhận ưu đãi tại JOZO Biên Hòa.",
+      "Box riêng tư, âm thanh xịn, photobooth miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
     images: ["/images/jozo-thumbnail.jpg"],
   },
 };
@@ -47,7 +47,7 @@ async function getRooms(): Promise<RoomType[]> {
     `${process.env.NEXT_PUBLIC_API_URL}/api/room-types`,
     {
       cache: "no-store",
-    }
+    },
   );
 
   const data = await response.json();
@@ -67,9 +67,36 @@ async function getPrices(): Promise<Price[]> {
   return data.data;
 }
 
+function roomGridLayoutClass(count: number): string {
+  if (count <= 0) return "";
+  if (count === 1) {
+    return "grid gap-6 grid-cols-1 max-w-md mx-auto w-full";
+  }
+  if (count === 2) {
+    return "grid gap-6 grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto w-full";
+  }
+  if (count === 4) {
+    return "grid gap-6 grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto w-full";
+  }
+  return "grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto w-full";
+}
+
 export default async function Home() {
   const rooms = await getRooms();
   const prices = await getPrices();
+
+  const displayRooms = rooms
+    .filter((room) => room.type !== "small")
+    .sort((a, b) => {
+    const typeOrder: Record<string, number> = {
+      medium: 1,
+      large: 2,
+      dorm: 3,
+    };
+    const orderA = typeOrder[a.type] ?? 99;
+    const orderB = typeOrder[b.type] ?? 99;
+    return orderA - orderB;
+  });
 
   // Hàm helper để lấy giá thấp nhất cho từng loại box
   const getMinPriceForRoomType = (roomType: string, prices: Price[]) => {
@@ -100,29 +127,25 @@ export default async function Home() {
         {/* Room Types Section */}
         <section
           id="booking"
-          className="mb-16 bg-gradient-to-br from-pink-50 to-rose-100 p-8 rounded-2xl shadow-lg"
+          className="mb-16 border border-border bg-gradient-to-b from-card to-muted/60 p-8 sm:p-10 rounded-2xl shadow-sm"
         >
-          {/* Room Types Preview */}
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-3 mb-8">
-            {rooms
-              .sort((a, b) => {
-                const typeOrder = { small: 1, medium: 2, large: 3 };
-                const orderA = typeOrder[a.type as keyof typeof typeOrder] || 0;
-                const orderB = typeOrder[b.type as keyof typeof typeOrder] || 0;
-                return orderA - orderB;
-              })
-              .map((room, index) => {
-                const minPrice = getMinPriceForRoomType(room.type, prices);
-                return (
-                  <div
-                    key={room._id}
-                    className="transform hover:scale-105 transition-all duration-300"
-                    style={{ animationDelay: `${index * 200}ms` }}
-                  >
-                    <RoomCard room={room} minPrice={minPrice} />
-                  </div>
-                );
-              })}
+          <div className="max-w-6xl mx-auto">
+            {displayRooms.length > 0 && (
+              <div className={roomGridLayoutClass(displayRooms.length)}>
+                {displayRooms.map((room, index) => {
+                  const minPrice = getMinPriceForRoomType(room.type, prices);
+                  return (
+                    <div
+                      key={room._id}
+                      className="min-w-0"
+                      style={{ animationDelay: `${index * 200}ms` }}
+                    >
+                      <RoomCard room={room} minPrice={minPrice} />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
       </div>

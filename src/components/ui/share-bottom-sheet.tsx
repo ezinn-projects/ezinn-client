@@ -78,7 +78,7 @@ export const ShareBottomSheet = ({
       id: "copy",
       name: "Sao chép",
       icon: <Copy className="w-6 h-6" />,
-      color: "bg-gray-500",
+      color: "bg-primary/60",
       action: () => copyToClipboard(),
     },
     {
@@ -183,7 +183,7 @@ export const ShareBottomSheet = ({
     <div className="fixed inset-0 z-50 flex items-end">
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-primary/50 transition-opacity duration-300 ${
           isOpen ? "opacity-50" : "opacity-0"
         }`}
         onClick={onClose}
@@ -197,12 +197,12 @@ export const ShareBottomSheet = ({
       >
         {/* Handle */}
         <div className="flex justify-center pt-4 pb-2">
-          <div className="w-12 h-1 bg-gray-300 rounded-full" />
+          <div className="w-12 h-1 bg-primary/25 rounded-full" />
         </div>
 
         {/* Header */}
         <div className="flex items-center justify-center px-6 pb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Chia sẻ</h3>
+          <h3 className="text-lg font-semibold text-foreground">Chia sẻ</h3>
         </div>
 
         {/* Share Options */}
@@ -212,14 +212,14 @@ export const ShareBottomSheet = ({
               <button
                 key={option.id}
                 onClick={option.action}
-                className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-xl transition-colors"
+                className="flex flex-col items-center p-3 hover:bg-primary/6 rounded-xl transition-colors"
               >
                 <div
                   className={`w-10 h-10 ${option.color} rounded-full flex items-center justify-center text-white mb-2`}
                 >
                   {option.icon}
                 </div>
-                <span className="text-xs font-medium text-gray-700 text-center">
+                <span className="text-xs font-medium text-primary/80 text-center">
                   {option.name}
                 </span>
               </button>

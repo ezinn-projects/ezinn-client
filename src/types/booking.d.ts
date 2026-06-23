@@ -1,4 +1,4 @@
-export type RoomType = "Small" | "Medium" | "Large";
+export type RoomType = "Small" | "Medium" | "Large" | "Dorm";
 
 export type QueueSong = {
   video_id: string;
@@ -36,8 +36,7 @@ export type BookingResponse = {
 export type BookingRequest = {
   customerName: string;
   customerPhone: string;
-  customerEmail?: string;
-  roomType: "Small" | "Medium" | "Large";
+  roomType: "Small" | "Medium" | "Large" | "Dorm";
   startTime: string; // ISO string với timezone +07:00
   endTime: string; // ISO string với timezone +07:00
   note?: string;

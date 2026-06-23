@@ -40,8 +40,9 @@ export const POSITIONS: Record<Position, string> = {
 };
 
 export const WORK_SHIFTS: Record<WorkShift, string> = {
-  morning: "Ca sáng (12:00 - 17:00)",
-  evening: "Ca tối (17:00 - 22:00)",
+  shift_9_14: "9h - 14h",
+  shift_14_19: "14h - 19h",
+  shift_19_1: "19h - 1h",
 };
 
 // Utility Functions
@@ -221,6 +222,7 @@ export const exportToCSV = (applications: RecruitmentApplication[]): string => {
     "Ngày làm việc",
     "Ca làm việc",
     "Vị trí",
+    "Ghi chú",
     "Ngày nộp đơn",
     "Trạng thái",
   ];
@@ -238,6 +240,7 @@ export const exportToCSV = (applications: RecruitmentApplication[]): string => {
     formatWorkDays(app.workDays || []),
     formatWorkShifts(app.workShifts || []),
     formatPositions(app.position || []),
+    app.note?.trim() || "",
     formatDate(app.submittedAt),
     APPLICATION_STATUSES[app.status],
   ]);

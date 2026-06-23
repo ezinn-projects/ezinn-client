@@ -6,18 +6,30 @@ import { RoomType } from "@/types/room";
 import { Calendar, Users } from "lucide-react";
 import RoomImageCarousel from "./images-list";
 
-// Mapping tên box
-const ROOM_NAME_MAPPING: Record<string, string> = {
-  small: "Mini Squad",
-  medium: "Party Zone",
-  large: "Mega Squad",
+/** Nhãn loại hiển thị nổi bật (badge + overlay ảnh) */
+const TYPE_BADGE: Record<string, string> = {
+  small: "S-Box",
+  medium: "S-Box",
+  large: "L-Box",
+  dorm: "Dorm",
 };
 
-// Mapping số người
+const BADGE_CLASS: Record<string, string> = {
+  small:
+    "bg-red-50 text-primary ring-1 ring-red-200/90 font-semibold tracking-tight",
+  medium:
+    "bg-primary/8 text-primary ring-1 ring-primary/20 font-semibold tracking-tight",
+  large:
+    "bg-primary/12 text-primary ring-1 ring-primary/25 font-semibold tracking-tight",
+  dorm: "bg-primary/10 text-primary ring-1 ring-primary/25 font-semibold tracking-tight",
+};
+
+// Mapping số người / mô tả khu (dòng phụ dưới badge)
 const CAPACITY_MAPPING: Record<string, string> = {
-  small: "1-3 người",
-  medium: "4-5 người",
-  large: "6-8 người",
+  small: "1-5 người · box",
+  medium: "1-5 người · box",
+  large: "6-8 người · box",
+  dorm: "Nintendo Switch · dorm (Khu chung)",
 };
 
 export default function RoomCard({
@@ -30,8 +42,9 @@ export default function RoomCard({
   // Chuyển đổi room type từ format cũ sang mới để tạo href
   const bookingUrl = `/${room.type}`;
 
-  const roomSizeName = ROOM_NAME_MAPPING[room.type] || "Standard";
-  const capacityText = CAPACITY_MAPPING[room.type] || "1-3 người";
+  const typeBadge = TYPE_BADGE[room.type] || "Box";
+  const badgeClass = BADGE_CLASS[room.type] ?? BADGE_CLASS.small;
+  const capacityText = CAPACITY_MAPPING[room.type] || "Phòng riêng · xem mô tả";
 
   // Sử dụng minPrice từ props
   const displayPrice = minPrice || 0;
@@ -42,30 +55,28 @@ export default function RoomCard({
       <RoomImageCarousel
         images={room.images || []}
         roomName={room.roomName || "Room"}
-        roomType={roomSizeName}
+        roomType={typeBadge}
+        fallbackImageKey={room.type}
       />
 
       {/* Content Section */}
       <div className="p-5">
         <Link href={bookingUrl} className="block">
-          <Typography
-            as="h4"
-            variant="semibold"
-            className="mb-2 text-lightpink"
-          >
+          <div className="mb-2">
+            <span
+              className={`inline-block text-xs px-2.5 py-1 rounded-md ${badgeClass}`}
+            >
+              {typeBadge}
+            </span>
+          </div>
+          <Typography as="h4" variant="semibold" className="mb-2 text-primary">
             {room.roomName}
           </Typography>
 
-          <div className="flex items-center mb-3">
-            <Users className="w-4 h-4 mr-1 text-gray-500" />
-            <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+          <div className="flex items-start gap-2 mb-3">
+            <Users className="w-4 h-4 mt-0.5 shrink-0 text-primary/50" />
+            <span className="text-xs text-primary/70 leading-snug">
               {capacityText}
-            </span>
-          </div>
-
-          <div className="mb-2">
-            <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded">
-              Ưu đãi đặt trước: -10% (T2-T6) / -5% (T7-CN)
             </span>
           </div>
 
@@ -74,13 +85,13 @@ export default function RoomCard({
               <Typography
                 as="p"
                 variant="bold"
-                className="text-lightpink text-lg"
+                className="text-primary text-lg"
               >
                 Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
               </Typography>
             ) : (
               <div className="text-center py-4">
-                <Typography as="p" variant="bold" className="text-lightpink">
+                <Typography as="p" variant="bold" className="text-primary">
                   Liên hệ để biết giá
                 </Typography>
               </div>
@@ -91,7 +102,7 @@ export default function RoomCard({
         {/* Nút đặt box */}
         <Link
           href={bookingUrl}
-          className="w-full bg-lightpink hover:bg-pink-600 text-white font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center"
+          className="w-full bg-primary hover:bg-brand-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center"
         >
           <Calendar className="w-4 h-4 mr-2" />
           Đặt ngay

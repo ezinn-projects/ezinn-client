@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -24,7 +24,7 @@ export async function PUT(
 
     if (response.ok) {
       // Revalidate cache bằng tags để đảm bảo dữ liệu mới được fetch
-      revalidateTag("booking-details");
+      revalidateTag("booking-details", "max");
 
       return NextResponse.json(result);
     } else {
@@ -33,7 +33,7 @@ export async function PUT(
   } catch {
     return NextResponse.json(
       { success: false, message: "Lỗi server" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

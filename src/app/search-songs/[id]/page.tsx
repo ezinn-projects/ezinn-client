@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 // Ngăn không cho Google index các trang search-songs
 export const metadata: Metadata = {
-  title: "Tìm bài hát - Jozo Music Box",
+  title: "Chọn nhạc - Jozo Music Box",
   robots: {
     index: false,
     follow: false,

@@ -25,11 +25,11 @@ export default function TemporaryClosurePage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <Link
           href="/"
-          className="inline-flex items-center text-lightpink hover:text-pink-600 mb-6 transition-colors"
+          className="inline-flex items-center text-primary hover:text-brand-hover mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Quay lại trang chủ
@@ -74,7 +74,7 @@ export default function TemporaryClosurePage() {
               </Typography>
             </div>
 
-            <ul className="space-y-3 text-gray-700">
+            <ul className="space-y-3 text-primary/80">
               <li className="flex items-center gap-3">
                 <CalendarOff className="w-5 h-5 text-amber-600 flex-shrink-0" />
                 <span>
@@ -90,22 +90,22 @@ export default function TemporaryClosurePage() {
               </li>
             </ul>
 
-            <Typography as="p" variant="default" className="text-gray-600">
+            <Typography as="p" variant="default" className="text-primary/70">
               Jozo xin lỗi quý khách vì sự bất tiện này. Khi mở cửa trở lại,
               thông tin sẽ được cập nhật trên website và fanpage. Cảm ơn quý
               khách đã ủng hộ!
             </Typography>
 
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-primary/12">
               <Typography
                 as="p"
                 variant="default"
-                className="text-gray-500 text-sm"
+                className="text-primary/55 text-sm"
               >
                 Có thắc mắc vui lòng liên hệ:{" "}
                 <a
                   href="tel:0359660934"
-                  className="text-lightpink font-medium hover:underline"
+                  className="text-primary font-medium hover:underline"
                 >
                   035 966 0934
                 </a>

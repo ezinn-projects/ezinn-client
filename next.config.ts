@@ -3,7 +3,6 @@ const nextConfig = {
   experimental: {
     appDir: true, // Bật App Router
   },
-  // Giảm cache HTML trang chủ để thông báo đóng cửa cập nhật kịp
   async headers() {
     return [
       {

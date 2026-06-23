@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passwordSchema } from "./password.schema";
 
 const MAX_AGE = 100;
 const MIN_AGE = 12;
@@ -6,20 +7,17 @@ const MIN_AGE = 12;
 export const registerSchema = z
   .object({
     full_name: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự"),
-    email: z
-      .union([
-        z.string().email("Email không hợp lệ").trim(),
-        z.string().length(0), // Cho phép chuỗi rỗng
-        z.null(),
-      ])
-      .optional(),
+    email: z.union([
+      z.string().min(1, "Email không được để trống"),
+      z.string().email("Email không hợp lệ").trim(),
+    ]),
     phone_number: z
       .string()
       .regex(
         /^(0)[0-9]{9}$/,
-        "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)"
+        "Số điện thoại không đúng định dạng Việt Nam (VD: 0912345678)",
       ),
-    password: z.string().min(6, "Passcode phải có ít nhất 6 ký tự"),
+    password: passwordSchema,
     confirm_password: z.string(),
     date_of_birth: z
       .date()
@@ -33,7 +31,7 @@ export const registerSchema = z
       }, `Bạn phải đủ ${MIN_AGE} tuổi để đăng ký`),
   })
   .refine((data) => data.password === data.confirm_password, {
-    message: "passcode xác nhận không khớp",
+    message: "Mật khẩu xác nhận không khớp",
     path: ["confirm_password"],
   });
 

@@ -33,12 +33,12 @@ export default function RoomImageGallery({
   if (validImages.length === 0) {
     return (
       <div className="mb-6">
-        <div className="bg-gradient-to-br from-lightpink/20 to-pink-100 rounded-lg p-8 text-center shadow-md aspect-video flex flex-col items-center justify-center">
+        <div className="bg-gradient-to-br from-primary/10 to-muted rounded-lg p-8 text-center shadow-md aspect-video flex flex-col items-center justify-center">
           <div className="text-6xl mb-4">🏠</div>
-          <h3 className="text-lg font-semibold text-lightpink mb-2">
+          <h3 className="text-lg font-semibold text-primary mb-2">
             {roomLabel}
           </h3>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-primary/70">
             Hình ảnh box sẽ được cập nhật sớm
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function RoomImageGallery({
   };
 
   const dotVariants = {
-    active: { scale: 1.3, backgroundColor: "#ec4899" },
+    active: { scale: 1.3, backgroundColor: "#c40a0a" },
     inactive: { scale: 1, backgroundColor: "#ffffff80" },
   };
 
@@ -78,8 +78,8 @@ export default function RoomImageGallery({
   if (!isClient) {
     return (
       <div className="mb-6">
-        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-gray-100">
-          <div className="absolute top-3 right-3 bg-lightpink text-white px-4 py-2 z-20 rounded-lg font-bold text-sm shadow-md">
+        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-primary/8">
+          <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-4 py-2 z-20 rounded-lg font-bold text-sm shadow-md">
             {roomLabel}
           </div>
           <Image
@@ -100,9 +100,9 @@ export default function RoomImageGallery({
     <>
       <div className="mb-6">
         {/* Carousel Container */}
-        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-gray-100 group">
+        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg bg-primary/8 group">
           {/* Room Label Badge */}
-          <div className="absolute top-3 right-3 bg-lightpink text-white px-4 py-2 z-30 rounded-lg font-bold text-sm shadow-md">
+          <div className="absolute top-3 right-3 bg-primary text-primary-foreground px-4 py-2 z-30 rounded-lg font-bold text-sm shadow-md">
             {roomLabel}
           </div>
 
@@ -112,7 +112,7 @@ export default function RoomImageGallery({
               e.stopPropagation();
               setSelectedImage(validImages[currentImage]);
             }}
-            className="absolute top-3 left-3 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-30"
+            className="absolute top-3 left-3 bg-primary/50 hover:bg-primary/70 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-30"
             aria-label="Xem ảnh phóng to"
           >
             <Maximize2 className="w-4 h-4" />
@@ -151,7 +151,7 @@ export default function RoomImageGallery({
             <>
               <motion.button
                 onClick={prevImage}
-                className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30"
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label="Hình trước"
@@ -160,7 +160,7 @@ export default function RoomImageGallery({
               </motion.button>
               <motion.button
                 onClick={nextImage}
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30"
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label="Hình tiếp theo"
@@ -172,7 +172,7 @@ export default function RoomImageGallery({
 
           {/* Image Counter */}
           {validImages.length > 1 && (
-            <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-3 py-1.5 rounded-lg z-30 font-medium">
+            <div className="absolute bottom-3 right-3 bg-primary/55 text-primary-foreground text-xs px-3 py-1.5 rounded-lg z-30 font-medium">
               {currentImage + 1}/{validImages.length}
             </div>
           )}
@@ -205,13 +205,13 @@ export default function RoomImageGallery({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-primary/85 z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedImage(null)}
           >
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+              className="absolute right-4 top-28 text-white transition-colors hover:text-white/80 z-10"
               onClick={() => setSelectedImage(null)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

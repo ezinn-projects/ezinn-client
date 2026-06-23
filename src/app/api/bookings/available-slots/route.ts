@@ -32,6 +32,7 @@ const TOTAL_ROOMS = {
   small: 2,
   medium: 2,
   large: 1,
+  dorm: 2,
 };
 
 export async function GET(request: NextRequest) {
@@ -164,21 +165,31 @@ export async function GET(request: NextRequest) {
       small: TOTAL_ROOMS.small,
       medium: TOTAL_ROOMS.medium,
       large: TOTAL_ROOMS.large,
+      dorm: TOTAL_ROOMS.dorm,
     };
+
+    const totalForType =
+      roomType === "small"
+        ? TOTAL_ROOMS.small
+        : roomType === "medium"
+          ? TOTAL_ROOMS.medium
+          : roomType === "large"
+            ? TOTAL_ROOMS.large
+            : roomType === "dorm"
+              ? TOTAL_ROOMS.dorm
+              : 0;
 
     // Nếu có bất kỳ time slot nào bị đặt hết tất cả các phòng thì coi như không còn phòng
     if (
+      totalForType > 0 &&
       ALL_TIME_SLOTS.some(
-        (slot) =>
-          bookedRoomsBySlot[slot].size >=
-          (roomType === "small"
-            ? TOTAL_ROOMS.small
-            : roomType === "medium"
-            ? TOTAL_ROOMS.medium
-            : TOTAL_ROOMS.large)
+        (slot) => bookedRoomsBySlot[slot].size >= totalForType,
       )
     ) {
-      availableRoomCount[roomType as keyof typeof TOTAL_ROOMS] -= 1;
+      const key = roomType as keyof typeof TOTAL_ROOMS;
+      if (key in availableRoomCount) {
+        availableRoomCount[key] -= 1;
+      }
     }
 
     return NextResponse.json({

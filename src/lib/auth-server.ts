@@ -15,13 +15,27 @@ export async function getCurrentUser(): Promise<IMemberProfile | null> {
   const token = cookieStore.get("access_token")?.value;
   if (!token) return null;
 
+  const authHeaders = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   try {
+    const membershipRes = await fetch(`${getBackendUrl()}/membership/me`, {
+      method: "GET",
+      headers: authHeaders,
+      cache: "no-store",
+    });
+
+    if (membershipRes.ok) {
+      const membershipData = await membershipRes.json();
+      const member = extractMember(membershipData);
+      if (member) return member;
+    }
+
     const res = await fetch(`${getBackendUrl()}/users/get-user`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: authHeaders,
       cache: "no-store",
     });
 

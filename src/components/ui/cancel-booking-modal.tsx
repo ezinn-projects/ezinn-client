@@ -25,7 +25,7 @@ export default function CancelBookingModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-primary/40">
       <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
         <div className="text-center">
           <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -44,35 +44,35 @@ export default function CancelBookingModal({
             </svg>
           </div>
 
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Xác nhận hủy</h2>
+          <h2 className="text-xl font-bold text-foreground mb-2">Xác nhận hủy</h2>
 
-          <p className="text-gray-600 mb-6">
+          <p className="text-primary/70 mb-6">
             Bạn có chắc chắn muốn hủy box này không? Hành động này không thể
             hoàn tác.
           </p>
 
           {bookingDetails && (
-            <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-              <h3 className="font-semibold text-gray-900 mb-2">Thông tin:</h3>
+            <div className="bg-primary/6 rounded-lg p-4 mb-6 text-left">
+              <h3 className="font-semibold text-foreground mb-2">Thông tin:</h3>
               <div className="space-y-1 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Mã đặt box:</span>
+                  <span className="text-primary/70">Mã đặt box:</span>
                   <span className="font-medium">{bookingCode}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Tên:</span>
+                  <span className="text-primary/70">Tên:</span>
                   <span className="font-medium">{bookingDetails.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">SĐT:</span>
+                  <span className="text-primary/70">SĐT:</span>
                   <span className="font-medium">{bookingDetails.phone}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Ngày:</span>
+                  <span className="text-primary/70">Ngày:</span>
                   <span className="font-medium">{bookingDetails.date}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Thời gian:</span>
+                  <span className="text-primary/70">Thời gian:</span>
                   <span className="font-medium">{bookingDetails.time}</span>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function CancelBookingModal({
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              className="flex-1 py-2 px-4 border border-primary/18 rounded-lg text-primary/80 hover:bg-primary/8 transition-colors"
               disabled={isCancelling}
             >
               Không hủy

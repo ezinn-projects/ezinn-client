@@ -4,11 +4,29 @@ import { MongoClient } from "mongodb";
 let client: MongoClient | null = null;
 let clientPromise: Promise<MongoClient>;
 
-const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.VPS_IP}:${process.env.VPS_PORT}/${process.env.DB_NAME}?authSource=${process.env.VPS_AUTH_SOURCE}`;
+function getMongoUri(): string {
+  if (process.env.NODE_ENV === "development") {
+    return "mongodb://localhost:27017/jozo";
+  }
 
-if (!uri) {
-  throw new Error("Please add your MongoDB URI to .env.local");
+  const { DB_USER, DB_PASSWORD, VPS_IP, VPS_PORT, DB_NAME, VPS_AUTH_SOURCE } =
+    process.env;
+
+  if (
+    !DB_USER ||
+    !DB_PASSWORD ||
+    !VPS_IP ||
+    !VPS_PORT ||
+    !DB_NAME ||
+    !VPS_AUTH_SOURCE
+  ) {
+    throw new Error("Please add your MongoDB credentials to .env");
+  }
+
+  return `mongodb://${DB_USER}:${DB_PASSWORD}@${VPS_IP}:${VPS_PORT}/${DB_NAME}?authSource=${VPS_AUTH_SOURCE}`;
 }
+
+const uri = getMongoUri();
 
 if (process.env.NODE_ENV === "development") {
   // Caching client in development

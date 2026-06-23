@@ -29,21 +29,21 @@ export default function TimeSlot({
           {/* Chú thích */}
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-white border rounded-sm border-black block"></span>
+              <span className="w-4 h-4 bg-white border rounded-sm border-primary/35 block"></span>
               <p className="text-sm">Khả dụng</p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-gray-400/50 border rounded-sm border-black block"></span>
+              <span className="w-4 h-4 bg-primary/25 border rounded-sm border-primary/30 block"></span>
               <p className="text-sm">Không khả dụng</p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-4 h-4 bg-black border rounded-sm border-black block"></span>
-              <p className="text-sm text-black">Đã chọn</p>
+              <span className="w-4 h-4 bg-primary border rounded-sm border-primary block"></span>
+              <p className="text-sm text-foreground">Đã chọn</p>
             </div>
           </div>
 
           {/* Hiển thị Grid */}
-          <p className="text-gray-600">Chọn khung giờ:</p>
+          <p className="text-primary/70">Chọn khung giờ:</p>
           <div className="grid grid-cols-2 gap-2 mt-2">
             {fixedTimeSlots.map((slot, index) => {
               const isUnavailable = !availableSlots.includes(slot);
@@ -56,10 +56,10 @@ export default function TimeSlot({
                   onClick={() => onSelectSlots(slot)}
                   className={`p-2 rounded-md text-center border ${
                     isUnavailable
-                      ? "bg-gray-400/50 cursor-not-allowed"
+                      ? "bg-primary/20 border-primary/25 text-primary/50 cursor-not-allowed"
                       : isSelected
-                      ? "bg-black text-white"
-                      : "bg-white border-black"
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-white border-primary/40 text-primary"
                   }`}
                 >
                   {slot}

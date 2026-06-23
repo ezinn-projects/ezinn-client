@@ -10,7 +10,7 @@ interface CustomPatternBackgroundProps {
 }
 
 export const BackgroundBricks: React.FC<CustomPatternBackgroundProps> = ({
-  patternColor = "#fb3a5d",
+  patternColor = "#c40a0a",
   backgroundColor = "transparent",
   className,
   fade = true,

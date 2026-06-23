@@ -23,7 +23,7 @@ const TwoColumnFooter = () => {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="font-inter w-full bg-gradient-to-b from-black/40 via-black/20 to-transparent backdrop-blur-sm pt-2"
+      className="font-inter w-full border-t border-red-100/80 bg-white pt-2 text-primary"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
@@ -31,64 +31,37 @@ const TwoColumnFooter = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col justify-between lg:flex-row">
           <div className="space-y-8">
-            <Image
-              priority={true}
-              unoptimized={true}
-              width={100}
-              height={40}
-              src="/images/logo.png"
-              alt="logo"
-              className="h-7 w-auto"
-            />
-
-            <div className="flex space-x-6 text-sm text-gray-700  dark:text-gray-300">
-              <span>Được phát triển với ❤️ bởi JOZO</span>
+            <div className="space-y-2 text-sm text-primary/75">
+              <div className="flex items-center space-x-1">
+                <span>Được phát triển với ❤️ bởi </span>
+                <Image
+                  priority={true}
+                  unoptimized={true}
+                  width={100}
+                  height={40}
+                  src="/images/jozo-logo.png"
+                  alt="logo"
+                  className="h-7 w-auto"
+                  style={{ width: "auto" }}
+                />
+              </div>
+              <p>
+                Địa chỉ:{" "}
+                <a
+                  href="https://maps.app.goo.gl/EY3WPsWzYbkaFQkZA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary underline-offset-2 hover:underline"
+                >
+                  30 Phan Trung
+                </a>
+              </p>
             </div>
           </div>
           {/* Navigations */}
-          <div className="mt-16 grid grid-cols-2 gap-14 md:grid-cols-2 lg:mt-0 xl:col-span-2">
-            <div className="md:mt-0">
-              <h3 className="text-sm font-semibold leading-6 text-gray-900  dark:text-gray-200">
-                Kết Nối
-              </h3>
-              <div className="mt-6 space-y-4">
-                {navigation.connect.map((item) => (
-                  <div key={item.name}>
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm leading-6 text-gray-700 hover:text-gray-900 dark:text-gray-600 hover:dark:text-gray-200"
-                    >
-                      {item.name}
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div>
-                <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">
-                  Khám Phá
-                </h3>
-                <div className="mt-6 space-y-4">
-                  {navigation.explore.map((item) => (
-                    <div key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm leading-6 text-gray-700 hover:text-gray-900 dark:text-gray-600 hover:dark:text-gray-200"
-                      >
-                        {item.name}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-gray-100/10">
-          <p className="text-xs leading-5 text-gray-700 dark:text-gray-300">
+        <div className="border-t border-primary/10 sm:mt-20 lg:mt-24">
+          <p className="text-xs leading-5 text-primary/65">
             &copy; 2026 JOZO. Đã đăng ký bản quyền. Mọi quyền được bảo lưu.
           </p>
         </div>

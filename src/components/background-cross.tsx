@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 interface CrossPatternBackgroundProps {
   crossSize?: number;
   crossColor?: string;
@@ -12,7 +11,7 @@ interface CrossPatternBackgroundProps {
 }
 
 export const BackgroundCross: React.FC<CrossPatternBackgroundProps> = ({
-  crossColor = "#fb3a5d",
+  crossColor = "#c40a0a",
   backgroundColor = "transparent",
   crossSize = 40,
   className,

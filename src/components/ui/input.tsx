@@ -79,7 +79,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className="mb-4">
       {label && (
-        <label className="block text-lightpink mb-1">
+        <label className="block text-primary mb-1">
           {label}
           {required && (
             <span className="text-red-500 ml-1" aria-label="required">
@@ -90,7 +90,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       )}
       <div className="relative">
         {prefix && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/55">
             {prefix}
           </div>
         )}
@@ -103,9 +103,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           inputMode={type === "number" ? "numeric" : props.inputMode}
           aria-invalid={Boolean(error)}
           className={cn(
-            "w-full border rounded px-3 py-2 text-black outline-none",
+            "w-full border rounded px-3 py-2 text-foreground outline-none",
             "transition-all duration-200 ease-in-out",
-            "focus:ring-2 focus:ring-lightpink focus:border-lightpink",
+            "focus:ring-2 focus:ring-primary focus:border-primary",
             error && [
               "border-red-500",
               "animate-shake-vertical",
@@ -118,12 +118,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {...props}
         />
         {(suffix || showPasswordToggle) && (
-          <div className="absolute right-3 top-1/2 -translate-y-[35%] text-gray-500">
+          <div className="absolute right-3 top-1/2 -translate-y-[35%] text-primary/55">
             {showPasswordToggle ? (
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="hover:text-lightpink focus:outline-none"
+                className="hover:text-primary focus:outline-none"
               >
                 {showPassword ? (
                   <EyeOpenIcon className="h-4 w-4" />
@@ -138,7 +138,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         )}
       </div>
       {helpText && !error && (
-        <p className="mt-1 text-sm text-gray-500">{helpText}</p>
+        <p className="mt-1 text-sm text-primary/55">{helpText}</p>
       )}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>

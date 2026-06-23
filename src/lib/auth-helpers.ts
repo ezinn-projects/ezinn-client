@@ -24,22 +24,40 @@ export const getTokenFromResponse = (payload: unknown): string | null => {
   );
 };
 
+const isUserLike = (value: unknown): value is IMemberProfile => {
+  if (!value || typeof value !== "object") return false;
+  const obj = value as Record<string, unknown>;
+  return Boolean(
+    obj.full_name ||
+      obj.fullName ||
+      obj.email ||
+      obj.username ||
+      obj.phone ||
+      obj.phone_number,
+  );
+};
+
 export const extractMember = (payload: unknown): IMemberProfile | null => {
   if (!payload || typeof payload !== "object") return null;
 
-  const data = (payload as Record<string, unknown>).data ?? payload;
-  if (!data || typeof data !== "object") return null;
+  const root = payload as Record<string, unknown>;
+  const envelope = root.data ?? root.result ?? root;
+  if (!envelope || typeof envelope !== "object") return null;
+
+  const envelopeObj = envelope as Record<string, unknown>;
 
   const memberCandidates = [
-    (data as Record<string, unknown>).member,
-    (data as Record<string, unknown>).user,
-    (data as Record<string, unknown>).profile,
-    (data as Record<string, unknown>).result,
-    data,
+    envelopeObj.user,
+    envelopeObj.member,
+    envelopeObj.profile,
+    isUserLike(envelopeObj) ? envelopeObj : null,
+    root.user,
+    (root.result as Record<string, unknown> | undefined)?.user,
+    (root.data as Record<string, unknown> | undefined)?.user,
   ];
 
   const member = memberCandidates.find(
-    (candidate) => candidate && typeof candidate === "object"
+    (candidate) => candidate && typeof candidate === "object",
   ) as IMemberProfile | undefined;
 
   return member ?? null;

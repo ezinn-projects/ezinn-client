@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
+
+const POPOVER_ESTIMATED_HEIGHT = 280;
 
 interface DateSelectProps {
   value: Date | undefined;
@@ -22,10 +25,39 @@ export function DateSelect({
 }: DateSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const dayRef = useRef<HTMLDivElement>(null);
   const monthRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
+  const [popoverPosition, setPopoverPosition] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    width: number;
+    placement: "top" | "bottom";
+  } | null>(null);
+
+  const updatePopoverPosition = useCallback(() => {
+    if (!triggerRef.current) return;
+
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const placement =
+      spaceBelow < POPOVER_ESTIMATED_HEIGHT && spaceAbove > spaceBelow
+        ? "top"
+        : "bottom";
+
+    setPopoverPosition({
+      left: rect.left,
+      width: rect.width,
+      placement,
+      ...(placement === "bottom"
+        ? { top: rect.bottom + 4 }
+        : { bottom: window.innerHeight - rect.top + 4 }),
+    });
+  }, []);
 
   // Initialize client-side state
   useEffect(() => {
@@ -101,17 +133,38 @@ export function DateSelect({
     }
   }, [isOpen, selectedDate, isClient]);
 
+  useEffect(() => {
+    if (!isOpen || !isClient) return;
+
+    window.addEventListener("resize", updatePopoverPosition);
+    window.addEventListener("scroll", updatePopoverPosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePopoverPosition);
+      window.removeEventListener("scroll", updatePopoverPosition, true);
+    };
+  }, [isOpen, isClient, updatePopoverPosition]);
+
+  const handleToggle = () => {
+    if (!isOpen) {
+      updatePopoverPosition();
+    }
+    setIsOpen((open) => !open);
+  };
+
   // Click outside handler
   useEffect(() => {
     if (!isClient) return;
 
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
       if (
-        popoverRef.current &&
-        !popoverRef.current.contains(event.target as Node)
+        popoverRef.current?.contains(target) ||
+        triggerRef.current?.contains(target)
       ) {
-        setIsOpen(false);
+        return;
       }
+      setIsOpen(false);
     };
 
     if (isOpen) {
@@ -125,15 +178,16 @@ export function DateSelect({
 
   return (
     <div className="relative">
-      <label className="block font-medium text-lightpink mb-1">
+      <label className="block font-medium text-primary mb-1">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <button
+        ref={triggerRef}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={cn(
-          "w-full px-4 py-2 text-left bg-white rounded-md border text-black border-black/20",
+          "w-full px-4 py-2 text-left bg-white rounded-md border text-foreground border-primary/20",
           "focus:outline-none focus:ring-2 focus:ring-black/20",
           "flex items-center justify-between",
           error && "border-red-500"
@@ -151,115 +205,133 @@ export function DateSelect({
         {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </button>
 
-      <AnimatePresence>
-        {isOpen && isClient && (
-          <motion.div
-            ref={popoverRef}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute z-50 w-full mt-1 bg-white rounded-md shadow-lg border border-black/20"
-          >
-            <div className="grid grid-cols-3 p-2 gap-2">
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">
-                  Ngày
-                </label>
-                <div
-                  ref={dayRef}
-                  className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
-                >
-                  {days.map((day) => (
-                    <motion.button
-                      key={day}
-                      data-day={day}
-                      type="button"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleSelect("day", day)}
-                      className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
-                        isClient && selectedDate.getDate() === day
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
-                      )}
-                    >
-                      {day}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">
-                  Tháng
-                </label>
-                <div
-                  ref={monthRef}
-                  className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
-                >
-                  {months.map((month) => (
-                    <motion.button
-                      key={month}
-                      data-month={month}
-                      type="button"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleSelect("month", month)}
-                      className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
-                        isClient && selectedDate.getMonth() + 1 === month
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
-                      )}
-                    >
-                      {month}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-black/60">Năm</label>
-                <div
-                  ref={yearRef}
-                  className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
-                >
-                  {years.map((year) => (
-                    <motion.button
-                      key={year}
-                      data-year={year}
-                      type="button"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleSelect("year", year)}
-                      className={cn(
-                        "w-full px-2 py-1 text-sm rounded-md text-black",
-                        isClient && selectedDate.getFullYear() === year
-                          ? "bg-lightpink text-white"
-                          : "hover:bg-lightpink/5"
-                      )}
-                    >
-                      {year}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* OK Button */}
-            <div className="p-2 border-t border-black/10">
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="w-full py-2 px-4 bg-lightpink text-white rounded-md hover:bg-lightpink/80 animate-buttonheartbeat transition-colors"
+      {isClient &&
+        createPortal(
+          <AnimatePresence>
+            {isOpen && popoverPosition && (
+              <motion.div
+                ref={popoverRef}
+                initial={{
+                  opacity: 0,
+                  y: popoverPosition.placement === "bottom" ? -10 : 10,
+                }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{
+                  opacity: 0,
+                  y: popoverPosition.placement === "bottom" ? -10 : 10,
+                }}
+                style={{
+                  position: "fixed",
+                  top: popoverPosition.top,
+                  bottom: popoverPosition.bottom,
+                  left: popoverPosition.left,
+                  width: popoverPosition.width,
+                }}
+                className="z-[9998] bg-white rounded-md shadow-lg border border-primary/20"
               >
-                OK
-              </button>
-            </div>
-          </motion.div>
+                <div className="grid grid-cols-3 p-2 gap-2">
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-foreground/60">
+                      Ngày
+                    </label>
+                    <div
+                      ref={dayRef}
+                      className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
+                    >
+                      {days.map((day) => (
+                        <motion.button
+                          key={day}
+                          data-day={day}
+                          type="button"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => handleSelect("day", day)}
+                          className={cn(
+                            "w-full px-2 py-1 text-sm rounded-md text-foreground",
+                            isClient && selectedDate.getDate() === day
+                              ? "bg-primary text-primary-foreground"
+                              : "hover:bg-primary/5"
+                          )}
+                        >
+                          {day}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-foreground/60">
+                      Tháng
+                    </label>
+                    <div
+                      ref={monthRef}
+                      className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
+                    >
+                      {months.map((month) => (
+                        <motion.button
+                          key={month}
+                          data-month={month}
+                          type="button"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => handleSelect("month", month)}
+                          className={cn(
+                            "w-full px-2 py-1 text-sm rounded-md text-foreground",
+                            isClient && selectedDate.getMonth() + 1 === month
+                              ? "bg-primary text-primary-foreground"
+                              : "hover:bg-primary/5"
+                          )}
+                        >
+                          {month}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-foreground/60">
+                      Năm
+                    </label>
+                    <div
+                      ref={yearRef}
+                      className="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-black/20"
+                    >
+                      {years.map((year) => (
+                        <motion.button
+                          key={year}
+                          data-year={year}
+                          type="button"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => handleSelect("year", year)}
+                          className={cn(
+                            "w-full px-2 py-1 text-sm rounded-md text-foreground",
+                            isClient && selectedDate.getFullYear() === year
+                              ? "bg-primary text-primary-foreground"
+                              : "hover:bg-primary/5"
+                          )}
+                        >
+                          {year}
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-2 border-t border-primary/10">
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:bg-brand-hover animate-buttonheartbeat transition-colors"
+                  >
+                    OK
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );

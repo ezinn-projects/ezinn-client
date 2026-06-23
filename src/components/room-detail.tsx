@@ -39,12 +39,12 @@ const RoomDetail: React.FC<RoomDetailProps> = ({ roomData }) => {
       </div>
 
       {/* Room Description */}
-      <p className="text-gray-700 mb-4">{roomData.description}</p>
+      <p className="text-primary/80 mb-4">{roomData.description}</p>
 
       {/* Pricing */}
-      <p className="text-lg font-semibold text-gray-800 mb-4">
+      <p className="text-lg font-semibold text-foreground mb-4">
         Price:{" "}
-        <span className="line-through text-gray-500">
+        <span className="line-through text-primary/55">
           {roomData.price.toLocaleString()} VND
         </span>{" "}
         <span className="text-red-500">
@@ -54,9 +54,9 @@ const RoomDetail: React.FC<RoomDetailProps> = ({ roomData }) => {
 
       {/* Amenities */}
       <ul className="list-disc pl-5">
-        <strong className="text-gray-800">Amenities:</strong>
+        <strong className="text-foreground">Amenities:</strong>
         {roomData.amenities.map((amenity, index) => (
-          <li key={index} className="text-gray-700">
+          <li key={index} className="text-primary/80">
             {amenity}
           </li>
         ))}

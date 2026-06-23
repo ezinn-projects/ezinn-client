@@ -33,14 +33,13 @@ interface SearchSongsClientProps {
 
 async function searchYouTube(
   query: string,
-  roomScheduleId?: string
+  roomScheduleId?: string,
 ): Promise<VideoData> {
-  // Thêm từ khóa "karaoke" vào query để tìm kiếm chính xác hơn
-  const searchQuery = `${query} karaoke`;
+  const searchQuery = query.trim();
 
   const url = roomScheduleId
     ? `/api/search-videos?query=${encodeURIComponent(
-        searchQuery
+        searchQuery,
       )}&booking=${encodeURIComponent(roomScheduleId)}`
     : `/api/search-videos?query=${encodeURIComponent(searchQuery)}`;
 
@@ -64,12 +63,12 @@ export default function SearchSongsClient({
   const [error, setError] = useState<string | null>(null);
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [bookingDetails, setBookingDetails] = useState<Booking | null>(
-    initialBookingDetails || null
+    initialBookingDetails || null,
   );
   const [loadingBooking, setLoadingBooking] = useState(false);
   const [addingToQueue, setAddingToQueue] = useState<string | null>(null);
   const [queueSongs, setQueueSongs] = useState<QueueSong[]>(
-    initialBookingDetails?.queueSongs || []
+    initialBookingDetails?.queueSongs || [],
   );
   const [showQueueModal, setShowQueueModal] = useState(false);
 
@@ -125,7 +124,7 @@ export default function SearchSongsClient({
         setLoading(false);
       }
     },
-    [roomScheduleId]
+    [roomScheduleId],
   );
 
   // Effect để thực hiện tìm kiếm khi debouncedQuery thay đổi
@@ -160,11 +159,11 @@ export default function SearchSongsClient({
       <h1 className="text-3xl font-bold mb-6">Tìm kiếm video</h1>
 
       {roomScheduleId && (
-        <div className="mb-6 bg-gradient-to-r from-pink-50 to-red-50 border border-pink-200 rounded-lg p-4">
+        <div className="mb-6 bg-gradient-to-r from-background to-red-50/40 border border-red-100 rounded-lg p-4">
           <div className="flex items-center gap-3">
-            <div className="bg-pink-100 rounded-full p-2">
+            <div className="bg-red-100 rounded-full p-2">
               <svg
-                className="w-5 h-5 text-pink-600"
+                className="w-5 h-5 text-primary"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -182,18 +181,18 @@ export default function SearchSongsClient({
                 </div>
               ) : bookingDetails ? (
                 <div>
-                  <p className="text-sm text-gray-600">Thông tin đặt box:</p>
-                  <p className="text-lg font-bold text-pink-600">
+                  <p className="text-sm text-primary/70">Thông tin đặt box:</p>
+                  <p className="text-lg font-bold text-primary">
                     {bookingDetails.customerName}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-primary/70">
                     Mã: #{bookingDetails.bookingCode}
                   </p>
                 </div>
               ) : (
                 <div>
-                  <p className="text-sm text-gray-600">Mã đặt box:</p>
-                  <p className="text-lg font-bold text-pink-600 font-mono tracking-wider">
+                  <p className="text-sm text-primary/70">Mã đặt box:</p>
+                  <p className="text-lg font-bold text-primary font-mono tracking-wider">
                     #{roomScheduleId.slice(0, 6).toUpperCase()}
                   </p>
                 </div>
@@ -211,13 +210,13 @@ export default function SearchSongsClient({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Nhập tên/ca sĩ/lời bài hát"
-              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lightpink outline-none focus:border-transparent text-lg text-lightpink"
+              placeholder="Nhập tên bài, ca sĩ hoặc lời nhạc"
+              className="w-full px-4 py-3 pr-12 border border-primary/18 rounded-lg focus:ring-2 focus:ring-primary outline-none focus:border-transparent text-lg text-primary"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-primary/50 hover:text-primary/70 transition-colors duration-200"
                 type="button"
               >
                 <svg
@@ -273,7 +272,7 @@ export default function SearchSongsClient({
                     height={192}
                     className="w-full h-48 object-cover"
                   />
-                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm">
+                  <div className="absolute bottom-2 right-2 bg-primary/80 text-primary-foreground px-2 py-1 rounded text-sm">
                     {Math.floor(video.duration / 60)}:
                     {(video.duration % 60).toString().padStart(2, "0")}
                   </div>
@@ -281,7 +280,7 @@ export default function SearchSongsClient({
 
                 <div className="p-4">
                   <h3
-                    className="font-semibold text-lg mb-2 text-gray-800 overflow-hidden"
+                    className="font-semibold text-lg mb-2 text-foreground overflow-hidden"
                     style={{
                       display: "-webkit-box",
                       WebkitLineClamp: 2,
@@ -291,7 +290,7 @@ export default function SearchSongsClient({
                     {video.title}
                   </h3>
 
-                  <div className="space-y-2 text-sm text-gray-600 mb-4">
+                  <div className="space-y-2 text-sm text-primary/70 mb-4">
                     <div className="flex items-center gap-2">
                       <svg
                         className="w-4 h-4"
@@ -348,7 +347,7 @@ export default function SearchSongsClient({
                       disabled={
                         !roomScheduleId || addingToQueue === video.video_id
                       }
-                      className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-lightpink text-white font-semibold rounded-lg hover:bg-lightpink/80 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-brand-hover transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {addingToQueue === video.video_id ? (
                         <>
@@ -356,7 +355,7 @@ export default function SearchSongsClient({
                           Đang thêm...
                         </>
                       ) : (
-                        <>
+                        <span className="flex items-center justify-center gap-1 whitespace-nowrap">
                           <svg
                             className="w-4 h-4 mr-2"
                             fill="currentColor"
@@ -365,7 +364,7 @@ export default function SearchSongsClient({
                             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                           </svg>
                           Thêm video
-                        </>
+                        </span>
                       )}
                     </button>
                     <a
@@ -414,7 +413,7 @@ export default function SearchSongsClient({
       {/* Modal */}
       {showQueueModal && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-primary/40 flex items-center justify-center z-50 p-4"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setShowQueueModal(false);
@@ -423,11 +422,11 @@ export default function SearchSongsClient({
         >
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-primary/12">
               <div className="flex items-center gap-3">
-                <div className="bg-lightpink/20 rounded-full p-2">
+                <div className="bg-primary/15 rounded-full p-2">
                   <svg
-                    className="w-5 h-5 text-lightpink"
+                    className="w-5 h-5 text-primary"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -435,17 +434,17 @@ export default function SearchSongsClient({
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-800">
+                  <h2 className="text-xl font-bold text-foreground">
                     Danh sách phát
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-primary/70">
                     {queueSongs.length} video đã được thêm
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setShowQueueModal(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="p-2 text-primary/50 hover:text-primary/70 hover:bg-primary/8 rounded-lg transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -467,9 +466,9 @@ export default function SearchSongsClient({
             <div className="flex-1 overflow-y-auto p-6">
               {queueSongs.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <div className="w-24 h-24 bg-primary/8 rounded-full flex items-center justify-center mb-4">
                     <svg
-                      className="w-12 h-12 text-gray-400"
+                      className="w-12 h-12 text-primary/50"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -482,11 +481,11 @@ export default function SearchSongsClient({
                       />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  <h3 className="text-lg font-semibold text-primary/80 mb-2">
                     Danh sách phát trống
                   </h3>
-                  <p className="text-sm text-gray-500 max-w-sm">
-                    Hãy tìm kiếm và thêm những bài hát yêu thích vào danh sách
+                  <p className="text-sm text-primary/55 max-w-sm">
+                    Hãy tìm kiếm và thêm những bài nhạc yêu thích vào danh sách
                     phát của bạn!
                   </p>
                 </div>
@@ -495,11 +494,11 @@ export default function SearchSongsClient({
                   {queueSongs.map((song, index) => (
                     <div
                       key={`${song.video_id}-${index}`}
-                      className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                      className="flex items-center gap-2 p-3 bg-primary/6 rounded-lg hover:bg-primary/8 transition-colors duration-200"
                     >
                       <div className="flex-shrink-0">
-                        <div className="w-6 h-6 bg-lightpink/20 rounded flex items-center justify-center">
-                          <span className="text-xs font-bold text-lightpink">
+                        <div className="w-6 h-6 bg-primary/15 rounded flex items-center justify-center">
+                          <span className="text-xs font-bold text-primary">
                             {index + 1}
                           </span>
                         </div>
@@ -517,7 +516,7 @@ export default function SearchSongsClient({
 
                       <div className="flex-1 min-w-0">
                         <h3
-                          className="font-semibold text-gray-800 text-sm leading-tight"
+                          className="font-semibold text-foreground text-sm leading-tight"
                           title={song.title}
                           style={{
                             display: "-webkit-box",
@@ -528,11 +527,11 @@ export default function SearchSongsClient({
                         >
                           {song.title}
                         </h3>
-                        <p className="text-gray-600 text-xs truncate">
+                        <p className="text-primary/70 text-xs truncate">
                           {song.author}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-primary/55">
                             {Math.floor(song.duration / 60)}:
                             {(song.duration % 60).toString().padStart(2, "0")}
                           </span>
@@ -554,7 +553,7 @@ export default function SearchSongsClient({
 
                             const result = await removeSongFromQueue(
                               roomScheduleId,
-                              index
+                              index,
                             );
 
                             if (result.success) {
@@ -598,7 +597,7 @@ export default function SearchSongsClient({
             </div>
 
             {/* Modal Footer - Ghi chú */}
-            <div className="border-t border-gray-200 p-4 bg-blue-50">
+            <div className="border-t border-primary/12 p-4 bg-blue-50">
               <div className="flex items-start gap-2">
                 <svg
                   className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"
@@ -614,7 +613,7 @@ export default function SearchSongsClient({
                 <div className="flex-1">
                   <p className="text-xs text-blue-800 leading-relaxed">
                     <span className="font-semibold">Tiết kiệm thời gian:</span>{" "}
-                    Thêm sẵn nhiều bài hát vào danh sách để không phải tìm kiếm
+                    Thêm sẵn nhiều bài nhạc vào danh sách để không phải tìm kiếm
                     mỗi lần hết bài.
                   </p>
                 </div>

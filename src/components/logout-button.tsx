@@ -1,12 +1,15 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function LogoutButton({
   className,
+  children,
 }: {
   className?: string;
+  children?: ReactNode;
 }) {
   const router = useRouter();
 
@@ -29,7 +32,7 @@ export default function LogoutButton({
         }
       }}
     >
-      Đăng xuất
+      {children ?? "Đăng xuất"}
     </Button>
   );
 }

@@ -17,13 +17,13 @@ const config: Config = {
       keyframes: {
         buttonheartbeat: {
           "0%": {
-            "box-shadow": "0 0 0 0 hsl(var(--lightpink))",
+            "box-shadow": "0 0 0 0 hsl(var(--primary))",
           },
           "50%": {
-            "box-shadow": "0 0 0 5px hsl(var(--lightpink)/0)",
+            "box-shadow": "0 0 0 5px hsl(var(--primary)/0)",
           },
           "100%": {
-            "box-shadow": "0 0 0 0 hsl(var(--lightpink)/0)",
+            "box-shadow": "0 0 0 0 hsl(var(--primary)/0)",
           },
         },
         shake: {
@@ -78,6 +78,18 @@ const config: Config = {
         },
         lightpink: {
           DEFAULT: "hsl(var(--lightpink))",
+        },
+        brand: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          muted: "hsl(var(--brand-muted))",
+          "muted-border": "hsl(var(--brand-muted-border))",
+          hover: "hsl(var(--brand-hover))",
+          soft: "hsl(var(--brand-soft))",
+        },
+        /* #f4edda — nền / vùng be đồng bộ với --background */
+        beige: {
+          DEFAULT: "hsl(var(--beige))",
         },
       },
       screens: {
