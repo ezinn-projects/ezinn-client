@@ -51,63 +51,55 @@ export default function RoomCard({
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
-      {/* Image Section */}
-      <RoomImageCarousel
-        images={room.images || []}
-        roomName={room.roomName || "Room"}
-        roomType={typeBadge}
-        fallbackImageKey={room.type}
-      />
+      {/* Carousel — không bọc Link để vuốt/chuyển ảnh không bị navigate */}
+      <div className="relative z-10">
+        <RoomImageCarousel
+          images={room.images || []}
+          roomName={room.roomName || "Room"}
+          roomType={typeBadge}
+          fallbackImageKey={room.type}
+        />
+      </div>
 
-      {/* Content Section */}
-      <div className="p-4 sm:p-5">
-        <Link href={bookingUrl} className="block">
-          <div className="mb-2">
-            <span
-              className={`inline-block text-xs px-2.5 py-1 rounded-md ${badgeClass}`}
-            >
-              {typeBadge}
-            </span>
-          </div>
-          <Typography as="h4" variant="semibold" className="mb-2 text-primary">
-            {room.roomName}
-          </Typography>
+      {/* Phần còn lại của card — click anywhere để đi tới trang đặt box */}
+      <Link href={bookingUrl} className="block p-4 sm:p-5">
+        <div className="mb-2">
+          <span
+            className={`inline-block text-xs px-2.5 py-1 rounded-md ${badgeClass}`}
+          >
+            {typeBadge}
+          </span>
+        </div>
+        <Typography as="h4" variant="semibold" className="mb-2 text-primary">
+          {room.roomName}
+        </Typography>
 
-          <div className="flex items-start gap-2 mb-3">
-            <Users className="w-4 h-4 mt-0.5 shrink-0 text-primary/50" />
-            <span className="text-xs text-primary/70 leading-snug">
-              {capacityText}
-            </span>
-          </div>
+        <div className="flex items-start gap-2 mb-3">
+          <Users className="w-4 h-4 mt-0.5 shrink-0 text-primary/50" />
+          <span className="text-xs text-primary/70 leading-snug">
+            {capacityText}
+          </span>
+        </div>
 
-          <div className="mb-4">
-            {displayPrice > 0 ? (
-              <Typography
-                as="p"
-                variant="bold"
-                className="text-primary text-lg"
-              >
-                Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
+        <div className="mb-4">
+          {displayPrice > 0 ? (
+            <Typography as="p" variant="bold" className="text-primary text-lg">
+              Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
+            </Typography>
+          ) : (
+            <div className="text-center py-4">
+              <Typography as="p" variant="bold" className="text-primary">
+                Liên hệ để biết giá
               </Typography>
-            ) : (
-              <div className="text-center py-4">
-                <Typography as="p" variant="bold" className="text-primary">
-                  Liên hệ để biết giá
-                </Typography>
-              </div>
-            )}
-          </div>
-        </Link>
+            </div>
+          )}
+        </div>
 
-        {/* Nút đặt box */}
-        <Link
-          href={bookingUrl}
-          className="w-full bg-primary hover:bg-brand-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center"
-        >
+        <span className="w-full bg-primary hover:bg-brand-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center">
           <Calendar className="w-4 h-4 mr-2" />
           Đặt ngay
-        </Link>
-      </div>
+        </span>
+      </Link>
     </div>
   );
 }

@@ -28,17 +28,23 @@ export default function RoomImageCarousel({
   const displayImages =
     images && images.length > 0 ? images : [`/images/room-${imageSlug}.jpg`];
 
-  const nextImage = () => {
+  const nextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
     setCurrentImage((prev) => (prev + 1) % displayImages.length);
   };
 
-  const prevImage = () => {
+  const prevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
     setCurrentImage(
       (prev) => (prev - 1 + displayImages.length) % displayImages.length
     );
   };
 
-  const goToImage = (index: number) => {
+  const goToImage = (index: number, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
     setCurrentImage(index);
   };
 
@@ -99,6 +105,7 @@ export default function RoomImageCarousel({
     <div
       ref={containerRef}
       className="aspect-video relative group cursor-grab active:cursor-grabbing select-none"
+      onClick={(e) => e.stopPropagation()}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -128,6 +135,7 @@ export default function RoomImageCarousel({
       {displayImages.length > 1 && (
         <>
           <button
+            type="button"
             onClick={prevImage}
             className="absolute left-2 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
             aria-label="Hình trước"
@@ -135,6 +143,7 @@ export default function RoomImageCarousel({
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
+            type="button"
             onClick={nextImage}
             className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary/50 hover:bg-primary/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
             aria-label="Hình tiếp theo"
@@ -149,8 +158,9 @@ export default function RoomImageCarousel({
         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
           {displayImages.map((_, index) => (
             <button
+              type="button"
               key={index}
-              onClick={() => goToImage(index)}
+              onClick={(e) => goToImage(index, e)}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentImage
                   ? "bg-white scale-125"
