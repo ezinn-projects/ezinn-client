@@ -35,12 +35,17 @@ export default function PromotionCard({
           {/* Badge: chương comeback làm nổi bật Hot */}
           <div
             className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold shadow ${
+              promotion.slug === "dang-ky-thanh-vien" ||
               promotion.slug === "jozo-comeback-tang-2-gio"
                 ? "bg-primary text-primary-foreground"
                 : "bg-white/90 text-primary"
             }`}
           >
-            {promotion.slug === "jozo-comeback-tang-2-gio" ? "Hot" : "Khuyến mãi"}
+            {promotion.slug === "dang-ky-thanh-vien"
+              ? "Thành viên"
+              : promotion.slug === "jozo-comeback-tang-2-gio"
+                ? "Hot"
+                : "Khuyến mãi"}
           </div>
         </div>
 

@@ -9,6 +9,116 @@ export default function PromotionContent({
   promotionId,
 }: PromotionContentProps) {
   // Render content dựa vào promotion ID
+  if (promotionId === "7") {
+    return (
+      <div className="space-y-6">
+        <Typography
+          as="h1"
+          variant="bold"
+          className="text-3xl text-primary mb-4"
+        >
+          Đăng ký thành viên Jozo — Giảm ngay 10%
+        </Typography>
+
+        <div className="relative w-full rounded-xl overflow-hidden border-2 border-red-200 shadow-lg my-6">
+          <Image
+            src="/images/member-poster-final.png"
+            alt="Poster chương trình thành viên Jozo — giảm ngay 10%"
+            width={1086}
+            height={1448}
+            className="object-contain w-full h-auto"
+            priority
+          />
+        </div>
+
+        <div className="bg-accent/60 border-l-4 border-primary p-4 rounded-r-lg">
+          <Typography
+            as="p"
+            variant="semibold"
+            className="text-primary text-lg leading-relaxed"
+          >
+            Từ ngày <strong>10/7/2026</strong>, Jozo mở chương trình thành viên
+            — đăng ký để nhận <strong>giảm ngay 10%</strong> và hàng loạt ưu
+            đãi hấp dẫn.
+          </Typography>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            ✨ Quyền lợi thành viên
+          </Typography>
+          <ul className="space-y-3 text-primary/80">
+            <li>
+              <strong>🎂 Ưu đãi sinh nhật:</strong> quà và ưu đãi đặc biệt dành
+              riêng cho ngày sinh nhật của bạn.
+            </li>
+            <li>
+              <strong>⭐ Tích điểm thành viên:</strong> mỗi lần sử dụng dịch vụ
+              đều được cộng điểm vào tài khoản.
+            </li>
+            <li>
+              <strong>⬆️ Thăng hạng nhận ưu đãi:</strong> càng tích điểm càng
+              lên hạng — mở khóa thêm nhiều quyền lợi.
+            </li>
+            <li>
+              <strong>🎁 Đủ 3 / 5 / 10 lần nhận quà:</strong> ghé đủ số lần để
+              nhận quà hấp dẫn theo từng mốc.
+            </li>
+            <li>
+              <strong>🍟 Tặng snack, nước &amp; phút miễn phí:</strong> nhận
+              snack, nước uống và miễn phí đến 20 phút theo chương trình.
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            📌 Lưu ý
+          </Typography>
+          <ul className="list-disc list-inside space-y-2 text-primary/80">
+            <li>Chương trình chính thức áp dụng từ ngày 10/7/2026.</li>
+            <li>
+              Ưu đãi giảm 10% và các quyền lợi khác theo quy định tại quầy / trên
+              hệ thống thành viên.
+            </li>
+            <li>Không quy đổi ưu đãi thành tiền mặt.</li>
+            <li>
+              Chi tiết điều kiện có thể thay đổi; vui lòng liên hệ hotline hoặc
+              nhân viên lễ tân khi đến cửa hàng.
+            </li>
+          </ul>
+        </div>
+
+        <div className="mt-6">
+          <Typography
+            as="h3"
+            variant="semibold"
+            className="text-xl text-foreground mb-3"
+          >
+            📞 Liên hệ
+          </Typography>
+          <Typography
+            as="p"
+            variant="default"
+            className="text-primary/80 leading-relaxed"
+          >
+            <strong>Hotline:</strong> 035 966 0934
+            <br />
+            <strong>Địa chỉ:</strong> 30 Phan Trung, P. Tam Hiệp, Đồng Nai
+          </Typography>
+        </div>
+      </div>
+    );
+  }
+
   if (promotionId === "6") {
     return (
       <div className="space-y-6">

@@ -139,24 +139,49 @@ export default async function PromotionDetailPage({
 
             {/* CTA button */}
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
-              <Link
-                href="/medium"
-                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
-              >
-                Đặt S-Box (1-5 người)
-              </Link>
-              <Link
-                href="/large"
-                className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
-              >
-                Đặt box Large (6-8 người)
-              </Link>
-              <a
-                href="tel:0359660934"
-                className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
-              >
-                Liên hệ: 035 966 0934
-              </a>
+              {promotion.id === "7" ? (
+                <>
+                  <Link
+                    href="/register"
+                    className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Đăng ký ngay!
+                  </Link>
+                  <Link
+                    href="/membership"
+                    className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Xem chương trình thành viên
+                  </Link>
+                  <a
+                    href="tel:0359660934"
+                    className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Liên hệ: 035 966 0934
+                  </a>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/medium"
+                    className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Đặt S-Box (1-5 người)
+                  </Link>
+                  <Link
+                    href="/large"
+                    className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Đặt box Large (6-8 người)
+                  </Link>
+                  <a
+                    href="tel:0359660934"
+                    className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
+                  >
+                    Liên hệ: 035 966 0934
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
