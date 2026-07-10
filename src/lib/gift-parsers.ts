@@ -28,7 +28,7 @@ export const parseGiftItem = (payload: unknown): Gift | null => {
   }
 
   if (record._id) {
-    return record as Gift;
+    return payload as Gift;
   }
 
   return null;
