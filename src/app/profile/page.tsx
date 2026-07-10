@@ -5,6 +5,8 @@ import { StreakRewards } from "../../components/streak-rewards";
 import { ProfileAccountMenu } from "@/components/profile-account-menu";
 import { MembershipTierProgress } from "@/components/membership-tier-progress";
 import { computeMembershipProgress } from "@/lib/membership-utils";
+import { getActiveGifts } from "@/lib/gifts";
+import { resolveGiftForReward } from "@/lib/gift-matching";
 import type { Gift } from "@/types/gift";
 
 type MembershipResult = {
@@ -89,12 +91,8 @@ export default async function ProfilePage() {
     }
 
     try {
-      const appApiUrl = getAppApiUrl();
-      const giftsUrl = appApiUrl ? `${appApiUrl}/api/gifts` : "/api/gifts";
-      const res = await fetch(giftsUrl, { cache: "no-store" });
-      const data = await res.json();
-      if (data?.success && Array.isArray(data.data)) {
-        gifts = data.data as Gift[];
+      if (membershipResult) {
+        gifts = await getActiveGifts();
       }
     } catch (error) {
       console.error("Lấy danh sách quà thất bại", error);
@@ -106,7 +104,12 @@ export default async function ProfilePage() {
     Object.entries(membershipResult.config.tierThresholds).sort(
       (a, b) => a[1] - b[1],
     );
-  const streakRewards = membershipResult?.config?.streak?.rewards || [];
+  const streakRewards = (membershipResult?.config?.streak?.rewards || []).map(
+    (reward) => ({
+      ...reward,
+      gift: resolveGiftForReward(reward, gifts),
+    }),
+  );
   const {
     currentTier,
     nextTierName,
@@ -180,7 +183,6 @@ export default async function ProfilePage() {
               windowDays={streakWindowDays}
               currentCount={streakCount}
               rewards={streakRewards}
-              gifts={gifts}
             />
           </div>
         </section>

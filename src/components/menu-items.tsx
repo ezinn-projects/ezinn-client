@@ -12,6 +12,7 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { href: "/", label: "Trang chủ" },
+  { href: "/gioi-thieu", label: "Giới thiệu" },
   { href: "/register", label: "Đăng ký thành viên", hideWhenAuthed: true },
   { href: "/login", label: "Đăng nhập", hideWhenAuthed: true },
   { href: "/profile", label: "Hộ sơ & điểm", showWhenAuthed: true },

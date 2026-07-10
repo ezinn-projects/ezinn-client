@@ -1,32 +1,24 @@
 import { NextResponse } from "next/server";
-import clientPromise, { checkMongoConnection } from "@/lib/mongodb";
-import type { Gift } from "@/types/gift";
+import { getActiveGifts, getGiftById, getGiftsByIds } from "@/lib/gifts";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const isConnected = await checkMongoConnection();
-    if (!isConnected) {
-      return NextResponse.json(
-        { success: false, message: "MongoDB connection failed" },
-        { status: 500 }
-      );
-    }
-
-    const client = await clientPromise;
-    const db = client.db("jozo");
-    const giftsCollection = db.collection<Gift>("gifts");
-
-    const gifts = await giftsCollection
-      .find({ isActive: true })
-      .sort({ createdAt: -1 })
-      .toArray();
+    const idsParam = new URL(request.url).searchParams.get("ids");
+    const gifts = idsParam
+      ? await getGiftsByIds(
+          idsParam
+            .split(",")
+            .map((id) => id.trim())
+            .filter(Boolean),
+        )
+      : await getActiveGifts();
 
     return NextResponse.json({ success: true, data: gifts });
   } catch (error) {
     console.error("Failed to fetch gifts", error);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

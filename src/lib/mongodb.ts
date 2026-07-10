@@ -38,6 +38,8 @@ export async function checkMongoConnection() {
 
 export default clientPromise;
 
+export const getDatabaseName = () => process.env.DB_NAME || "jozo";
+
 if (process.env.NODE_ENV === "development") {
   ensureIndexes().catch(console.error);
 }

@@ -9,9 +9,9 @@ import { promotions } from "@/data/promotions";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
+  title: "JOZO Music Box Biên Hòa | Box   giá sinh viên",
   description:
-    "Đặt box riêng tư tại JOZO Biên Hòa: âm thanh studio, photobooth miễn phí, phụ kiện chụp hình, giá sinh viên. Đặt online để giữ chỗ.",
+    "Đặt box riêng tư tại JOZO Biên Hòa: âm thanh studio, phụ kiện chụp hình miễn phí, giá sinh viên. Đặt online để giữ chỗ.",
   keywords: [
     "jozo",
     "music box",
@@ -20,24 +20,24 @@ export const metadata: Metadata = {
     "music box giá sinh viên",
     "đặt phòng music box",
     "box riêng tư",
-    "photobooth miễn phí",
+    "phụ kiện chụp hình",
   ],
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
+    title: "JOZO Music Box Biên Hòa | Box   giá sinh viên",
     description:
-      "Không gian box riêng tư, âm thanh studio, phụ kiện chụp hình miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
+      "Không gian box   âm thanh studio, phụ kiện chụp hình miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
     url: "/",
     images: ["/images/jozo-thumbnail.jpg"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "JOZO Music Box Biên Hòa | Box riêng tư, giá sinh viên",
+    title: "JOZO Music Box Biên Hòa | Box   giá sinh viên",
     description:
-      "Box riêng tư, âm thanh xịn, photobooth miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
+      "Box   âm thanh studio, phụ kiện chụp hình miễn phí. Đặt online để giữ chỗ tại JOZO Biên Hòa.",
     images: ["/images/jozo-thumbnail.jpg"],
   },
 };
@@ -88,15 +88,15 @@ export default async function Home() {
   const displayRooms = rooms
     .filter((room) => room.type !== "small")
     .sort((a, b) => {
-    const typeOrder: Record<string, number> = {
-      medium: 1,
-      large: 2,
-      dorm: 3,
-    };
-    const orderA = typeOrder[a.type] ?? 99;
-    const orderB = typeOrder[b.type] ?? 99;
-    return orderA - orderB;
-  });
+      const typeOrder: Record<string, number> = {
+        medium: 1,
+        large: 2,
+        dorm: 3,
+      };
+      const orderA = typeOrder[a.type] ?? 99;
+      const orderB = typeOrder[b.type] ?? 99;
+      return orderA - orderB;
+    });
 
   // Hàm helper để lấy giá thấp nhất cho từng loại box
   const getMinPriceForRoomType = (roomType: string, prices: Price[]) => {

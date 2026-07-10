@@ -18,17 +18,25 @@ export function serializeMongoDocument<T extends Record<string, unknown>>(
         keyof T,
         string
       >];
+    } else if (serialized[key] instanceof Date) {
+      serialized[key] = serialized[key].toISOString() as T[Extract<
+        keyof T,
+        string
+      >];
     } else if (Array.isArray(serialized[key])) {
       serialized[key] = serialized[key].map((item: unknown) =>
         item instanceof ObjectId
           ? item.toString()
-          : typeof item === "object" && item !== null
-          ? serializeMongoDocument(item as Record<string, unknown>)
-          : item
+          : item instanceof Date
+            ? item.toISOString()
+            : typeof item === "object" && item !== null
+              ? serializeMongoDocument(item as Record<string, unknown>)
+              : item
       ) as T[Extract<keyof T, string>];
     } else if (
       typeof serialized[key] === "object" &&
-      serialized[key] !== null
+      serialized[key] !== null &&
+      !(serialized[key] instanceof Date)
     ) {
       serialized[key] = serializeMongoDocument(
         serialized[key] as Record<string, unknown>

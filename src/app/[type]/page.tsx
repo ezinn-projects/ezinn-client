@@ -33,7 +33,33 @@ const ROOM_TYPE_LABELS: Record<RoomType, string> = {
   Small: "S-Box (1-5 người)",
   Medium: "S-Box (1-5 người)",
   Large: "L-Box (6-8 người)",
-  Dorm: "Dorm",
+  Dorm: "Dorm Nintendo Switch",
+};
+
+const ROOM_TYPE_SEO: Record<
+  RoomType,
+  { description: string; keywords: string }
+> = {
+  Small: {
+    description:
+      "Đặt S-Box tại JOZO Biên Hòa — phòng box riêng 1–5 người, âm thanh studio, phụ kiện chụp hình miễn phí. Giá sinh viên.",
+    keywords: "music box biên hòa, s-box, box riêng tư",
+  },
+  Medium: {
+    description:
+      "Đặt S-Box tại JOZO Biên Hòa — phòng box riêng 1–5 người, âm thanh studio, phụ kiện chụp hình miễn phí. Giá sinh viên.",
+    keywords: "music box biên hòa, s-box, box riêng tư",
+  },
+  Large: {
+    description:
+      "Đặt L-Box tại JOZO Biên Hòa — phòng box riêng 6–8 người, 4 mic sẵn, phụ kiện chụp hình miễn phí. Giá theo giờ.",
+    keywords: "music box biên hòa, l-box, box nhóm đông",
+  },
+  Dorm: {
+    description:
+      "Khu Dorm Nintendo Switch tại JOZO Biên Hòa — chơi game chung, không phải phòng kín. Tính giờ theo bảng giá.",
+    keywords: "nintendo switch biên hòa, dorm jozo, chơi game tại quán",
+  },
 };
 
 interface BookingPageProps {
@@ -53,11 +79,12 @@ export async function generateMetadata({
   }
 
   const roomLabel = ROOM_TYPE_LABELS[roomType];
+  const seo = ROOM_TYPE_SEO[roomType];
 
   return {
-    title: `Đặt ${roomLabel} - Jozo`,
-    description: `Đặt ${roomLabel} tại Jozo. Chọn thời gian phù hợp và đặt box ngay hôm nay!`,
-    keywords: `đặt ${roomLabel.toLowerCase()}, jozo, ${roomLabel.toLowerCase()}`,
+    title: `Đặt ${roomLabel} - JOZO Biên Hòa`,
+    description: seo.description,
+    keywords: seo.keywords,
   };
 }
 
@@ -132,8 +159,8 @@ export default async function BookingPage({ params }: BookingPageProps) {
 
       {isDorm && (
         <div className="mb-4 rounded-lg border border-primary/30 bg-accent/50 px-4 py-3 text-sm font-semibold text-primary shadow-sm">
-          Dorm là khu chơi game Nintendo Switch chung — không phải phòng box
-          riêng. Giá theo khung giờ như bảng giá bên dưới.
+          Khu Dorm — chơi Nintendo Switch chung, không phải phòng box riêng.
+          Tính giờ theo bảng giá bên dưới.
         </div>
       )}
 

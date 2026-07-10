@@ -1,22 +1,43 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { extractGiftId, normalizeObjectId } from "@/lib/object-id";
 import type { Gift } from "@/types/gift";
+import { useMemo, useState } from "react";
 
 type StreakReward = {
   count: number;
   bonusPoints: number;
   giftId?: string;
+  gift?: Gift;
 };
 
 type Props = {
   windowDays: number;
   currentCount: number;
   rewards: StreakReward[];
-  gifts: Gift[];
 };
 
-const dayLabel = (day: number) => `Ngày ${day}`;
+const visitLabel = (visit: number) => `Lượt ${visit}`;
+
+const giftTypeLabel: Record<Gift["type"], string> = {
+  snacks_drinks: "Đồ ăn & thức uống",
+  discount_percentage: "Voucher giảm giá",
+  discount_amount: "Voucher giảm giá",
+  discount: "Voucher giảm giá",
+};
+
+const formatGiftValue = (gift: Gift) => {
+  if (gift.discountAmount) {
+    return `Giảm ${gift.discountAmount.toLocaleString("vi-VN")}đ`;
+  }
+  if (gift.discountPercentage) {
+    return `Giảm ${gift.discountPercentage}%`;
+  }
+  if (gift.price) {
+    return `Trị giá ${gift.price.toLocaleString("vi-VN")}đ`;
+  }
+  return null;
+};
 
 const GiftIcon = ({ className }: { className?: string }) => (
   <svg
@@ -29,41 +50,23 @@ const GiftIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export function StreakRewards({
-  windowDays,
-  currentCount,
-  rewards,
-  gifts,
-}: Props) {
+export function StreakRewards({ windowDays, currentCount, rewards }: Props) {
   const cappedWindow = Math.max(1, Math.min(windowDays || 0, 60));
 
   const rewardMap = useMemo(() => {
-    const byId = new Map<string, Gift>();
-    gifts.forEach((gift) => {
-      if (gift?._id) {
-        byId.set(String(gift._id), gift);
-      }
-    });
-
-    const map = new Map<
-      number,
-      StreakReward & {
-        gift?: Gift;
-      }
-    >();
+    const map = new Map<number, StreakReward>();
     rewards?.forEach((reward) => {
-      const gift =
-        reward.giftId && byId.get(reward.giftId)
-          ? byId.get(reward.giftId)
-          : undefined;
-      map.set(reward.count, { ...reward, gift });
+      map.set(reward.count, {
+        ...reward,
+        gift: reward.gift,
+        giftId: extractGiftId(reward) || reward.giftId,
+      });
     });
     return map;
-  }, [rewards, gifts]);
+  }, [rewards]);
 
-  const [selected, setSelected] = useState<
-    (StreakReward & { gift?: Gift }) | null
-  >(null);
+  const [selected, setSelected] = useState<StreakReward | null>(null);
+  const selectedGift = selected?.gift;
 
   return (
     <div className="space-y-3">
@@ -79,9 +82,9 @@ export function StreakRewards({
       `}</style>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-gray-800">Chuỗi điểm danh</p>
+          <p className="text-sm font-semibold text-gray-800">Lượt sử dụng</p>
           <p className="text-xs text-gray-500">
-            {currentCount} / {cappedWindow} ngày · Chạm vào mốc để xem quà
+            {currentCount} / {cappedWindow} lượt · Chạm vào mốc để xem quà
           </p>
         </div>
       </div>
@@ -97,31 +100,34 @@ export function StreakRewards({
           const active = day <= currentCount;
           const reward = rewardMap.get(day);
           const isNext = day === currentCount + 1;
-          const hasGift = Boolean(reward?.gift || reward?.giftId);
+          const giftId = reward ? extractGiftId(reward) : null;
+          const hasGiftConfig = Boolean(reward?.gift || giftId);
 
           return (
             <button
               key={day}
               type="button"
-              onClick={() => reward && hasGift && setSelected(reward)}
+              onClick={() => reward && hasGiftConfig && setSelected(reward)}
               className={`relative flex h-14 w-full items-center justify-center rounded-xl border text-[11px] font-semibold overflow-hidden transition focus:outline-none ${
                 active
                   ? "bg-gradient-to-br from-emerald-100 via-white to-emerald-50 border-emerald-200 text-emerald-800 shadow-sm"
                   : "bg-gray-50 border-gray-200 text-gray-600"
               } ${isNext ? "ring-2 ring-emerald-300" : ""} ${
-                reward && hasGift ? "hover:-translate-y-[1px] hover:shadow" : ""
+                reward && hasGiftConfig
+                  ? "hover:-translate-y-[1px] hover:shadow"
+                  : ""
               }`}
               title={
                 reward
                   ? `Mốc ${day}: +${reward.bonusPoints} điểm${
                       reward.gift ? ` · ${reward.gift.name}` : ""
                     }`
-                  : dayLabel(day)
+                  : visitLabel(day)
               }
             >
               {reward ? (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-1 text-center relative">
-                  {hasGift && (
+                  {hasGiftConfig && (
                     <div
                       className="absolute inset-0 opacity-60"
                       style={{
@@ -134,7 +140,7 @@ export function StreakRewards({
                   )}
 
                   <div className="relative flex flex-col items-center gap-1">
-                    {hasGift ? (
+                    {hasGiftConfig ? (
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-600 shadow ring-1 ring-emerald-100 animate-pulse">
                         <GiftIcon className="h-5 w-5" />
                       </div>
@@ -151,7 +157,7 @@ export function StreakRewards({
                 </span>
               ) : (
                 <span className="text-[11px] font-semibold text-gray-700">
-                  {dayLabel(day)}
+                  {visitLabel(day)}
                 </span>
               )}
             </button>
@@ -160,8 +166,14 @@ export function StreakRewards({
       </div>
 
       {selected && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-2xl p-5 space-y-4">
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 px-4"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="relative max-h-[85vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               type="button"
               onClick={() => setSelected(null)}
@@ -169,43 +181,96 @@ export function StreakRewards({
             >
               Đóng
             </button>
-            <div className="space-y-2">
-              <p className="text-sm font-semibold text-gray-700">
+
+            <div className="space-y-1 pr-10">
+              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
                 Mốc {selected.count}/{cappedWindow}
               </p>
               <h3 className="text-lg font-bold text-gray-900">
-                +{selected.bonusPoints} điểm thưởng
+                Phần thưởng mốc này
               </h3>
             </div>
 
-            <div className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
-              {selected.gift?.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={selected.gift.image}
-                  alt={selected.gift.name}
-                  className="h-16 w-16 rounded-lg object-cover border border-gray-200"
-                />
+            <div className="mt-4 space-y-4">
+              <div className="rounded-xl border border-amber-100 bg-amber-50 px-4 py-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                  Điểm thưởng
+                </p>
+                <p className="mt-1 text-2xl font-extrabold text-amber-900">
+                  +{selected.bonusPoints.toLocaleString("vi-VN")} điểm
+                </p>
+              </div>
+
+              {selectedGift ? (
+                <div className="space-y-3 rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+                  <div className="flex items-start gap-3">
+                    {selectedGift.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={selectedGift.image}
+                        alt={selectedGift.name}
+                        className="h-20 w-20 shrink-0 rounded-xl object-cover border border-emerald-100 bg-white"
+                      />
+                    ) : (
+                      <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-dashed border-emerald-200 bg-white text-emerald-600">
+                        <GiftIcon className="h-8 w-8" />
+                      </div>
+                    )}
+
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                        Quà tặng kèm
+                      </p>
+                      <p className="text-base font-bold text-gray-900">
+                        {selectedGift.name}
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {giftTypeLabel[selectedGift.type]}
+                      </p>
+                      {formatGiftValue(selectedGift) ? (
+                        <p className="text-sm font-semibold text-emerald-700">
+                          {formatGiftValue(selectedGift)}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {selectedGift.items && selectedGift.items.length > 0 ? (
+                    <div className="space-y-2 rounded-xl border border-white bg-white p-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                          Danh sách món trong quà
+                        </p>
+                      </div>
+                      <ul className="space-y-2">
+                        {selectedGift.items.map((item, index) => (
+                          <li
+                            key={`${normalizeObjectId(item.itemId) || item.name}-${index}`}
+                            className="flex items-center justify-between gap-3 rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5"
+                          >
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-gray-900">
+                                {item.name}
+                              </p>
+                            </div>
+                            <span className="shrink-0 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">
+                              x{item.quantity}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-dashed border-emerald-200 bg-white px-4 py-3 text-sm text-gray-600">
+                      Quà này chưa có danh sách món chi tiết.
+                    </div>
+                  )}
+                </div>
               ) : (
-                <div className="h-16 w-16 rounded-lg bg-white border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-500">
-                  No image
+                <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
+                  Không tìm thấy thông tin quà cho mốc này.
                 </div>
               )}
-              <div className="space-y-1">
-                <p className="text-sm font-semibold text-gray-900">
-                  {selected.gift?.name || "Quà tặng"}
-                </p>
-
-                {selected.gift?.discountAmount ? (
-                  <p className="text-xs font-semibold text-emerald-700">
-                    Giảm {selected.gift.discountAmount.toLocaleString("vi-VN")}đ
-                  </p>
-                ) : selected.gift?.discountPercentage ? (
-                  <p className="text-xs font-semibold text-emerald-700">
-                    Giảm {selected.gift.discountPercentage}%
-                  </p>
-                ) : null}
-              </div>
             </div>
           </div>
         </div>
