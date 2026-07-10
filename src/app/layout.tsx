@@ -1,31 +1,34 @@
-import Nav from "@/components/nav";
+import NavWithUser from "@/components/nav-with-user";
 import BoardGameNeonBackground from "@/components/ui/board-game-neon-background";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { jozoServicesSeoDescription } from "@/data/services";
-import { getCurrentUser } from "@/lib/auth-server";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Suspense } from "react";
+import Nav from "@/components/nav";
 import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
+  display: "swap",
 });
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jozo.com.vn"),
   title: "JOZO Biên Hòa | Music Box, Nintendo Switch & Board Game",
   icons: {
-    icon: "/images/jozo-logo.png",
-    apple: "/images/jozo-logo.png",
-    shortcut: "/images/jozo-logo.png",
+    icon: "/images/jozo-logo-sm.png",
+    apple: "/images/jozo-logo-sm.png",
+    shortcut: "/images/jozo-logo-sm.png",
   },
   keywords: [
     "JOZO",
@@ -46,11 +49,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    nocache: true,
     googleBot: {
       index: true,
       follow: true,
-      nocache: true,
     },
   },
   verification: {
@@ -58,13 +59,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
-
   return (
     <html lang="vi">
       <body
@@ -79,7 +78,9 @@ export default async function RootLayout({
 
         {/* Header */}
         <header className="relative z-[9999]">
-          <Nav currentUser={currentUser} />
+          <Suspense fallback={<Nav currentUser={null} />}>
+            <NavWithUser />
+          </Suspense>
         </header>
 
         {/* Main */}

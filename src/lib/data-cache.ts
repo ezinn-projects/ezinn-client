@@ -4,9 +4,49 @@ import {
   serializeMongoDocuments,
 } from "@/lib/serialize-utils";
 import { Booking } from "@/types/booking";
+import { Price } from "@/types/price";
+import { RoomType } from "@/types/room";
 import { ObjectId } from "mongodb";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
+
+export const getRoomTypes = unstable_cache(
+  async (): Promise<RoomType[]> => {
+    try {
+      const client = await clientPromise;
+      const db = client.db("jozo");
+      const roomTypes = await db.collection("roomTypes").find({}).toArray();
+      return serializeMongoDocuments(roomTypes) as unknown as RoomType[];
+    } catch (error) {
+      console.error("Error fetching room types:", error);
+      return [];
+    }
+  },
+  ["room-types"],
+  {
+    tags: ["room-types"],
+    revalidate: 60,
+  },
+);
+
+export const getPrices = unstable_cache(
+  async (): Promise<Price[]> => {
+    try {
+      const client = await clientPromise;
+      const db = client.db("jozo");
+      const prices = await db.collection("prices").find({}).toArray();
+      return serializeMongoDocuments(prices) as unknown as Price[];
+    } catch (error) {
+      console.error("Error fetching prices:", error);
+      return [];
+    }
+  },
+  ["prices"],
+  {
+    tags: ["prices"],
+    revalidate: 300,
+  },
+);
 
 /**
  * Cached function để lấy booking details

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     description:
       "Đăng ký thành viên Jozo từ 10/7/2026 — giảm ngay 10%, ưu đãi sinh nhật, tích điểm và quà hấp dẫn.",
     url: "/membership",
-    images: ["/images/member-poster-final.png"],
+    images: ["/images/member-poster-final.webp"],
     type: "website",
   },
   twitter: {
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     title: "Chương trình thành viên Jozo | Giảm ngay 10%",
     description:
       "Đăng ký thành viên Jozo từ 10/7/2026 — giảm ngay 10% và nhận ưu đãi hấp dẫn.",
-    images: ["/images/member-poster-final.png"],
+    images: ["/images/member-poster-final.webp"],
   },
 };
 
@@ -104,7 +104,7 @@ export default function MembershipPage() {
               <div className="relative mx-auto w-full max-w-sm">
                 <div className="relative aspect-[1086/1448] w-full overflow-hidden rounded-xl border border-white/15 shadow-2xl">
                   <Image
-                    src="/images/member-poster-final.png"
+                    src="/images/member-poster-final.webp"
                     alt="Poster chương trình thành viên Jozo"
                     fill
                     sizes="(min-width: 768px) 384px, 90vw"

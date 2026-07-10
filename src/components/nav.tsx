@@ -81,7 +81,7 @@ export default function Nav({
             <Link href="/" className="inline-block">
               {/* Desktop Logo */}
               <Image
-                src="/images/jozo-logo.png"
+                src="/images/jozo-logo.webp"
                 alt="JOZO Music Box"
                 width={120}
                 height={30}
@@ -89,7 +89,7 @@ export default function Nav({
               />
               {/* Mobile Logo */}
               <Image
-                src="/images/jozo-logo.png"
+                src="/images/jozo-logo.webp"
                 alt="JOZO Music Box"
                 width={80}
                 height={20}

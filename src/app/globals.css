@@ -18,6 +18,22 @@
   animation: board-game-neon-drift 52s linear infinite;
 }
 
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .board-game-neon-drift {
+    animation: none;
+  }
+
+  .neon-gaming-flicker {
+    animation: none;
+    will-change: auto;
+  }
+
+  .nav-red-beam,
+  .nav-red-reflection {
+    animation: none;
+  }
+}
+
 @keyframes neon-gaming-flicker {
   0%,
   7%,

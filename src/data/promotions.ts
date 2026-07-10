@@ -7,7 +7,7 @@ export const promotions: Promotion[] = [
     title: "Đăng ký thành viên Jozo — Giảm ngay 10%",
     shortDescription:
       "Từ 10/7/2026, đăng ký thành viên Jozo để nhận giảm ngay 10%, ưu đãi sinh nhật, tích điểm, thăng hạng và quà khi đủ số lần ghé.",
-    image: "/images/member-poster-final.png",
+    image: "/images/member-poster-final.webp",
     postedAt: "2026-07-10T00:00:00+07:00",
   },
   {

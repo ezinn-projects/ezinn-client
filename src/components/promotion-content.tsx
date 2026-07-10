@@ -22,7 +22,7 @@ export default function PromotionContent({
 
         <div className="relative w-full rounded-xl overflow-hidden border-2 border-red-200 shadow-lg my-6">
           <Image
-            src="/images/member-poster-final.png"
+            src="/images/member-poster-final.webp"
             alt="Poster chương trình thành viên Jozo — giảm ngay 10%"
             width={1086}
             height={1448}

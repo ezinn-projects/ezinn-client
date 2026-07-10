@@ -37,11 +37,9 @@ const TwoColumnFooter = () => {
             <div className="flex items-center space-x-1">
               <span>Được phát triển với ❤️ bởi </span>
               <Image
-                priority={true}
-                unoptimized={true}
                 width={100}
                 height={40}
-                src="/images/jozo-logo.png"
+                src="/images/jozo-logo.webp"
                 alt="logo"
                 className="h-7 w-auto"
                 style={{ width: "auto" }}

@@ -38,7 +38,7 @@ export default function JozoLoader({
       {/* Jozo Logo */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <Image
-          src="/images/jozo-logo.png"
+          src="/images/jozo-logo.webp"
           alt="Jozo Logo"
           width={40}
           height={40}

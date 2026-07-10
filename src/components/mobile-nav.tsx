@@ -121,7 +121,7 @@ export default function MobileMenu({
                 <div className="border-b border-primary/10 px-5 pb-4 pt-6">
                   <div className="flex items-center justify-between gap-3">
                     <Image
-                      src="/images/jozo-logo.png"
+                      src="/images/jozo-logo.webp"
                       alt="JOZO Music Box"
                       width={120}
                       height={30}
