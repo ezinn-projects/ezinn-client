@@ -25,7 +25,7 @@ export const jozoServices: JozoService[] = [
     title: "Music Box",
     tagline: "Phòng rộng rãi — box riêng chỉ có nhóm mình",
     summary:
-      "Không gian box kiểu Hàn, rộng rãi và thoải mái. S-Box 1–5 người, L-Box 6–8 người trang bị sẵn 4 mic. Âm thanh studio, phụ kiện chụp hình miễn phí. Giá rẻ — không phụ thu, không tính thuế.",
+      "Không gian box đang dạng concept, rộng rãi và thoải mái. S-Box 1–5 người, L-Box 6–8 người trang bị sẵn 4 mic. Âm thanh studio, phụ kiện chụp hình miễn phí. Giá rẻ — không phụ thu, không tính thuế.",
     highlights: [
       "Phòng rộng rãi · S-Box 1–5 · L-Box 6–8 người",
       "L-Box trang bị sẵn 4 mic",
@@ -88,7 +88,7 @@ export const jozoServicesFaq = [
   {
     question: "Music box tại JOZO có gì?",
     answer:
-      "Phòng box rộng rãi, kiểu Hàn — S-Box 1–5 người, L-Box 6–8 người trang bị sẵn 4 mic. Âm thanh studio, phụ kiện chụp hình miễn phí. Giá rẻ, không phụ thu, không tính thuế.",
+      "Phòng box rộng rãi, đa dạng concept — S-Box 1–5 người, L-Box 6–8 người trang bị sẵn 4 mic. Âm thanh studio, phụ kiện chụp hình miễn phí. Giá rẻ, không phụ thu, không tính thuế.",
   },
   {
     question: "Giá tại JOZO có phụ thu hay thuế không?",
