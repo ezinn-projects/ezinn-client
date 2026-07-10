@@ -67,7 +67,6 @@ export default async function RootLayout({
 
   return (
     <html lang="vi">
-      <link rel="icon" href="/images/jozo-logo.png" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground antialiased`}
       >
