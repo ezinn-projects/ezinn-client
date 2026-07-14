@@ -32,6 +32,9 @@ const CAPACITY_MAPPING: Record<string, string> = {
   dorm: "Nintendo Switch · dorm (Khu chung)",
 };
 
+// TODO(tạm): sáng hết máy game — set false khi mở lại Dorm
+const TEMP_DISABLE_DORM = true;
+
 export default function RoomCard({
   room,
   minPrice,
@@ -41,6 +44,7 @@ export default function RoomCard({
 }) {
   // Chuyển đổi room type từ format cũ sang mới để tạo href
   const bookingUrl = `/${room.type}`;
+  const isDormDisabled = TEMP_DISABLE_DORM && room.type === "dorm";
 
   const typeBadge = TYPE_BADGE[room.type] || "Box";
   const badgeClass = BADGE_CLASS[room.type] ?? BADGE_CLASS.small;
@@ -49,8 +53,71 @@ export default function RoomCard({
   // Sử dụng minPrice từ props
   const displayPrice = minPrice || 0;
 
+  const cardBody = (
+    <>
+      <div className="mb-2">
+        <span
+          className={`inline-block text-xs px-2.5 py-1 rounded-md ${badgeClass}`}
+        >
+          {typeBadge}
+        </span>
+      </div>
+      <Typography as="h4" variant="semibold" className="mb-2 text-primary">
+        {room.roomName}
+      </Typography>
+
+      <div className="flex items-start gap-2 mb-3">
+        <Users className="w-4 h-4 mt-0.5 shrink-0 text-primary/50" />
+        <span className="text-xs text-primary/70 leading-snug">
+          {capacityText}
+        </span>
+      </div>
+
+      <div className="mb-4">
+        {isDormDisabled ? (
+          <div className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2.5">
+            <p className="text-sm font-semibold text-amber-800">
+              Tạm thời hết máy chơi game
+            </p>
+            <p className="mt-0.5 text-xs text-amber-700/90">
+              Xin lỗi khách iu — vui lòng quay lại sau nhé!
+            </p>
+          </div>
+        ) : displayPrice > 0 ? (
+          <Typography as="p" variant="bold" className="text-primary text-lg">
+            Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
+          </Typography>
+        ) : (
+          <div className="text-center py-4">
+            <Typography as="p" variant="bold" className="text-primary">
+              Liên hệ để biết giá
+            </Typography>
+          </div>
+        )}
+      </div>
+
+      {isDormDisabled ? (
+        <span className="w-full bg-primary/35 text-primary-foreground font-medium py-2 px-4 rounded-lg flex items-center justify-center cursor-not-allowed">
+          <Calendar className="w-4 h-4 mr-2" />
+          Tạm hết máy
+        </span>
+      ) : (
+        <span className="w-full bg-primary hover:bg-brand-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center">
+          <Calendar className="w-4 h-4 mr-2" />
+          Đặt ngay
+        </span>
+      )}
+    </>
+  );
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+    <div
+      className={`bg-white rounded-lg shadow-md overflow-hidden transition-shadow group ${
+        isDormDisabled
+          ? "opacity-75"
+          : "hover:shadow-lg"
+      }`}
+    >
       {/* Carousel — không bọc Link để vuốt/chuyển ảnh không bị navigate */}
       <div className="relative z-10">
         <RoomImageCarousel
@@ -61,45 +128,13 @@ export default function RoomCard({
         />
       </div>
 
-      {/* Phần còn lại của card — click anywhere để đi tới trang đặt box */}
-      <Link href={bookingUrl} className="block p-4 sm:p-5">
-        <div className="mb-2">
-          <span
-            className={`inline-block text-xs px-2.5 py-1 rounded-md ${badgeClass}`}
-          >
-            {typeBadge}
-          </span>
-        </div>
-        <Typography as="h4" variant="semibold" className="mb-2 text-primary">
-          {room.roomName}
-        </Typography>
-
-        <div className="flex items-start gap-2 mb-3">
-          <Users className="w-4 h-4 mt-0.5 shrink-0 text-primary/50" />
-          <span className="text-xs text-primary/70 leading-snug">
-            {capacityText}
-          </span>
-        </div>
-
-        <div className="mb-4">
-          {displayPrice > 0 ? (
-            <Typography as="p" variant="bold" className="text-primary text-lg">
-              Chỉ từ: {displayPrice.toLocaleString("vi-VN")}đ/giờ
-            </Typography>
-          ) : (
-            <div className="text-center py-4">
-              <Typography as="p" variant="bold" className="text-primary">
-                Liên hệ để biết giá
-              </Typography>
-            </div>
-          )}
-        </div>
-
-        <span className="w-full bg-primary hover:bg-brand-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors animate-buttonheartbeat flex items-center justify-center">
-          <Calendar className="w-4 h-4 mr-2" />
-          Đặt ngay
-        </span>
-      </Link>
+      {isDormDisabled ? (
+        <div className="block p-4 sm:p-5 pointer-events-none">{cardBody}</div>
+      ) : (
+        <Link href={bookingUrl} className="block p-4 sm:p-5">
+          {cardBody}
+        </Link>
+      )}
     </div>
   );
 }
