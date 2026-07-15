@@ -87,14 +87,8 @@ const ALL_START_TIMES = generateTimeSlots(9, 23, 30).filter((time) => {
 
 type BookingActivityType = "nintendo-switch" | "music-box";
 
-// TODO(tạm): sáng hết máy game — bật lại Nintendo Switch + Dorm khi có máy
-const TEMP_HIDE_NINTENDO_SWITCH = true;
-const TEMP_DISABLE_DORM = true;
-
 const ACTIVITY_OPTIONS: { value: BookingActivityType; label: string }[] = [
-  ...(TEMP_HIDE_NINTENDO_SWITCH
-    ? []
-    : [{ value: "nintendo-switch" as const, label: "Chơi game Nintendo Switch" }]),
+  { value: "nintendo-switch", label: "Chơi game Nintendo Switch" },
   { value: "music-box", label: "Music Box" },
 ];
 
@@ -334,7 +328,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   const router = useRouter();
   const { downloadTicket } = useTicketActions();
   const isDorm = roomType === "Dorm";
-  const isDormDisabled = isDorm && TEMP_DISABLE_DORM;
 
   // State management
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -456,17 +449,10 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   }, [roomType, setValue]);
 
   useEffect(() => {
-    if (isDorm && !TEMP_DISABLE_DORM) {
+    if (isDorm) {
       setValue("activityType", "nintendo-switch");
     }
   }, [isDorm, setValue]);
-
-  // Nếu đang chọn Nintendo Switch bị ẩn tạm thời → clear để bắt chọn lại
-  useEffect(() => {
-    if (TEMP_HIDE_NINTENDO_SWITCH && activityType === "nintendo-switch" && !isDorm) {
-      setValue("activityType", "");
-    }
-  }, [activityType, isDorm, setValue]);
 
   useEffect(() => {
     if (!selectedDate || !isClient || !selectedStartTime) return;
@@ -502,14 +488,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
   // Handler functions với useCallback để tối ưu performance
   const onSubmit = useCallback(
     async (data: BookingFormData) => {
-      if (TEMP_DISABLE_DORM && roomType === "Dorm") {
-        toast({
-          title: "Tạm hết máy chơi game",
-          description: "Dorm sẽ mở lại vào trưa. Xin lỗi khách iu!",
-          variant: "destructive",
-        });
-        return;
-      }
       if (!selectedStartTime || !selectedDuration || !selectedDate) {
         toast({
           title: "Lỗi",
@@ -611,7 +589,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
         setIsSubmitting(false);
       }
     },
-    [selectedStartTime, selectedDuration, selectedDate, endTime, roomType],
+    [selectedStartTime, selectedDuration, selectedDate, endTime],
   );
 
   const copyBookingCode = useCallback(() => {
@@ -717,12 +695,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {isDormDisabled && (
-          <div className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
-            Tạm hết máy chơi game — Dorm sẽ mở lại vào trưa. Xin lỗi khách iu!
-          </div>
-        )}
-
         {/* Customer Information */}
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-primary mb-4">
@@ -994,11 +966,7 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
             </div>
           )}
 
-        {isDormDisabled ? (
-          <div className="w-full py-3 mt-6 text-center font-medium text-amber-800 bg-amber-50 border border-amber-300 rounded-lg">
-            Tạm hết máy chơi game — mở lại trưa
-          </div>
-        ) : isTetDay1Off(selectedDate) ? (
+        {isTetDay1Off(selectedDate) ? (
           <div className="w-full py-3 mt-6 text-center font-medium text-primary bg-accent/45 border border-primary/30 rounded-lg">
             Jozo nghỉ ngày mùng 1, hẹn khách iu vào ngày mùng 2.
           </div>
