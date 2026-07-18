@@ -3,10 +3,6 @@
  * Fallback về localhost:4000 cho development
  */
 export const getApiUrl = (): string => {
-  console.log(
-    "process.env.NEXT_PUBLIC_BACKEND_API_URL",
-    process.env.NEXT_PUBLIC_BACKEND_API_URL
-  );
   return process.env.NEXT_PUBLIC_BACKEND_API_URL || "http://localhost:4000";
 };
 

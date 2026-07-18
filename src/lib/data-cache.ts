@@ -64,7 +64,6 @@ export const getBookingDetails = unstable_cache(
       });
 
       if (!booking) {
-        console.log("Booking not found for ID:", id);
         return null;
       }
 
@@ -146,8 +145,6 @@ export const getRoomDataByType = unstable_cache(
         .collection("roomTypes")
         .find({ type: roomType.toLowerCase() })
         .toArray();
-
-      console.log("rooms", rooms);
 
       if (!rooms.length) {
         return {
@@ -231,7 +228,6 @@ export const getRoomDataByType = unstable_cache(
 
       // Lấy bảng giá
       const prices = await db.collection("prices").find({}).toArray();
-      console.log("Found prices:", prices.length);
 
       // Serialize MongoDB documents để có thể truyền sang Client Component
       return {
@@ -241,7 +237,6 @@ export const getRoomDataByType = unstable_cache(
     } catch (error) {
       console.error("Error fetching room data by type:", error);
       // Fallback trong trường hợp lỗi
-      console.log("Using error fallback mock data");
       return {
         rooms: [],
         prices: [

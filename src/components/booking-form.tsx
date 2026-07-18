@@ -546,8 +546,6 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
 
         const result = await response.json();
 
-        console.log("result", result);
-
         if (result.success) {
           // Hiển thị modal xác nhận
           const bookingId = result.booking?._id || "";

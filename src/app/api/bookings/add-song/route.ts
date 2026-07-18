@@ -62,8 +62,6 @@ export async function POST(request: NextRequest) {
       _id: bookingId,
     });
 
-    console.log("updatedBooking", updatedBooking);
-
     // Revalidate cache để đảm bảo dữ liệu mới được fetch
     revalidatePath(`/search-songs/${bookingId}`);
     revalidatePath(`/api/bookings/${bookingId}`);

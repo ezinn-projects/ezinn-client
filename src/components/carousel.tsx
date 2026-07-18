@@ -9,6 +9,8 @@ type Banner = {
   image: string;
   alt: string;
   href?: string;
+  /** Display width of the image inside aspect-video + object-contain (not the container). */
+  sizes: string;
 };
 
 const banners: Banner[] = [
@@ -16,10 +18,14 @@ const banners: Banner[] = [
     image: "/images/member-poster-final.webp",
     alt: "Đăng ký thành viên Jozo — Giảm ngay 10% từ 10/7/2026",
     href: "/membership",
+    // Portrait 3:4 in 16:9 frame ≈ 42% of container width (~450px at max-w-6xl)
+    sizes: "(min-width: 1024px) 485px, (min-width: 640px) 40vw, 45vw",
   },
   {
     image: "/images/price-list.png",
     alt: "Bảng giá Jozo — Music Box / Nintendo và Board Game",
+    // Landscape ~1.41 ratio in 16:9 frame ≈ 79% of container width
+    sizes: "(min-width: 1024px) 915px, (min-width: 640px) 75vw, 85vw",
   },
 ];
 
@@ -39,7 +45,7 @@ function BannerSlide({
         src={banner.image}
         alt={banner.alt}
         fill
-        sizes="(min-width: 1024px) 1200px, 100vw"
+        sizes={banner.sizes}
         className="object-contain"
         priority={priority}
         loading={priority ? undefined : "lazy"}

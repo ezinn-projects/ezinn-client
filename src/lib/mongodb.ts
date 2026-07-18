@@ -56,8 +56,6 @@ export async function ensureIndexes() {
       { email: 1 },
       { unique: true, sparse: true }, // sparse: true cho phép null
     );
-
-    console.log("Indexes created successfully");
   } catch (error) {
     console.error("Error creating indexes:", error);
   }
