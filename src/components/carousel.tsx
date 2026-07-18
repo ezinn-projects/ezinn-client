@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -67,18 +67,45 @@ function BannerLink({
 
 const BannerCarousel = () => {
   const [currentBanner, setCurrentBanner] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentBanner((prev) => (prev + 1) % banners.length);
     }, 5000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [currentBanner]);
+
+  const goTo = (index: number) => {
+    setCurrentBanner(((index % banners.length) + banners.length) % banners.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current == null || touchEndX.current == null) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > 40) goTo(currentBanner + 1);
+    else if (distance < -40) goTo(currentBanner - 1);
+  };
 
   return (
     <section className="pb-6 sm:pb-8 md:pb-12 -mx-3 sm:mx-0">
       <div className="w-full max-w-6xl mx-auto">
-        <div className="relative w-full">
+        <div
+          className="relative w-full touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {banners.map((banner, index) => (
             <div
               key={banner.image}

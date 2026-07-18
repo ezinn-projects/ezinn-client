@@ -1,5 +1,6 @@
 import Typography from "./ui/typography";
 import PromotionCard from "./promotion-card";
+import MobileSnapSlider from "./mobile-snap-slider";
 import { Promotion } from "@/types/promotion";
 
 type PromotionSectionProps = {
@@ -29,11 +30,14 @@ export default function PromotionSection({
         </div>
       </div>
 
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <MobileSnapSlider
+        desktopClassName="gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        slideClassName="w-[82%] max-w-[300px]"
+      >
         {promotions.map((promotion) => (
           <PromotionCard key={promotion.id} promotion={promotion} />
         ))}
-      </div>
+      </MobileSnapSlider>
     </section>
   );
 }

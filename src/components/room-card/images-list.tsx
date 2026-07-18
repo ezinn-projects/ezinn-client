@@ -50,15 +50,18 @@ export default function RoomImageCarousel({
 
   // Touch handlers for swipe functionality
   const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    e.stopPropagation();
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e?: React.TouchEvent) => {
+    e?.stopPropagation();
     if (!touchStart || !touchEnd) return;
 
     const distance = touchStart - touchEnd;

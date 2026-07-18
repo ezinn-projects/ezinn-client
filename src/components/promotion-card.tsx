@@ -30,7 +30,7 @@ export default function PromotionCard({
             alt={promotion.title}
             fill
             loading="lazy"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 82vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover group-hover:scale-110 transition-transform duration-300"
           />
           {/* Badge: chương comeback làm nổi bật Hot */}
