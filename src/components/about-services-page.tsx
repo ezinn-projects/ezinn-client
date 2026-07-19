@@ -15,6 +15,7 @@ import {
   Gamepad2,
   MapPin,
   Mic2,
+  MonitorPlay,
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
@@ -22,6 +23,7 @@ import { useState } from "react";
 
 const serviceIcons: Record<JozoServiceId, typeof Mic2> = {
   "music-box": Mic2,
+  netflix: MonitorPlay,
   "nintendo-switch": Gamepad2,
   "board-game": Dices,
 };
@@ -35,6 +37,12 @@ const serviceAccent: Record<
     glow: "from-red-500/20 via-rose-400/10 to-transparent",
     badge: "bg-white/15 text-white ring-white/20",
     gradient: "from-[#1a0a0c] via-[#2a1018] to-[#0f1118]",
+  },
+  netflix: {
+    ring: "group-hover:ring-rose-200/80",
+    glow: "from-rose-600/25 via-red-500/10 to-transparent",
+    badge: "bg-rose-50 text-rose-950 ring-rose-100",
+    gradient: "from-[#1a080c] via-[#2a0c14] to-[#0b0c12]",
   },
   "nintendo-switch": {
     ring: "group-hover:ring-violet-200/80",
@@ -314,11 +322,11 @@ export default function AboutServicesPage() {
               id="services-heading"
               className="text-2xl font-bold text-foreground sm:text-3xl"
             >
-              Ba dịch vụ tại JOZO
+              Đa dạng giải trí tại JOZO
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-foreground/70 sm:text-base">
-              Music box, Nintendo Switch và board game — chọn một hoặc kết hợp cả
-              buổi trong cùng một địa điểm.
+              Music box, Netflix, Nintendo Switch và board game — chọn một hoặc
+              kết hợp cả buổi trong cùng một địa điểm.
             </p>
           </div>
 

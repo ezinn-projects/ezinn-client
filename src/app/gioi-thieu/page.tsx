@@ -7,12 +7,13 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Giới thiệu | JOZO Biên Hòa — Tổ hợp giải trí Music Box, Nintendo Switch & Board Game",
+  title:
+    "Giới thiệu | JOZO Biên Hòa — Tổ hợp giải trí đa dạng: Music Box, Netflix, Nintendo Switch & Board Game",
   description: jozoServicesSeoDescription,
   keywords: jozoServicesKeywords,
   alternates: { canonical: "/gioi-thieu" },
   openGraph: {
-    title: "Giới thiệu JOZO Biên Hòa — Tổ hợp giải trí",
+    title: "Giới thiệu JOZO Biên Hòa — Tổ hợp giải trí đa dạng",
     description: jozoServicesSeoDescription,
     url: "/gioi-thieu",
     images: ["/images/jozo-thumbnail.jpg"],
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Giới thiệu JOZO Biên Hòa",
+    title: "Giới thiệu JOZO Biên Hòa — Tổ hợp giải trí đa dạng",
     description: jozoServicesSeoDescription,
     images: ["/images/jozo-thumbnail.jpg"],
   },

@@ -88,8 +88,8 @@ const ALL_START_TIMES = generateTimeSlots(9, 23, 30).filter((time) => {
 type BookingActivityType = "nintendo-switch" | "music-box";
 
 const ACTIVITY_OPTIONS: { value: BookingActivityType; label: string }[] = [
-  { value: "nintendo-switch", label: "Chơi game Nintendo Switch" },
   { value: "music-box", label: "Music Box" },
+  { value: "nintendo-switch", label: "Chơi game Nintendo Switch" },
 ];
 
 const ACTIVITY_NOTE_PREFIX: Record<BookingActivityType, string> = {

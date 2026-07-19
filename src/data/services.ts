@@ -1,4 +1,8 @@
-export type JozoServiceId = "music-box" | "nintendo-switch" | "board-game";
+export type JozoServiceId =
+  | "music-box"
+  | "netflix"
+  | "nintendo-switch"
+  | "board-game";
 
 export type JozoService = {
   id: JozoServiceId;
@@ -14,9 +18,9 @@ export type JozoService = {
 export const jozoVenue = {
   name: "JOZO Biên Hòa",
   address: "30 Phan Trung, Tam Hiệp, Biên Hòa, Đồng Nai",
-  headline: "Tổ hợp giải trí tại Biên Hòa",
+  headline: "Tổ hợp giải trí đa dạng tại Biên Hòa",
   intro:
-    "JOZO là tổ hợp giải trí gồm music box, khu Nintendo Switch và board game — một địa chỉ cho cả buổi chill với bạn bè. Phòng rộng rãi, giá rẻ, không phụ thu, không tính thuế.",
+    "JOZO — viết tắt của Joy Zone — là không gian vui chơi, giải trí đa dạng tại Biên Hòa, nơi bạn có thể hát Music Box, xem Netflix, chơi Nintendo Switch và Board Game cùng bạn bè. Phòng rộng rãi, giá hợp lý, không phụ thu, không tính thuế.",
 };
 
 export const jozoServices: JozoService[] = [
@@ -40,6 +44,27 @@ export const jozoServices: JozoService[] = [
       "box style hàn quốc",
       "đặt phòng music box",
       "giá rẻ không phụ thu",
+    ],
+  },
+  {
+    id: "netflix",
+    title: "Netflix",
+    tagline: "Xem phim / series chill cùng nhóm",
+    summary:
+      "Góc xem Netflix tại JOZO — chọn phim hoặc series yêu thích, ngồi chill cùng bạn bè. Kết hợp snack và nước uống tại quán. Phù hợp nhóm muốn thư giãn, không cần mang thiết bị theo.",
+    highlights: [
+      "Xem Netflix tại quán",
+      "Phù hợp nhóm chill / thư giãn",
+      "Kết hợp snack & nước uống",
+      "Không cần mang thiết bị theo",
+    ],
+    bookingLabel: "Ghé JOZO",
+    bookingHref: "/#booking",
+    keywords: [
+      "netflix biên hòa",
+      "xem netflix tại quán",
+      "xem phim biên hòa",
+      "chill xem phim biên hòa",
     ],
   },
   {
@@ -77,18 +102,28 @@ export const jozoServices: JozoService[] = [
 ];
 
 export const jozoServicesSeoDescription =
-  "JOZO Biên Hòa — tổ hợp giải trí: music box phòng rộng, L-Box 4 mic, Nintendo Switch và board game. Giá rẻ, không phụ thu, không tính thuế. 30 Phan Trung, Tam Hiệp.";
+  "JOZO Biên Hòa — tổ hợp giải trí đa dạng: music box, Netflix, Nintendo Switch và board game. Giá rẻ, không phụ thu, không tính thuế. 30 Phan Trung, Tam Hiệp.";
 
 export const jozoServicesFaq = [
   {
+    question: "JOZO có nghĩa là gì?",
+    answer:
+      "JOZO là viết tắt của Joy Zone — không gian vui chơi, giải trí đa dạng dành cho những buổi gặp gỡ và thư giãn cùng bạn bè tại Biên Hòa.",
+  },
+  {
     question: "JOZO có những dịch vụ gì?",
     answer:
-      "JOZO là tổ hợp giải trí tại Biên Hòa gồm ba dịch vụ: music box, khu Nintendo Switch (Dorm) và board game có sẵn tại quán.",
+      "JOZO là tổ hợp giải trí đa dạng tại Biên Hòa gồm music box, xem Netflix, khu Nintendo Switch (Dorm) và board game có sẵn tại quán.",
   },
   {
     question: "Music box tại JOZO có gì?",
     answer:
       "Phòng box rộng rãi, đa dạng concept — S-Box 1–5 người, L-Box 6–8 người trang bị sẵn 4 mic. Âm thanh studio, phụ kiện chụp hình miễn phí. Giá rẻ, không phụ thu, không tính thuế.",
+  },
+  {
+    question: "JOZO có xem Netflix không?",
+    answer:
+      "Có. JOZO có góc xem Netflix để nhóm bạn ngồi chill, chọn phim hoặc series — kết hợp snack và đồ uống tại quán, không cần mang thiết bị theo.",
   },
   {
     question: "Giá tại JOZO có phụ thu hay thuế không?",
@@ -110,6 +145,7 @@ export const jozoServicesFaq = [
 export const jozoServicesKeywords = [
   "jozo biên hòa",
   "tổ hợp giải trí biên hòa",
+  "tổ hợp giải trí đa dạng biên hòa",
   ...jozoServices.flatMap((service) => service.keywords),
 ];
 

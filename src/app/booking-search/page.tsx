@@ -6,19 +6,32 @@ import Input from "@/components/ui/input";
 import { JozoLoaderWithText } from "@/components/ui/jozo-loader";
 import { toast } from "@/hooks/use-toast";
 import { cancelBooking } from "@/lib/api-utils";
-import { Booking, RoomType } from "@/types/booking.d";
+import { Booking } from "@/types/booking.d";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 type TabType = "all" | "booked" | "in use" | "cancelled" | "finished";
 
-const ROOM_NAME: Record<RoomType, string> = {
-  Small: "Mini Squad (S - BOX)",
-  Medium: "Party Zone (M - BOX)",
-  Large: "Mega Squad (L - BOX)",
-  Dorm: "Dorm",
-};
+function getRoomName(roomType?: string | null): string {
+  const normalizedRoomType = roomType?.trim().toLowerCase();
+
+  if (normalizedRoomType === "small" || normalizedRoomType === "medium") {
+    return "S-Box (1-5 người)";
+  }
+
+  if (normalizedRoomType === "dorm") {
+    return "Dorm";
+  }
+
+  return "L-Box (6-8 người)";
+}
+
+function getBookingRoomName(
+  booking: Pick<Booking, "actualRoomType" | "originalRoomType">,
+): string {
+  return getRoomName(booking.actualRoomType || booking.originalRoomType);
+}
 
 function BookingSearchContent() {
   const searchParams = useSearchParams();
@@ -601,7 +614,7 @@ function BookingSearchContent() {
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                                   />
                                 </svg>
-                                {ROOM_NAME[booking.actualRoomType]}
+                                {getBookingRoomName(booking)}
                               </h3>
                               <div className="space-y-2">
                                 <p className="text-sm text-primary/70 flex items-center gap-2">
@@ -762,7 +775,7 @@ function BookingSearchContent() {
                 <div className="space-y-2">
                   <p className="text-primary/80">
                     <span className="font-medium">Loại box:</span>{" "}
-                    {ROOM_NAME[selectedBooking.actualRoomType]}
+                    {getBookingRoomName(selectedBooking)}
                   </p>
                   <p className="text-primary/80">
                     <span className="font-medium">Ngày đặt:</span>{" "}
@@ -911,7 +924,10 @@ function BookingSearchContent() {
                     <div className="flex justify-between">
                       <span className="text-primary/70">Loại box:</span>
                       <span className="font-medium text-primary">
-                        {ROOM_NAME[bookingToCancel.originalRoomType]}
+                        {getRoomName(
+                          bookingToCancel.originalRoomType ||
+                            bookingToCancel.actualRoomType,
+                        )}
                       </span>
                     </div>
                     <div className="flex justify-between">

@@ -24,7 +24,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jozo.com.vn"),
-  title: "JOZO Biên Hòa | Music Box, Nintendo Switch & Board Game",
+  title: "JOZO Biên Hòa | Tổ hợp giải trí đa dạng — Music Box, Netflix, Switch & Board Game",
   icons: {
     icon: "/images/jozo-logo-sm.png",
     apple: "/images/jozo-logo-sm.png",
@@ -32,7 +32,9 @@ export const metadata: Metadata = {
   },
   keywords: [
     "JOZO",
+    "tổ hợp giải trí đa dạng biên hòa",
     "music box biên hòa",
+    "netflix biên hòa",
     "nintendo switch biên hòa",
     "board game biên hòa",
     "box riêng tư",
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
   ],
   description: jozoServicesSeoDescription,
   openGraph: {
-    title: "JOZO Biên Hòa | Music Box, Nintendo Switch & Board Game",
+    title: "JOZO Biên Hòa | Tổ hợp giải trí đa dạng",
     description: jozoServicesSeoDescription,
     images: ["/images/jozo-thumbnail.jpg"],
   },

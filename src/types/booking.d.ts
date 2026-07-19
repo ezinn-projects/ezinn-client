@@ -15,8 +15,9 @@ export type Booking = {
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
-  actualRoomType: RoomType;
-  originalRoomType: RoomType;
+  /** BE có thể trả "Medium" hoặc "medium" — normalize khi hiển thị */
+  actualRoomType: string;
+  originalRoomType: string;
   startTime: string; // ISO string với timezone +07:00
   endTime: string; // ISO string với timezone +07:00
   note?: string;
