@@ -21,7 +21,7 @@ export type Booking = {
   startTime: string; // ISO string với timezone +07:00
   endTime: string; // ISO string với timezone +07:00
   note?: string;
-  status?: "booked" | "cancelled" | "completed" | "in use";
+  status?: "booked" | "cancelled" | "completed" | "finished" | "in use";
   createdAt?: string;
   updatedAt?: string;
   queueSongs?: QueueSong[];

@@ -89,7 +89,10 @@ function BookingSearchContent() {
       case "cancelled":
         return bookings.filter((booking) => booking.status === "cancelled");
       case "finished":
-        return bookings.filter((booking) => booking.status === "completed");
+        return bookings.filter(
+          (booking) =>
+            booking.status === "finished" || booking.status === "completed",
+        );
       default:
         return bookings;
     }
@@ -168,8 +171,9 @@ function BookingSearchContent() {
         return "Đang sử dụng";
       case "cancelled":
         return "Đã hủy";
+      case "finished":
       case "completed":
-        return "Đã hoàn thành";
+        return "Hoàn thành";
       default:
         return "Chưa xác định";
     }
@@ -187,6 +191,7 @@ function BookingSearchContent() {
         return "text-green-600";
       case "cancelled":
         return "text-red-600";
+      case "finished":
       case "completed":
         return "text-purple-600";
       default:
