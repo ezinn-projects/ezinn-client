@@ -17,23 +17,23 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Thành viên Jozo | Giảm 10% khi đăng ký",
+  title: "Chương trình Thành viên Jozo | Ưu đãi giảm 10%",
   description:
-    "Từ 10/7/2026, đăng ký thành viên Jozo được giảm 10%. Có tích điểm, ưu đãi sinh nhật và quà khi ghé đủ số lần.",
+    "Tham gia Chương trình Thành viên Jozo từ ngày 10/7/2026. Thành viên được giảm 10%, tích điểm, ưu đãi sinh nhật và quà tặng theo số lần sử dụng dịch vụ.",
   alternates: { canonical: "/membership" },
   openGraph: {
-    title: "Thành viên Jozo | Giảm 10% khi đăng ký",
+    title: "Chương trình Thành viên Jozo | Ưu đãi giảm 10%",
     description:
-      "Từ 10/7/2026 đăng ký thành viên Jozo được giảm 10%, tích điểm và nhận quà khi ghé quán.",
+      "Đăng ký thành viên Jozo từ 10/7/2026 để nhận ưu đãi giảm 10%, tích điểm và quyền lợi dành riêng cho hội viên.",
     url: "/membership",
     images: ["/images/member-poster-final.webp"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Thành viên Jozo | Giảm 10% khi đăng ký",
+    title: "Chương trình Thành viên Jozo | Ưu đãi giảm 10%",
     description:
-      "Đăng ký thành viên từ 10/7/2026 — giảm 10% và có thêm ưu đãi khi ghé Jozo.",
+      "Tham gia Chương trình Thành viên Jozo từ 10/7/2026 — giảm 10% và nhận các quyền lợi dành riêng cho hội viên.",
     images: ["/images/member-poster-final.webp"],
   },
 };
@@ -54,47 +54,47 @@ export default async function MembershipPage() {
 
   const streakMilestones =
     streakRewards.length > 0
-      ? streakRewards.map((r) => r.count).join(", ")
-      : "3, 5, 10";
+      ? streakRewards.map((r) => r.count).join(" / ")
+      : "3 / 5 / 10";
 
   const benefits = [
     {
       icon: Cake,
-      title: "Sinh nhật có quà",
+      title: "Ưu đãi sinh nhật",
       description:
         birthdayMultiplier > 1
-          ? `Ngày sinh nhật điểm được nhân ${birthdayMultiplier} lần. Nhớ cập nhật ngày sinh trong tài khoản nhé.`
-          : "Tới quán đúng ngày sinh nhật thì có ưu đãi riêng — hỏi lễ tân là được.",
+          ? `Trong ngày sinh nhật, điểm tích lũy được nhân ${birthdayMultiplier} lần. Vui lòng cập nhật ngày sinh trong tài khoản để áp dụng.`
+          : "Thành viên nhận ưu đãi đặc biệt trong tháng sinh nhật theo quy định chương trình.",
     },
     {
       icon: Star,
-      title: "Đi bao nhiêu tích điểm bấy nhiêu",
+      title: "Tích điểm khi sử dụng dịch vụ",
       description:
         pointPerCurrency > 0 && currencyUnit > 0
-          ? `Cứ ${formatVnd(currencyUnit)}đ là được cộng ${formatPoints(pointPerCurrency)} điểm. Đi nhiều thì điểm lên nhanh.`
-          : "Mỗi lần đặt phòng hay dùng dịch vụ đều được cộng điểm.",
+          ? `Mỗi ${formatVnd(currencyUnit)} đồng chi tiêu được cộng ${formatPoints(pointPerCurrency)} điểm vào tài khoản thành viên.`
+          : "Mỗi lần sử dụng dịch vụ tại Jozo, điểm sẽ được cộng vào tài khoản thành viên.",
     },
     {
       icon: ChevronUp,
-      title: "Lên hạng thì đã hơn",
+      title: "Thăng hạng thành viên",
       description:
         tiers.length > 0
-          ? `Có ${tiers.length} hạng. Đi đều, tích điểm đủ là lên — hạng cao hơn thì ưu đãi tốt hơn.`
-          : "Tích đủ điểm là lên hạng. Hạng càng cao, ưu đãi càng đáng.",
+          ? `Chương trình gồm ${tiers.length} hạng. Điểm tích lũy càng cao, hạng thành viên càng được nâng cấp cùng quyền lợi tương ứng.`
+          : "Điểm tích lũy đạt ngưỡng sẽ được nâng hạng thành viên và mở quyền lợi tương ứng.",
     },
     {
       icon: Gift,
-      title: `Ghé đủ ${streakMilestones} lần có quà`,
+      title: `Quà tặng theo mốc ${streakMilestones} lần`,
       description:
         windowDays > 0
-          ? `Trong ${windowDays} ngày, ghé đủ mốc là nhận điểm thưởng và quà. Không cần làm gì thêm.`
-          : "Ghé đủ số lần theo mốc là nhận quà — đơn giản vậy thôi.",
+          ? `Trong vòng ${windowDays} ngày, thành viên đạt đủ số lần sử dụng dịch vụ sẽ nhận điểm thưởng và quà tặng theo từng mốc.`
+          : "Thành viên đạt đủ số lần sử dụng dịch vụ theo từng mốc sẽ nhận quà tặng tương ứng.",
     },
     {
       icon: Utensils,
-      title: "Snack, nước, thêm phút",
+      title: "Ưu đãi kèm theo",
       description:
-        "Tùy đợt có thể được tặng snack, nước hoặc thêm thời gian — chi tiết hỏi lễ tân khi tới.",
+        "Thành viên có thể nhận snack, đồ uống hoặc thời gian sử dụng bổ sung theo chính sách áp dụng tại từng thời điểm.",
     },
   ];
 
@@ -106,7 +106,7 @@ export default async function MembershipPage() {
           className="inline-flex items-center text-primary hover:text-brand-hover mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
-          Về trang chủ
+          Quay lại trang chủ
         </Link>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -116,14 +116,14 @@ export default async function MembershipPage() {
               <div className="space-y-4">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
                   <PartyPopper className="h-3.5 w-3.5" />
-                  Áp dụng từ 10/7/2026
+                  Chính thức từ 10/7/2026
                 </span>
                 <Typography
                   as="h1"
                   variant="bold"
                   className="text-3xl md:text-4xl leading-tight"
                 >
-                  Làm thành viên Jozo
+                  Chương trình Thành viên Jozo
                 </Typography>
                 <div className="inline-flex items-center rounded-xl border-2 border-white/30 bg-primary px-4 py-2 shadow-[0_0_24px_rgba(220,38,38,0.45)]">
                   <span className="text-xl md:text-2xl font-extrabold tracking-wide">
@@ -135,8 +135,9 @@ export default async function MembershipPage() {
                   variant="default"
                   className="text-white/80 text-base md:text-lg"
                 >
-                  Đăng ký miễn phí. Lần sau ghé quán là được giảm 10%, cộng thêm
-                  điểm và quà nếu đi đều.
+                  Đăng ký miễn phí để trở thành hội viên và nhận ngay ưu đãi giảm
+                  10%, cùng hệ thống tích điểm và quyền lợi dành riêng cho thành
+                  viên.
                 </Typography>
               </div>
 
@@ -144,7 +145,7 @@ export default async function MembershipPage() {
                 <div className="relative aspect-[1086/1448] w-full overflow-hidden rounded-xl border border-white/15 shadow-2xl">
                   <Image
                     src="/images/member-poster-final.webp"
-                    alt="Poster chương trình thành viên Jozo"
+                    alt="Poster Chương trình Thành viên Jozo"
                     fill
                     sizes="(min-width: 768px) 384px, 90vw"
                     className="object-contain bg-black"
@@ -162,8 +163,9 @@ export default async function MembershipPage() {
                 variant="semibold"
                 className="text-primary text-lg"
               >
-                Từ <strong>10/7/2026</strong>, cứ đăng ký xong là được giảm 10%
-                khi dùng dịch vụ tại Jozo. Không có phí, không ràng buộc gì thêm.
+                Từ ngày <strong>10/7/2026</strong>, khách hàng đăng ký thành viên
+                Jozo sẽ được giảm 10% khi sử dụng dịch vụ, đồng thời tham gia hệ
+                thống tích điểm và nhận các quyền lợi theo hạng thành viên.
               </Typography>
             </div>
 
@@ -173,7 +175,7 @@ export default async function MembershipPage() {
                 variant="semibold"
                 className="text-2xl text-foreground mb-6"
               >
-                Thành viên được gì?
+                Quyền lợi thành viên
               </Typography>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {benefits.map(({ icon: Icon, title, description }) => (
@@ -210,7 +212,7 @@ export default async function MembershipPage() {
                   variant="semibold"
                   className="text-2xl text-foreground mb-4"
                 >
-                  Các hạng
+                  Hạng thành viên
                 </Typography>
                 {pointPerCurrency > 0 && currencyUnit > 0 && (
                   <Typography
@@ -218,8 +220,8 @@ export default async function MembershipPage() {
                     variant="default"
                     className="text-primary/70 text-sm mb-4"
                   >
-                    Chi tiêu {formatVnd(currencyUnit)}đ thì cộng{" "}
-                    {formatPoints(pointPerCurrency)} điểm.
+                    Tỷ lệ tích điểm: {formatPoints(pointPerCurrency)} điểm /{" "}
+                    {formatVnd(currencyUnit)} đồng.
                   </Typography>
                 )}
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -230,7 +232,7 @@ export default async function MembershipPage() {
                     >
                       <div className="min-w-0">
                         <p className="text-xs uppercase tracking-wide text-primary/50">
-                          Mốc {index + 1}
+                          Hạng {index + 1}
                         </p>
                         <p className="font-semibold text-foreground capitalize truncate">
                           {name}
@@ -252,7 +254,7 @@ export default async function MembershipPage() {
                   variant="semibold"
                   className="text-2xl text-foreground mb-4"
                 >
-                  Quà khi ghé đều
+                  Quà tặng theo số lần sử dụng
                 </Typography>
                 {windowDays > 0 && (
                   <Typography
@@ -260,7 +262,8 @@ export default async function MembershipPage() {
                     variant="default"
                     className="text-primary/70 text-sm mb-4"
                   >
-                    Đếm trong {windowDays} ngày. Đủ mốc nào nhận mốc đó.
+                    Số lần sử dụng được ghi nhận trong vòng {windowDays} ngày.
+                    Thành viên đạt từng mốc sẽ nhận phần thưởng tương ứng.
                   </Typography>
                 )}
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -270,12 +273,12 @@ export default async function MembershipPage() {
                       className="rounded-xl border border-red-100 bg-white p-4"
                     >
                       <p className="text-sm font-semibold text-foreground">
-                        {reward.count} lần
+                        Mốc {reward.count} lần
                       </p>
                       <p className="text-sm text-primary/70 mt-1">
-                        +{formatPoints(reward.bonusPoints)} điểm
+                        +{formatPoints(reward.bonusPoints)} điểm thưởng
                         {reward.itemCount
-                          ? `, kèm ${reward.itemCount} phần quà`
+                          ? ` và ${reward.itemCount} phần quà`
                           : ""}
                       </p>
                     </div>
@@ -290,12 +293,20 @@ export default async function MembershipPage() {
                 variant="semibold"
                 className="text-2xl text-foreground mb-4"
               >
-                Làm sao để tham gia?
+                Cách tham gia
               </Typography>
               <ol className="list-decimal list-inside space-y-2 text-primary/80">
-                <li>Đăng ký tài khoản trên web Jozo — miễn phí.</li>
-                <li>Lần sau đặt phòng hoặc ghé quán, nhớ đăng nhập.</li>
-                <li>Đi đều thì điểm lên, hạng lên, có quà theo mốc.</li>
+                <li>
+                  Đăng ký tài khoản thành viên trên website Jozo (miễn phí).
+                </li>
+                <li>
+                  Đăng nhập khi đặt chỗ hoặc sử dụng dịch vụ tại Jozo để áp dụng
+                  ưu đãi thành viên.
+                </li>
+                <li>
+                  Tích điểm, thăng hạng và nhận quà tặng theo các mốc của chương
+                  trình.
+                </li>
               </ol>
             </section>
 
@@ -305,18 +316,20 @@ export default async function MembershipPage() {
                 variant="semibold"
                 className="text-2xl text-foreground mb-4"
               >
-                Vài lưu ý nhỏ
+                Điều khoản & lưu ý
               </Typography>
               <ul className="list-disc list-inside space-y-2 text-primary/80">
-                <li>Chương trình chạy chính thức từ 10/7/2026.</li>
                 <li>
-                  Giảm 10% và các ưu đãi khác theo quy định tại quán / trên hệ
-                  thống.
+                  Chương trình chính thức áp dụng từ ngày 10/7/2026.
                 </li>
-                <li>Không đổi ưu đãi ra tiền mặt.</li>
                 <li>
-                  Có gì thắc mắc thì gọi hotline hoặc hỏi lễ tân khi tới — tụi
-                  mình hỗ trợ liền.
+                  Ưu đãi giảm 10% và các quyền lợi khác được áp dụng theo quy
+                  định trên hệ thống và tại điểm kinh doanh.
+                </li>
+                <li>Ưu đãi không được quy đổi thành tiền mặt.</li>
+                <li>
+                  Jozo có quyền điều chỉnh nội dung chương trình. Mọi thắc mắc
+                  vui lòng liên hệ hotline hoặc nhân viên tại quầy.
                 </li>
               </ul>
             </section>
@@ -326,13 +339,13 @@ export default async function MembershipPage() {
                 href="/register"
                 className="bg-primary hover:bg-brand-hover text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-colors text-center shadow-lg shadow-primary/25"
               >
-                Đăng ký miễn phí
+                Đăng ký thành viên
               </Link>
               <a
                 href="tel:0359660934"
                 className="bg-white border-2 border-primary text-primary hover:bg-accent font-semibold py-3 px-8 rounded-lg transition-colors text-center"
               >
-                Gọi 035 966 0934
+                Liên hệ: 035 966 0934
               </a>
             </div>
 
