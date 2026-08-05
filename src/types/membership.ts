@@ -3,7 +3,8 @@ import type { ObjectId } from "mongodb";
 export interface IStreakReward {
   count: number;
   bonusPoints: number;
-  giftId?: ObjectId;
+  itemCount?: number;
+  giftId?: ObjectId | string;
 }
 
 export interface IStreakConfig {
@@ -11,20 +12,30 @@ export interface IStreakConfig {
   rewards: IStreakReward[];
 }
 
+export interface IGroupSizeBonus {
+  sizeGte: number;
+  points: number;
+}
+
 export interface IBonusRules {
+  bookingEarlyBonus?: number;
+  offPeakBonus?: number;
+  groupSizeBonus?: IGroupSizeBonus;
+  birthdayMultiplier?: number;
   [key: string]: unknown;
 }
 
 export interface IMembershipConfig {
-  _id?: ObjectId;
+  _id?: ObjectId | string;
   currencyUnit: number;
   pointPerCurrency: number;
   tierThresholds: Record<string, number>;
+  tierBenefits?: Record<string, unknown>;
   bonusRules?: IBonusRules;
   streak?: IStreakConfig;
   dailySelfClaimLimitPerPhone?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export interface IMemberLoyalty {

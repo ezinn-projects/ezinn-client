@@ -3,10 +3,20 @@ import { MongoClient } from "mongodb";
 let client: MongoClient | null = null;
 let clientPromise: Promise<MongoClient>;
 
-const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.VPS_IP}:${process.env.VPS_PORT}/${process.env.DB_NAME}?authSource=${process.env.VPS_AUTH_SOURCE}`;
+const host = process.env.VPS_IP || "127.0.0.1";
+const port = process.env.VPS_PORT || "27017";
+const dbName = process.env.DB_NAME || "jozo";
+const user = process.env.DB_USER;
+const password = process.env.DB_PASSWORD;
+const authSource = process.env.VPS_AUTH_SOURCE || "admin";
 
-if (!uri) {
-  throw new Error("Please add your MongoDB URI to .env.local");
+const uri =
+  user && password
+    ? `mongodb://${user}:${password}@${host}:${port}/${dbName}?authSource=${authSource}`
+    : `mongodb://${host}:${port}/${dbName}`;
+
+if (!host || !port || !dbName) {
+  throw new Error("Please add your MongoDB config to .env");
 }
 
 if (process.env.NODE_ENV === "development") {

@@ -62,12 +62,12 @@ export default function RegisterForm() {
         throw new Error(result.message || "Đăng ký thất bại");
       }
 
-      // Đăng ký thành công
+      // Đăng ký thành công — chuyển sang trang đăng nhập
       toast({
         title: "Đăng ký thành công!",
-        description: "Bạn đã đăng ký thành công!",
+        description: "Vui lòng đăng nhập để tiếp tục.",
       });
-      router.push("/");
+      router.push("/login");
     } catch (error: any) {
       toast({
         title: "Đăng ký thất bại!",
