@@ -8,7 +8,11 @@ import BookingSuccessModal from "@/components/ui/booking-success-modal";
 import { useTicketActions } from "@/hooks/use-ticket-actions";
 import { toast } from "@/hooks/use-toast";
 import { cancelBooking, createApiEndpoint } from "@/lib/api-utils";
-import { BookingFormData, BookingFormValues, bookingSchema } from "@/schemas/booking.schema";
+import {
+  BookingFormData,
+  BookingFormValues,
+  bookingSchema,
+} from "@/schemas/booking.schema";
 import { BookingRequest } from "@/types/booking.d";
 import { Price } from "@/types/price";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -694,25 +698,20 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
       </div>
 
       <div className="mb-5 bg-accent/60 border-l-4 border-primary p-3 rounded-r-lg text-sm text-primary">
-        <p className="font-semibold">
-          Thành viên mới giảm ngay 10% lần đầu
-        </p>
-        <p className="mt-1 text-primary/80">
-          Đăng ký thành viên Jozo để được giảm 10% cho lần sử dụng đầu tiên.{" "}
-          <Link
-            href="/register"
-            className="font-semibold underline underline-offset-2 hover:text-primary"
-          >
-            Đăng ký ngay
-          </Link>
-          {" · "}
-          <Link
-            href="/promotions/dang-ky-thanh-vien"
-            className="underline underline-offset-2 hover:text-primary"
-          >
-            Xem chi tiết
-          </Link>
-        </p>
+        <p className="font-semibold">Thành viên mới giảm ngay 10% lần đầu</p>
+        <Link
+          href="/register"
+          className="font-semibold underline underline-offset-2 hover:text-primary"
+        >
+          Đăng ký ngay
+        </Link>
+        {" · "}
+        <Link
+          href="/promotions/dang-ky-thanh-vien"
+          className="underline underline-offset-2 hover:text-primary"
+        >
+          Xem chi tiết
+        </Link>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
