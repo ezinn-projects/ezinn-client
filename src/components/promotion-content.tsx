@@ -89,6 +89,7 @@ export default function PromotionContent({
               Ưu đãi giảm 10% và các quyền lợi khác theo quy định tại quầy / trên
               hệ thống thành viên.
             </li>
+            <li>Ưu đãi giảm 10% không áp dụng cho các ngày lễ.</li>
             <li>Không quy đổi ưu đãi thành tiền mặt.</li>
             <li>
               Chi tiết điều kiện có thể thay đổi; vui lòng liên hệ hotline hoặc

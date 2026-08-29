@@ -326,6 +326,7 @@ export default async function MembershipPage() {
                   Ưu đãi giảm 10% và các quyền lợi khác được áp dụng theo quy
                   định trên hệ thống và tại điểm kinh doanh.
                 </li>
+                <li>Ưu đãi giảm 10% không áp dụng cho các ngày lễ.</li>
                 <li>Ưu đãi không được quy đổi thành tiền mặt.</li>
                 <li>
                   Jozo có quyền điều chỉnh nội dung chương trình. Mọi thắc mắc
