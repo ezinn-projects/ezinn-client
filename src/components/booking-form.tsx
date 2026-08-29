@@ -699,6 +699,9 @@ export default function BookingForm({ roomType, prices }: BookingFormProps) {
 
       <div className="mb-5 bg-accent/60 border-l-4 border-primary p-3 rounded-r-lg text-sm text-primary">
         <p className="font-semibold">Thành viên mới giảm ngay 10% lần đầu</p>
+        <p className="mt-1 text-primary/80">
+          Không áp dụng cho các ngày lễ.
+        </p>
         <Link
           href="/register"
           className="font-semibold underline underline-offset-2 hover:text-primary"

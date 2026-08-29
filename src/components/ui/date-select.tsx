@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
+import { getDaysInMonth } from "@/lib/date-utils";
 
 const POPOVER_ESTIMATED_HEIGHT = 280;
 
@@ -67,7 +68,6 @@ export function DateSelect({
   const currentYear = isClient ? new Date().getFullYear() : 2024;
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   const selectedDate = useMemo(() => {
     if (isClient) {
@@ -75,6 +75,11 @@ export function DateSelect({
     }
     return value || new Date(2024, 0, 1); // Default date for SSR
   }, [value, isClient]);
+
+  const days = Array.from(
+    { length: getDaysInMonth(selectedDate.getFullYear(), selectedDate.getMonth() + 1) },
+    (_, i) => i + 1,
+  );
 
   const scrollToCenter = (element: HTMLElement, container: HTMLElement) => {
     const elementRect = element.getBoundingClientRect();
@@ -93,10 +98,13 @@ export function DateSelect({
   const handleSelect = (type: "day" | "month" | "year", val: number) => {
     if (!isClient) return;
 
+    const year = type === "year" ? val : selectedDate.getFullYear();
+    const month = type === "month" ? val : selectedDate.getMonth() + 1;
+    const day = type === "day"
+      ? val
+      : Math.min(selectedDate.getDate(), getDaysInMonth(year, month));
     const newDate = new Date(selectedDate);
-    if (type === "day") newDate.setDate(val);
-    if (type === "month") newDate.setMonth(val - 1);
-    if (type === "year") newDate.setFullYear(val);
+    newDate.setFullYear(year, month - 1, day);
     onChange(newDate);
 
     // Scroll to center after selection

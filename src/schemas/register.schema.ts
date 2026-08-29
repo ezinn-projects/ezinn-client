@@ -1,8 +1,10 @@
 import { z } from "zod";
 import { passwordSchema } from "./password.schema";
-
-const MAX_AGE = 100;
-const MIN_AGE = 12;
+import {
+  isMemberBirthDateValid,
+  MAX_MEMBER_AGE,
+  MIN_MEMBER_AGE,
+} from "@/lib/date-utils";
 
 export const registerSchema = z
   .object({
@@ -21,14 +23,11 @@ export const registerSchema = z
     confirm_password: z.string(),
     date_of_birth: z
       .date()
-      .refine((date) => {
-        const age = new Date().getFullYear() - date.getFullYear();
-        return age <= MAX_AGE;
-      }, "Ngày sinh không hợp lệ")
-      .refine((date) => {
-        const age = new Date().getFullYear() - date.getFullYear();
-        return age >= MIN_AGE;
-      }, `Bạn phải đủ ${MIN_AGE} tuổi để đăng ký`),
+      .refine((date) => isMemberBirthDateValid(date), "Ngày sinh không hợp lệ")
+      .refine(
+        (date) => isMemberBirthDateValid(date),
+        `Tuổi thành viên phải từ ${MIN_MEMBER_AGE} đến ${MAX_MEMBER_AGE} tuổi`,
+      ),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "Mật khẩu xác nhận không khớp",

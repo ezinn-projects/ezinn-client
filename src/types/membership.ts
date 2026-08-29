@@ -56,6 +56,7 @@ export interface IMemberProfile {
   email?: string;
   phone?: string;
   phone_number?: string;
+  date_of_birth?: string | Date | null;
   fullName?: string;
   full_name?: string;
   name?: string;

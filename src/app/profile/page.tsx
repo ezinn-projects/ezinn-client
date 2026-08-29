@@ -62,7 +62,7 @@ export default async function ProfilePage() {
       label: "Số điện thoại",
       value: member?.phone || member?.phone_number || "—",
     },
-    { label: "Sinh nhật", value: dateOfBirth },
+    { label: "Ngày sinh", value: dateOfBirth },
   ];
 
   const cookieStore = await cookies();
