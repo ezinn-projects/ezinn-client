@@ -1,5 +1,5 @@
 import NavWithUser from "@/components/nav-with-user";
-import BoardGameNeonBackground from "@/components/ui/board-game-neon-background";
+import SignalParticlesBackground from "@/components/ui/signal-particles-background";
 import TwoColumnFooter from "@/components/ui/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { jozoServicesSeoDescription } from "@/data/services";
@@ -71,11 +71,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} relative flex min-h-screen flex-col overflow-x-hidden bg-background text-foreground antialiased`}
       >
-        <BoardGameNeonBackground
+        <SignalParticlesBackground
           className="fixed inset-0 z-0"
-          tileSize={320}
-          patternOpacity={0.18}
-          animated
+          spacing={16}
+          speed={0.9}
+          opacity={0.78}
         />
 
         {/* Header */}

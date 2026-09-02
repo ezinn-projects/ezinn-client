@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import GlowLine from "./glow-line";
 
 const navigation = {
   connect: [
@@ -26,12 +27,28 @@ const TwoColumnFooter = () => {
   return (
     <footer
       aria-labelledby="footer-heading"
-      className="font-inter w-full border-t border-red-100/80 bg-white pt-2 text-primary"
+      className="relative w-full overflow-hidden border-t border-primary/20 bg-background/45 pt-2 text-primary shadow-[0_10px_35px_hsl(var(--primary)/0.12)] backdrop-blur-xl"
     >
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <GlowLine
+          orientation="horizontal"
+          position="0"
+          color="red"
+          className="opacity-85"
+        />
+        <GlowLine
+          orientation="horizontal"
+          position="calc(100% - 1px)"
+          color="red"
+          className="opacity-70"
+        />
+        <span className="nav-red-beam absolute -top-9 left-[-45%] h-20 w-[46%] rounded-full" />
+        <span className="nav-red-reflection absolute -bottom-12 left-[-42%] h-24 w-[42%] rounded-full" />
+      </div>
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-3 sm:px-5 md:px-8 lg:px-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-3 sm:px-5 md:px-8 lg:px-10">
         <div className="flex flex-col justify-between gap-8 py-6 sm:py-8 lg:flex-row lg:items-start">
           <div className="space-y-2 text-sm text-primary/75">
             <div className="flex items-center space-x-1">
